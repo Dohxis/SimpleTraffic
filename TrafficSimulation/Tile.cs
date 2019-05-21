@@ -30,6 +30,10 @@ namespace TrafficSimulation
                 // Here we could return RemoveCarAction if tile 
                 // type is Car, which would allow us to simply 
                 // calculate all statistics
+                if(this.Type == TileType.Car)
+                {
+                    return new RemoveCar();
+                }
                 return new NoAction();
             }
 

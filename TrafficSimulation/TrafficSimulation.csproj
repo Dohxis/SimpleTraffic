@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Actions\MoveAction.cs" />
     <Compile Include="Actions\NoAction.cs" />
+    <Compile Include="Actions\RemoveCar.cs" />
     <Compile Include="Actions\TileAction.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

@@ -15,7 +15,7 @@ namespace TrafficSimulation
     // 2. Merging roads/grass and cars into one variable. Thats very convienent for
     //    the form because we can just loop over tiles and render them, but it 
     //    creates a need of "Dirty" tiles. I think we should still have a function 
-    //    "GetTiles()" for the form to render the map, but internally seperate these
+    //    "GetTiles()" for the form to render the map, but internally separate these
     //    to two entities.
 
     class Grid
@@ -23,11 +23,25 @@ namespace TrafficSimulation
         private TrafficRules trafficRules;
 
         public List<Tile> Tiles { get; private set; }
+        public List<Tile> CarTiles { get; private set; }
+        public List<Tile> RoadGrassTiles { get; private set; }
+
 
         public Grid(List<Tile> tiles, TrafficRules trafficRules)
         {
             this.Tiles = tiles;
             this.trafficRules = trafficRules;
+            for(int i = 0; i <= this.Tiles.Count; i++)
+            {
+                if(this.Tiles[i].Type == TileType.Road || this.Tiles[i].Type == TileType.Grass)
+                {
+                    RoadGrassTiles.Add(this.Tiles[i]);
+                }
+                else
+                {
+                    CarTiles.Add(this.Tiles[i]);
+                }
+            }
         }
 
         public void Tick()
