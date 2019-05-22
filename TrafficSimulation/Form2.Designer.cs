@@ -33,6 +33,7 @@
             this.rbTDown = new System.Windows.Forms.RadioButton();
             this.rbTLeft = new System.Windows.Forms.RadioButton();
             this.rbTRight = new System.Windows.Forms.RadioButton();
+            this.btnStart = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // rbPlusIntersection
@@ -90,11 +91,22 @@
             this.rbTRight.Text = "T Intersection Right";
             this.rbTRight.UseVisualStyleBackColor = true;
             // 
+            // btnStart
+            // 
+            this.btnStart.Location = new System.Drawing.Point(1113, 214);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(75, 23);
+            this.btnStart.TabIndex = 5;
+            this.btnStart.Text = "Start";
+            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1290, 849);
+            this.ClientSize = new System.Drawing.Size(1290, 845);
+            this.Controls.Add(this.btnStart);
             this.Controls.Add(this.rbTRight);
             this.Controls.Add(this.rbTLeft);
             this.Controls.Add(this.rbTDown);
@@ -114,5 +126,6 @@
         private System.Windows.Forms.RadioButton rbTDown;
         private System.Windows.Forms.RadioButton rbTLeft;
         private System.Windows.Forms.RadioButton rbTRight;
+        private System.Windows.Forms.Button btnStart;
     }
 }

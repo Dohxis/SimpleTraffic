@@ -28,7 +28,7 @@ namespace TrafficSimulation
             //this.grid = this.createDemoGrid();
             // this.pictureBoxes = new List<PictureBox>();
             //drawGrid(this.grid);
-            // createTimer();
+            //createTimer();
             this.Hide();
             Form f2 = new Form2();
             f2.ShowDialog();

@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Forms;
 using TrafficSimulation.Actions;
 
@@ -28,6 +29,12 @@ namespace TrafficSimulation
         private List<PictureBox> _selectedOnes;
         private List<PictureBox> _spawnPoints;
         private List<PictureBox> _exitPoints;
+        private int pictureBoxSize = 50;
+        private int pictureBoxGap = 5;
+        private List<PictureBox> pictureBoxes;
+        private int simulationUpdateInterval = 1000;
+        private int timesUpdated = 0;
+        //private Grid grid2;
 
         List<PictureBox> exitPoints = new List<PictureBox>();
 
@@ -52,6 +59,89 @@ namespace TrafficSimulation
                     this.Controls.Add(p);
                 }
             }
+        }
+
+        private void createTimer()
+        {
+            System.Timers.Timer timer = new System.Timers.Timer(this.simulationUpdateInterval);
+            timer.Elapsed += this.updateSimulation;
+            timer.Enabled = true;
+        }
+
+        private void updateSimulation(object source, ElapsedEventArgs e)
+        {
+            Tick();
+            this.timesUpdated++;
+            // For demo purposes I will spawn a new car with random
+            // actions every 3 ticks
+            if (this.timesUpdated % 2 == 0)
+            {
+                this.spawnDemoCar();
+            }
+
+        }
+
+
+        private void Tick()
+        {
+            for (int x = 0; x < grid[0].Count; x++)
+            {
+                for (int y = 0; y < grid.Count; y++)
+                {
+                    grid[x][y].Refresh();
+                }
+            }
+        }
+
+
+        private void spawnDemoCar()
+        {
+            List<TileAction> actions;
+            Random random = new Random();
+
+            switch (random.Next(3))
+            {
+                case 0:
+                    actions = new List<TileAction>() {
+                        new MoveAction(Direction.Up),
+                        new MoveAction(Direction.Up),
+                        new MoveAction(Direction.Left),
+                        new MoveAction(Direction.Left),
+                        new MoveAction(Direction.Left)
+                    };
+                    break;
+                case 1:
+                    actions = new List<TileAction>() {
+                        new MoveAction(Direction.Up),
+                        new MoveAction(Direction.Right),
+                        new MoveAction(Direction.Right),
+                        new MoveAction(Direction.Right)
+                    };
+                    break;
+                default:
+                case 2:
+                    actions = new List<TileAction>() {
+                        new MoveAction(Direction.Up),
+                        new MoveAction(Direction.Up),
+                        new MoveAction(Direction.Up),
+                        new MoveAction(Direction.Up)
+                    };
+                    break;
+            }
+
+            if (_spawnPoints != null)
+            {
+                int i = random.Next(_spawnPoints.Count);
+                PictureBox chosenpb = _spawnPoints[i];
+
+                Tile newTile = new Tile(chosenpb.Location.X, chosenpb.Location.Y, TileType.Car, actions);
+            }
+            else
+            {
+                MessageBox.Show("țî ce debil?");
+            }
+            //this.grid.UpdateTile(2, 3, TileType.Car, actions);
+            //this.drawGrid(this.grid);
         }
 
         private Color getTileColor(TileType type)
@@ -115,7 +205,6 @@ namespace TrafficSimulation
             }
 
         }
-
 
         public void RestoreGrid()
         {
@@ -773,6 +862,11 @@ namespace TrafficSimulation
             }
 
             _intersectionCounter++;
+        }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            createTimer();
         }
     }
 }
