@@ -15,44 +15,82 @@ namespace TrafficSimulation
 {
     public partial class Form2 : Form
     {
-        public Form2()
-        {
-            InitializeComponent();
-            CreateGrid();
-
-        }
-
-        List<List<PictureBox>> grid = new List<List<PictureBox>>();
+        //List<List<PictureBox>> grid = new List<List<PictureBox>>();
+        private Grid grid;
+        private List<PictureBox> pictureBoxes;
         private int _intersectionCounter = 0;
-        List<PictureBox> comparePoints = new List<PictureBox>();
-        private List<PictureBox> _selectedOnes;
-        private List<PictureBox> _spawnPoints;
-        private List<PictureBox> _exitPoints;
+        private int simuationUpdateInterval = 1000;
+        private int pictureBoxSize = 20;
+        private int pictureBoxGap = 1;
+
+        private List<PictureBox> comparePoints = new List<PictureBox>();
+        
 
         List<PictureBox> exitPoints = new List<PictureBox>();
 
-        public void CreateGrid()
+        public Form2()
         {
+            InitializeComponent();
+            this.grid = createInitialGrid();
+            this.pictureBoxes = new List<PictureBox>();
+            createTimer();
+            CreateGrid(grid);
+        }
+
+        private void createTimer()
+        {
+            System.Timers.Timer timer = new System.Timers.Timer(this.simuationUpdateInterval);
+            timer.Enabled = true;
+        }
+
+
+
+        private Grid createInitialGrid()
+        {
+            List<Tile> tiles = new List<Tile>();
+
             for (int x = 0; x < 40; x++)
             {
-                grid.Add(new List<PictureBox>());
                 for (int y = 0; y < 40; y++)
                 {
-                    Tile t = new Tile(x*21,y*21,TileType.Empty, new List<TileAction>());
-
-                    PictureBox p = new PictureBox();
-                    p.Name = "pictureBox";
-                    p.Location = new Point(x * 21, y * 21);
-                    p.Size = new Size(20, 20);
-                    p.BackColor = this.getTileColor(t.Type);
-                    p.Click += new EventHandler(this.pictureBoxClick);
-                    //p.MouseEnter += new EventHandler(this.pictureBoxEnter);
-                    //p.MouseLeave += new EventHandler(this.pictureBoxLeave);
-                    grid[x].Add(p);
-                    this.Controls.Add(p);
+                    tiles.Add(new Tile(x, y, TileType.Empty, new List<TileAction>()));
                 }
             }
+
+            return new Grid(tiles);
         }
+
+        private void CreateGrid(Grid grid)
+        {
+            bool isFirstTime = this.pictureBoxes.Count() == 0;
+
+            foreach (Tile tile in grid.Tiles)
+            {
+                if (isFirstTime)
+                {
+                    PictureBox pictureBox = new PictureBox();
+                    pictureBox.Location = new Point(
+                        tile.Position.X * (this.pictureBoxSize + this.pictureBoxGap),
+                        tile.Position.Y * (this.pictureBoxSize + this.pictureBoxGap)
+                    );
+                    pictureBox.Size = new Size(this.pictureBoxSize, this.pictureBoxSize);
+                    pictureBox.BackColor = this.getTileColor(tile.Type);
+                    pictureBox.Click += new EventHandler(this.pictureBoxClick);
+                    this.pictureBoxes.Add(pictureBox);
+                    this.Controls.Add(pictureBox);
+                }
+                else
+                {
+                    PictureBox pictureBox = this.pictureBoxes.Find(box =>
+                        box.Location.X == tile.Position.X * (this.pictureBoxSize + this.pictureBoxGap) &&
+                        box.Location.Y == tile.Position.Y * (this.pictureBoxSize + this.pictureBoxGap)
+                    );
+                    pictureBox.BackColor = this.getTileColor(tile.Type);
+                }
+
+            }
+        }
+
 
         private Color getTileColor(TileType type)
         {
@@ -66,12 +104,27 @@ namespace TrafficSimulation
                     return Color.LightGray;
                 case TileType.Empty:
                     return Color.Blue;
-               
+                case TileType.SpawnPoint:
+                    return Color.Red;
+                case TileType.ExitPoint:
+                    return Color.Black;
+
                 // Compiler is stupid and cannot realize that
                 // there is no other type, so this will
                 // never happen
                 default:
                     return Color.Red;
+            }
+        }
+
+        public void RestoreGrid()
+        {
+            foreach (Tile t in grid.Tiles)
+            {
+                if (t.Type == TileType.SpawnPoint)
+                {
+                    t.Type = TileType.Road;
+                }
             }
         }
 
@@ -82,32 +135,45 @@ namespace TrafficSimulation
             if (rbPlusIntersection.Checked == true)
             {
                 RestoreGrid();
-                Draw_PlusIntersection(p.Location.X / 21, p.Location.Y / 21);
-                CheckGrid();
+                grid.Draw_PlusIntersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+                
             }
             else if (rbTUp.Checked == true)
             {
                 RestoreGrid();
-                Draw_TIntersectionUp(p.Location.X/21, p.Location.Y / 21);
-                CheckGrid();
+                grid.Draw_TIntersectionUp(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+                
             }
             else if (rbTDown.Checked == true)
             {
                 RestoreGrid();
-                Draw_TIntersectionDown(p.Location.X/21, p.Location.Y / 21);
-                CheckGrid();
+                grid.Draw_TIntersectionDown(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+                
             }
             else if (rbTLeft.Checked == true)
             {
                 RestoreGrid();
-                Draw_TIntersectionLeft(p.Location.X/21, p.Location.Y / 21);
-                CheckGrid();
+                grid.Draw_TIntersectionLeft(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
             }
             else if (rbTRight.Checked == true)
             {
                 RestoreGrid();
-                Draw_TIntersectionRight(p.Location.X / 21, p.Location.Y / 21);
-                CheckGrid();
+                grid.Draw_TIntersectionRight(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
             }
             else
             {
@@ -115,667 +181,65 @@ namespace TrafficSimulation
             }
 
         }
-
-
-        public void RestoreGrid()
-        {
-            for (int x = 0; x < grid[0].Count; x++)
-            {
-                for (int y = 0; y < grid.Count; y++)
-                {
-                    if (grid[x][y].BackColor == Color.Red)
-                    {
-                        grid[x][y].BackColor = this.getTileColor(TileType.Road);
-                    }
-                }
-            }
-        }
-
-        public void CheckGrid()
-        {
-            _spawnPoints = new List<PictureBox>();
-            for (int x = 0; x < grid[0].Count; x++)
-            {
-                for (int y = 0; y < grid.Count; y++)
-                {
-                    if (grid[x][y].BackColor == getTileColor(TileType.Road) &&
-                        grid[x][y - 1].BackColor == getTileColor(TileType.Road) && grid[x - 1][y].BackColor == getTileColor(TileType.Empty)) // left spawnpoint
-                    {
-                        _spawnPoints.Add(grid[x][y]);
-                    }
-                    else if (grid[x][y].BackColor == getTileColor(TileType.Road) &&
-                        grid[x + 1][y].BackColor == getTileColor(TileType.Road) && grid[x][y - 1].BackColor == getTileColor(TileType.Empty)) // upper spawnpoint
-                    {
-                        _spawnPoints.Add(grid[x][y]);
-                    }
-                    else if (grid[x][y].BackColor == getTileColor(TileType.Road) &&
-                             grid[x][y - 1].BackColor == getTileColor(TileType.Grass) && grid[x + 1][y].BackColor == getTileColor(TileType.Empty)) // right spawnpoint
-                    {
-                        _spawnPoints.Add(grid[x][y]);
-                    }
-                    else if (grid[x][y].BackColor == getTileColor(TileType.Road) &&
-                             grid[x + 1][y].BackColor == getTileColor(TileType.Grass) && grid[x][y + 1].BackColor == getTileColor(TileType.Empty)) // right spawnpoint
-                    {
-                        _spawnPoints.Add(grid[x][y]);
-                    }
-                }
-            }
-
-            foreach (var a in _spawnPoints)
-            {
-                a.BackColor = Color.Red;
-            }
-
-        }
-
-        public void Draw_PlusIntersection(int x, int y)
-        {
-            if (_intersectionCounter == 0)
-            {
-                if (x + 7 < grid[0].Count && y + 7 < grid.Count)
-                {
-                    AddPlusToGrid(x,y);
-                }
-                else
-                {
-                    MessageBox.Show("Construction denied! Out of boundaries or already ocupied tiles!");
-                }
-            }
-            else
-            {
-                if (x + 7 < grid[0].Count && y + 7 < grid.Count && grid[x][y].BackColor == this.getTileColor(TileType.Empty) && grid[x+7][y+7].BackColor == this.getTileColor(TileType.Empty))
-                {
-                    int _distance;
-                    int _newValueX = Int32.MaxValue;
-                    int _newValueY = Int32.MaxValue;
-                    PictureBox _closest = new PictureBox();
-
-                    int _closestX = 0;
-                    int _closestY = 0;
-
-                    foreach (var a in comparePoints)
-                    {
-                        _distance = Math.Abs(a.Location.X / 21  - grid[x][y].Location.X / 21);
-
-                        if (_distance < _newValueX)
-                        {
-                            _closestX = a.Location.X / 21;
-                        }
-                    }
-
-                    foreach (var a in comparePoints)
-                    {
-                        if (a.Location.X == _closestX * 21)
-                        {
-                            _distance = Math.Abs(a.Location.Y / 21 - grid[x][y].Location.Y / 21);
-
-                            if (_distance < _newValueX)
-                            {
-                                _closestY = a.Location.Y / 21;
-                                _closest = grid[_closestX][_closestY];
-                            }
-                        }
-                    }
-
-                    
-                    if (grid[x][y].Location.Y >= _closest.Location.Y && grid[x][y].Location.Y < _closest.Location.Y + 8 && grid[x][y].Location.X < _closest.Location.X) // Add Left
-                    {
-                        AddPlusToGrid(_closestX - 8, _closestY );
-                    }
-                    else if (grid[x][y].Location.Y >= _closest.Location.Y && grid[x][y].Location.Y < _closest.Location.Y + 8 && grid[x][y].Location.X > _closest.Location.X) // Add Right
-                    {
-                        AddPlusToGrid(_closestX + 8, _closestY);
-                    }
-                    else if (grid[x][y].Location.X >= _closest.Location.X &&
-                             grid[x][y].Location.X < _closest.Location.X + 8 &&
-                             grid[x][y].Location.Y < _closest.Location.Y) // Add up
-                    {
-                        AddPlusToGrid(_closestX, _closestY - 8);
-                    }
-                    else if (grid[x][y].Location.X >= _closest.Location.X &&
-                             grid[x][y].Location.X < _closest.Location.X + 8 &&
-                             grid[x][y].Location.Y > _closest.Location.Y) // Add Down
-                    {
-                        AddPlusToGrid(_closestX, _closestY + 8);
-                    }
-
-                }
-                else
-                {
-                    MessageBox.Show("Construction denied! Out of boundaries!");
-                }
-            }
-        }
-
-
-        public void AddPlusToGrid(int x, int y) // Add method
-        {
-            List<Tile> tiles = new List<Tile>();
-            for (int a = x; a < x + 8; a++)
-            {
-                for (int b = y; b < y + 8; b++)
-                {
-                    if (a >= x && a < x + 3 || a >= x + 5 && a <= x + 8)
-                    {
-                        if (b == y + 3 || b == y + 4)
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
-                        }
-                        else
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                        }
-                    }
-                    else
-                    {
-                        tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                    }
-
-                    if (a == x + 3 || a == x + 4)
-                    {
-                        tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
-                    }
-
-                }
-            }
-
-            comparePoints.Add(grid[x][y]);
-
-            foreach (Tile t in tiles)
-            {
-                grid[t.Position.X][t.Position.Y].BackColor = this.getTileColor(t.Type);
-            }
-
-            _intersectionCounter++;
-        }
-
-        public void Draw_TIntersectionUp(int x, int y)
-        {
-            if (_intersectionCounter == 0)
-            {
-                if (x + 7 < grid[0].Count && y + 7 < grid.Count)
-                {
-                    AddT_UpToGrid(x, y);
-                }
-                else
-                {
-                    MessageBox.Show("Construction denied! Out of boundaries or already ocupied tiles!");
-                }
-            }
-            else
-            {
-                if (x + 7 < grid[0].Count && y + 7 < grid.Count && grid[x][y].BackColor == this.getTileColor(TileType.Empty) && grid[x + 7][y + 7].BackColor == this.getTileColor(TileType.Empty))
-                {
-                    int _distance;
-                    int _newValueX = Int32.MaxValue;
-                    int _newValueY = Int32.MaxValue;
-                    PictureBox _closest = new PictureBox();
-
-                    int _closestX = 0;
-                    int _closestY = 0;
-
-                    foreach (var a in comparePoints)
-                    {
-                        _distance = Math.Abs(a.Location.X / 21 - grid[x][y].Location.X / 21);
-
-                        if (_distance < _newValueX)
-                        {
-                            _closestX = a.Location.X / 21;
-                        }
-                    }
-
-                    foreach (var a in comparePoints)
-                    {
-                        if (a.Location.X == _closestX * 21)
-                        {
-                            _distance = Math.Abs(a.Location.Y / 21 - grid[x][y].Location.Y / 21);
-
-                            if (_distance < _newValueX)
-                            {
-                                _closestY = a.Location.Y / 21;
-                                _closest = grid[_closestX][_closestY];
-                            }
-                        }
-                    }
-
-
-                    if (grid[x][y].Location.Y >= _closest.Location.Y && grid[x][y].Location.Y < _closest.Location.Y + 8 && grid[x][y].Location.X < _closest.Location.X) // Add Left
-                    {
-                        AddT_UpToGrid(_closestX - 8, _closestY);
-                    }
-                    else if (grid[x][y].Location.Y >= _closest.Location.Y && grid[x][y].Location.Y < _closest.Location.Y + 8 && grid[x][y].Location.X > _closest.Location.X) // Add Right
-                    {
-                        AddT_UpToGrid(_closestX + 8, _closestY);
-                    }
-                    else if (grid[x][y].Location.X >= _closest.Location.X &&
-                             grid[x][y].Location.X < _closest.Location.X + 8 &&
-                             grid[x][y].Location.Y < _closest.Location.Y) // Add up
-                    {
-                        AddT_UpToGrid(_closestX, _closestY - 8);
-                    }
-                    else if (grid[x][y].Location.X >= _closest.Location.X &&
-                             grid[x][y].Location.X < _closest.Location.X + 8 &&
-                             grid[x][y].Location.Y > _closest.Location.Y) // Add Down
-                    {
-                        AddT_UpToGrid(_closestX, _closestY + 8);
-                    }
-
-                }
-                else
-                {
-                    MessageBox.Show("Construction denied! Out of boundaries!");
-                }
-            }
-        }
-
-        public void AddT_UpToGrid(int x, int y) // Add method
-        {
-            List<Tile> tiles = new List<Tile>();
-            for (int a = x; a < x + 8; a++)
-            {
-                for (int b = y; b < y + 8; b++)
-                {
-                    if (a >= x && a < x + 3 || a >= x + 5 && a <= x + 8)
-                    {
-                        if (b == y + 3 || b == y + 4)
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
-                        }
-                        else
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                        }
-                    }
-
-                    if (a == x + 3 || a == x + 4)
-                    {
-                        if (b == y + 5 || b == y + 6 || b == y + 7)
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                        }
-                        else
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
-                        }
-                    }
-
-                }
-            }
-
-            comparePoints.Add(grid[x][y]);
-
-            foreach (Tile t in tiles)
-            {
-                grid[t.Position.X][t.Position.Y].BackColor = this.getTileColor(t.Type);
-            }
-
-            _intersectionCounter++;
-        }
-
-        public void Draw_TIntersectionDown(int x, int y)
-        {
-            if (_intersectionCounter == 0)
-            {
-                if (x + 7 < grid[0].Count && y + 7 < grid.Count)
-                {
-                    AddT_DownToGrid(x, y);
-                }
-                else
-                {
-                    MessageBox.Show("Construction denied! Out of boundaries or already ocupied tiles!");
-                }
-            }
-            else
-            {
-                if (x + 7 < grid[0].Count && y + 7 < grid.Count && grid[x][y].BackColor == this.getTileColor(TileType.Empty) && grid[x + 7][y + 7].BackColor == this.getTileColor(TileType.Empty))
-                {
-                    int _distance;
-                    int _newValueX = Int32.MaxValue;
-                    int _newValueY = Int32.MaxValue;
-                    PictureBox _closest = new PictureBox();
-
-                    int _closestX = 0;
-                    int _closestY = 0;
-
-                    foreach (var a in comparePoints)
-                    {
-                        _distance = Math.Abs(a.Location.X / 21 - grid[x][y].Location.X / 21);
-
-                        if (_distance < _newValueX)
-                        {
-                            _closestX = a.Location.X / 21;
-                        }
-                    }
-
-                    foreach (var a in comparePoints)
-                    {
-                        if (a.Location.X == _closestX * 21)
-                        {
-                            _distance = Math.Abs(a.Location.Y / 21 - grid[x][y].Location.Y / 21);
-
-                            if (_distance < _newValueX)
-                            {
-                                _closestY = a.Location.Y / 21;
-                                _closest = grid[_closestX][_closestY];
-                            }
-                        }
-                    }
-
-
-                    if (grid[x][y].Location.Y >= _closest.Location.Y && grid[x][y].Location.Y < _closest.Location.Y + 8 && grid[x][y].Location.X < _closest.Location.X) // Add Left
-                    {
-                        AddT_DownToGrid(_closestX - 8, _closestY);
-                    }
-                    else if (grid[x][y].Location.Y >= _closest.Location.Y && grid[x][y].Location.Y < _closest.Location.Y + 8 && grid[x][y].Location.X > _closest.Location.X) // Add Right
-                    {
-                        AddT_DownToGrid(_closestX + 8, _closestY);
-                    }
-                    else if (grid[x][y].Location.X >= _closest.Location.X &&
-                             grid[x][y].Location.X < _closest.Location.X + 8 &&
-                             grid[x][y].Location.Y < _closest.Location.Y) // Add up
-                    {
-                        AddT_DownToGrid(_closestX, _closestY - 8);
-                    }
-                    else if (grid[x][y].Location.X >= _closest.Location.X &&
-                             grid[x][y].Location.X < _closest.Location.X + 8 &&
-                             grid[x][y].Location.Y > _closest.Location.Y) // Add Down
-                    {
-                        AddT_DownToGrid(_closestX, _closestY + 8);
-                    }
-
-                }
-                else
-                {
-                    MessageBox.Show("Construction denied! Out of boundaries!");
-                }
-            }
-        }
-
-        public void AddT_DownToGrid(int x, int y) // Add method
-        {
-            List<Tile> tiles = new List<Tile>();
-            for (int a = x; a < x + 8; a++)
-            {
-                for (int b = y; b < y + 8; b++)
-                {
-                    if (a >= x && a < x + 3 || a >= x + 5 && a <= x + 8)
-                    {
-                        if (b == y + 3 || b == y + 4)
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
-                        }
-                        else
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                        }
-                    }
-
-                    if (a == x + 3 || a == x + 4)
-                    {
-                        if (b == y || b == y + 1 || b == y + 2)
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                        }
-                        else
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
-                        }
-                    }
-
-                }
-            }
-
-            comparePoints.Add(grid[x][y]);
-
-            foreach (Tile t in tiles)
-            {
-                grid[t.Position.X][t.Position.Y].BackColor = this.getTileColor(t.Type);
-            }
-
-            _intersectionCounter++;
-        }
-
-        public void Draw_TIntersectionLeft(int x, int y)
-        {
-            if (_intersectionCounter == 0)
-            {
-                if (x + 7 < grid[0].Count && y + 7 < grid.Count)
-                {
-                    AddT_LeftToGrid(x, y);
-                }
-                else
-                {
-                    MessageBox.Show("Construction denied! Out of boundaries or already ocupied tiles!");
-                }
-            }
-            else
-            {
-                if (x + 7 < grid[0].Count && y + 7 < grid.Count && grid[x][y].BackColor == this.getTileColor(TileType.Empty) && grid[x + 7][y + 7].BackColor == this.getTileColor(TileType.Empty))
-                {
-                    int _distance;
-                    int _newValueX = Int32.MaxValue;
-                    int _newValueY = Int32.MaxValue;
-                    PictureBox _closest = new PictureBox();
-
-                    int _closestX = 0;
-                    int _closestY = 0;
-
-                    foreach (var a in comparePoints)
-                    {
-                        _distance = Math.Abs(a.Location.X / 21 - grid[x][y].Location.X / 21);
-
-                        if (_distance < _newValueX)
-                        {
-                            _closestX = a.Location.X / 21;
-                        }
-                    }
-
-                    foreach (var a in comparePoints)
-                    {
-                        if (a.Location.X == _closestX * 21)
-                        {
-                            _distance = Math.Abs(a.Location.Y / 21 - grid[x][y].Location.Y / 21);
-
-                            if (_distance < _newValueX)
-                            {
-                                _closestY = a.Location.Y / 21;
-                                _closest = grid[_closestX][_closestY];
-                            }
-                        }
-                    }
-
-
-                    if (grid[x][y].Location.Y >= _closest.Location.Y && grid[x][y].Location.Y < _closest.Location.Y + 8 && grid[x][y].Location.X < _closest.Location.X) // Add Left
-                    {
-                        AddT_LeftToGrid(_closestX - 8, _closestY);
-                    }
-                    else if (grid[x][y].Location.Y >= _closest.Location.Y && grid[x][y].Location.Y < _closest.Location.Y + 8 && grid[x][y].Location.X > _closest.Location.X) // Add Right
-                    {
-                        AddT_LeftToGrid(_closestX + 8, _closestY);
-                    }
-                    else if (grid[x][y].Location.X >= _closest.Location.X &&
-                             grid[x][y].Location.X < _closest.Location.X + 8 &&
-                             grid[x][y].Location.Y < _closest.Location.Y) // Add up
-                    {
-                        AddT_LeftToGrid(_closestX, _closestY - 8);
-                    }
-                    else if (grid[x][y].Location.X >= _closest.Location.X &&
-                             grid[x][y].Location.X < _closest.Location.X + 8 &&
-                             grid[x][y].Location.Y > _closest.Location.Y) // Add Down
-                    {
-                        AddT_LeftToGrid(_closestX, _closestY + 8);
-                    }
-
-                }
-                else
-                {
-                    MessageBox.Show("Construction denied! Out of boundaries!");
-                }
-            }
-        }
-
-        public void AddT_LeftToGrid(int x, int y) // Add method
-        {
-            List<Tile> tiles = new List<Tile>();
-            for (int a = x; a < x + 8; a++)
-            {
-                for (int b = y; b < y + 8; b++)
-                {
-                    if (a >= x && a < x + 3)
-                    {
-                        if (b == y + 3 || b == y + 4)
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
-                        }
-                        else
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                        }
-                    }
-
-                    if (a == x + 3 || a == x + 4)
-                    {
-                        tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
-                    }
-
-                    if (a >= x + 5 && a <= x + 8)
-                    {
-                        tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                    }
-                }
-            }
-
-            comparePoints.Add(grid[x][y]);
-
-            foreach (Tile t in tiles)
-            {
-                grid[t.Position.X][t.Position.Y].BackColor = this.getTileColor(t.Type);
-            }
-
-            _intersectionCounter++;
-        }
-
-        public void Draw_TIntersectionRight(int x, int y)
-        {
-            if (_intersectionCounter == 0)
-            {
-                if (x + 7 < grid[0].Count && y + 7 < grid.Count)
-                {
-                    AddT_LeftToGrid(x, y);
-                }
-                else
-                {
-                    MessageBox.Show("Construction denied! Out of boundaries or already ocupied tiles!");
-                }
-            }
-            else
-            {
-                if (x + 7 < grid[0].Count && y + 7 < grid.Count && grid[x][y].BackColor == this.getTileColor(TileType.Empty) && grid[x + 7][y + 7].BackColor == this.getTileColor(TileType.Empty))
-                {
-                    int _distance;
-                    int _newValueX = Int32.MaxValue;
-                    int _newValueY = Int32.MaxValue;
-                    PictureBox _closest = new PictureBox();
-
-                    int _closestX = 0;
-                    int _closestY = 0;
-
-                    foreach (var a in comparePoints)
-                    {
-                        _distance = Math.Abs(a.Location.X / 21 - grid[x][y].Location.X / 21);
-
-                        if (_distance < _newValueX)
-                        {
-                            _closestX = a.Location.X / 21;
-                        }
-                    }
-
-                    foreach (var a in comparePoints)
-                    {
-                        if (a.Location.X == _closestX * 21)
-                        {
-                            _distance = Math.Abs(a.Location.Y / 21 - grid[x][y].Location.Y / 21);
-
-                            if (_distance < _newValueX)
-                            {
-                                _closestY = a.Location.Y / 21;
-                                _closest = grid[_closestX][_closestY];
-                            }
-                        }
-                    }
-
-
-                    if (grid[x][y].Location.Y >= _closest.Location.Y && grid[x][y].Location.Y < _closest.Location.Y + 8 && grid[x][y].Location.X < _closest.Location.X) // Add Left
-                    {
-                        AddT_LeftToGrid(_closestX - 8, _closestY);
-                    }
-                    else if (grid[x][y].Location.Y >= _closest.Location.Y && grid[x][y].Location.Y < _closest.Location.Y + 8 && grid[x][y].Location.X > _closest.Location.X) // Add Right
-                    {
-                        AddT_LeftToGrid(_closestX + 8, _closestY);
-                    }
-                    else if (grid[x][y].Location.X >= _closest.Location.X &&
-                             grid[x][y].Location.X < _closest.Location.X + 8 &&
-                             grid[x][y].Location.Y < _closest.Location.Y) // Add up
-                    {
-                        AddT_LeftToGrid(_closestX, _closestY - 8);
-                    }
-                    else if (grid[x][y].Location.X >= _closest.Location.X &&
-                             grid[x][y].Location.X < _closest.Location.X + 8 &&
-                             grid[x][y].Location.Y > _closest.Location.Y) // Add Down
-                    {
-                        AddT_LeftToGrid(_closestX, _closestY + 8);
-                    }
-
-                }
-                else
-                {
-                    MessageBox.Show("Construction denied! Out of boundaries!");
-                }
-            }
-        }
-
-        public void AddT_RightToGrid(int x, int y) // Add method
-        {
-            List<Tile> tiles = new List<Tile>();
-            for (int a = x; a < x + 8; a++)
-            {
-                for (int b = y; b < y + 8; b++)
-                {
-                    if (a >= x + 5 && a < x + 8)
-                    {
-                        if (b == y + 3 || b == y + 4)
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
-                        }
-                        else
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                        }
-                    }
-
-                    if (b == x + 3 || b == x + 4)
-                    {
-                        tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
-                    }
-
-                    if (a >= x && a <= x + 3)
-                    {
-                        tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                    }
-                }
-            }
-
-            comparePoints.Add(grid[x][y]);
-
-            foreach (Tile t in tiles)
-            {
-                grid[t.Position.X][t.Position.Y].BackColor = this.getTileColor(t.Type);
-            }
-
-            _intersectionCounter++;
-        }
     }
 }
+
+
+
+
+/*
+
+public void CheckGrid()
+{
+    _spawnPoints = new List<PictureBox>();
+    for (int x = 0; x < grid[0].Count; x++)
+    {
+        for (int y = 0; y < grid.Count; y++)
+        {
+            if (grid[x][y].BackColor == getTileColor(TileType.Road) &&
+                grid[x][y - 1].BackColor == getTileColor(TileType.Road) && grid[x - 1][y].BackColor == getTileColor(TileType.Empty)) // left spawnpoint
+            {
+                _spawnPoints.Add(grid[x][y]);
+            }
+            else if (grid[x][y].BackColor == getTileColor(TileType.Road) &&
+                grid[x + 1][y].BackColor == getTileColor(TileType.Road) && grid[x][y - 1].BackColor == getTileColor(TileType.Empty)) // upper spawnpoint
+            {
+                _spawnPoints.Add(grid[x][y]);
+            }
+            else if (grid[x][y].BackColor == getTileColor(TileType.Road) &&
+                     grid[x][y - 1].BackColor == getTileColor(TileType.Grass) && grid[x + 1][y].BackColor == getTileColor(TileType.Empty)) // right spawnpoint
+            {
+                _spawnPoints.Add(grid[x][y]);
+            }
+            else if (grid[x][y].BackColor == getTileColor(TileType.Road) &&
+                     grid[x + 1][y].BackColor == getTileColor(TileType.Grass) && grid[x][y + 1].BackColor == getTileColor(TileType.Empty)) // right spawnpoint
+            {
+                _spawnPoints.Add(grid[x][y]);
+            }
+        }
+    }
+
+    foreach (var a in _spawnPoints)
+    {
+        a.BackColor = Color.Red;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Controls used for hover
 /*public void pictureBoxEnter(object sender, EventArgs e)
@@ -861,5 +325,37 @@ public void RestoreEmpty(int x, int y)
     {
         grid[t.Position.X][t.Position.Y].BackColor = this.getTileColor(t.Type);
     }
+}*/
+
+
+
+
+
+
+
+
+
+
+/* public void CreateGrid(Grid grid)
+{
+for (int x = 0; x < 40; x++)
+{
+grid.Add(new List<PictureBox>());
+for (int y = 0; y < 40; y++)
+{
+    Tile t = new Tile(x * 21, y * 21, TileType.Empty, new List<TileAction>());
+
+    PictureBox p = new PictureBox();
+    p.Name = "pictureBox";
+    p.Location = new Point(x * 21, y * 21);
+    p.Size = new Size(20, 20);
+    p.BackColor = this.getTileColor(t.Type);
+    p.Click += new EventHandler(this.pictureBoxClick);
+    //p.MouseEnter += new EventHandler(this.pictureBoxEnter);
+    //p.MouseLeave += new EventHandler(this.pictureBoxLeave);
+    grid[x].Add(p);
+    this.Controls.Add(p);
+}
+}
 }*/
 

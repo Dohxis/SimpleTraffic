@@ -37,6 +37,12 @@ namespace TrafficSimulation
             this.Dirty = false;
         }
 
+        public Tile(int x, int y)
+        {
+            Position.X = x;
+            Position.Y = y;
+        }
+
         public TileAction getNextAction()
         {
             if(this.Actions.Count() == 0)

@@ -34,7 +34,7 @@ namespace TrafficSimulation
             f2.ShowDialog();
         }
 
-        /*private void createTimer()
+        private void createTimer()
         {
             System.Timers.Timer timer = new System.Timers.Timer(this.simulationUpdateInterval);
             timer.Elapsed += this.updateSimulation;
@@ -182,7 +182,7 @@ namespace TrafficSimulation
 
             this.grid.UpdateTile(2, 3, TileType.Car, actions);
             this.drawGrid(this.grid);
-        }*/
+        }
     }
     
 }
