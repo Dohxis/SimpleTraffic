@@ -26,6 +26,8 @@ namespace TrafficSimulation
         private int _intersectionCounter = 0;
         List<PictureBox> comparePoints = new List<PictureBox>();
         private List<PictureBox> _selectedOnes;
+        private List<PictureBox> _spawnPoints;
+        private List<PictureBox> _exitPoints;
 
         List<PictureBox> exitPoints = new List<PictureBox>();
 
@@ -79,27 +81,89 @@ namespace TrafficSimulation
             //MessageBox.Show(p.Location.X.ToString() + " " + p.Location.Y.ToString() + " clicked");
             if (rbPlusIntersection.Checked == true)
             {
+                RestoreGrid();
                 Draw_PlusIntersection(p.Location.X / 21, p.Location.Y / 21);
+                CheckGrid();
             }
             else if (rbTUp.Checked == true)
             {
+                RestoreGrid();
                 Draw_TIntersectionUp(p.Location.X/21, p.Location.Y / 21);
+                CheckGrid();
             }
             else if (rbTDown.Checked == true)
             {
+                RestoreGrid();
                 Draw_TIntersectionDown(p.Location.X/21, p.Location.Y / 21);
+                CheckGrid();
             }
             else if (rbTLeft.Checked == true)
             {
+                RestoreGrid();
                 Draw_TIntersectionLeft(p.Location.X/21, p.Location.Y / 21);
+                CheckGrid();
             }
             else if (rbTRight.Checked == true)
             {
+                RestoreGrid();
                 Draw_TIntersectionRight(p.Location.X / 21, p.Location.Y / 21);
+                CheckGrid();
             }
             else
             {
                 MessageBox.Show("Please choose a type of intersection");
+            }
+
+        }
+
+
+        public void RestoreGrid()
+        {
+            for (int x = 0; x < grid[0].Count; x++)
+            {
+                for (int y = 0; y < grid.Count; y++)
+                {
+                    if (grid[x][y].BackColor == Color.Red)
+                    {
+                        grid[x][y].BackColor = this.getTileColor(TileType.Road);
+                    }
+                }
+            }
+        }
+
+        public void CheckGrid()
+        {
+            _spawnPoints = new List<PictureBox>();
+            for (int x = 0; x < grid[0].Count; x++)
+            {
+                for (int y = 0; y < grid.Count; y++)
+                {
+                    if (grid[x][y].BackColor == getTileColor(TileType.Road) &&
+                        grid[x][y - 1].BackColor == getTileColor(TileType.Road) && grid[x - 1][y].BackColor == getTileColor(TileType.Empty)) // left spawnpoint
+                    {
+                        _spawnPoints.Add(grid[x][y]);
+                    }
+                    else if (grid[x][y].BackColor == getTileColor(TileType.Road) &&
+                        grid[x + 1][y].BackColor == getTileColor(TileType.Road) && grid[x][y - 1].BackColor == getTileColor(TileType.Empty)) // upper spawnpoint
+                    {
+                        _spawnPoints.Add(grid[x][y]);
+                    }
+                    else if (grid[x][y].BackColor == getTileColor(TileType.Road) &&
+                             grid[x][y - 1].BackColor == getTileColor(TileType.Grass) && grid[x + 1][y].BackColor == getTileColor(TileType.Empty)) // right spawnpoint
+                    {
+                        _spawnPoints.Add(grid[x][y]);
+                    }
+                    else if (grid[x][y].BackColor == getTileColor(TileType.Road) &&
+                             grid[x + 1][y].BackColor == getTileColor(TileType.Grass) && grid[x][y + 1].BackColor == getTileColor(TileType.Empty)) // right spawnpoint
+                    {
+                        _spawnPoints.Add(grid[x][y]);
+                    }
+                }
+            }
+
+            foreach (var a in _spawnPoints)
+            {
+                a.BackColor = Color.Red;
             }
 
         }
