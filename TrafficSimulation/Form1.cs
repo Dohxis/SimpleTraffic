@@ -21,17 +21,20 @@ namespace TrafficSimulation
         private List<PictureBox> pictureBoxes;
         private int simulationUpdateInterval = 1000;
         private int timesUpdated = 0;
-        
+
         public Form1()
         {
             InitializeComponent();
-            this.grid = this.createDemoGrid();
-            this.pictureBoxes = new List<PictureBox>();
-            drawGrid(this.grid);
-            createTimer();
+            //this.grid = this.createDemoGrid();
+            // this.pictureBoxes = new List<PictureBox>();
+            //drawGrid(this.grid);
+            // createTimer();
+            this.Hide();
+            Form f2 = new Form2();
+            f2.ShowDialog();
         }
 
-        private void createTimer()
+        /*private void createTimer()
         {
             System.Timers.Timer timer = new System.Timers.Timer(this.simulationUpdateInterval);
             timer.Elapsed += this.updateSimulation;
@@ -179,6 +182,7 @@ namespace TrafficSimulation
 
             this.grid.UpdateTile(2, 3, TileType.Car, actions);
             this.drawGrid(this.grid);
-        }
+        }*/
     }
+    
 }

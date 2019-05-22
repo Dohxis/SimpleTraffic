@@ -23,6 +23,20 @@ namespace TrafficSimulation
             this.Dirty = false;
         }
 
+        public Tile(TileType type)
+        {
+            this.Type = type;
+            this.Dirty = false;
+        }
+
+        public Tile(int x, int y, TileType type)
+        {
+            Position.X = x;
+            Position.Y = y;
+            this.Type = type;
+            this.Dirty = false;
+        }
+
         public TileAction getNextAction()
         {
             if(this.Actions.Count() == 0)
