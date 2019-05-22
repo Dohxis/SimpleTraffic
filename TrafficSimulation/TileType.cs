@@ -8,6 +8,6 @@ namespace TrafficSimulation
 {
     enum TileType
     {
-        Grass, Road, Car, Empty
+        Grass, Road, Car, Empty, SpawnPoint, ExitPoint
     }
 }
