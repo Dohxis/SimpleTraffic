@@ -9,7 +9,6 @@ namespace TrafficSimulation
 {
     class Tile
     {
-
         public Position Position { get; }
         public List<TileAction> Actions { get; set; }
         public bool Dirty { get; set; }
@@ -21,6 +20,94 @@ namespace TrafficSimulation
             this.Actions = actions;
             this.Type = type;
             this.Dirty = false;
+        }
+
+        public List<TileAction> getRoute(Tile tile, List<Tile> tileLs)
+        {
+            Position Destination = new Position(this.Position.X, this.Position.Y);
+            List<Tile> tileList = new List<Tile>();
+            List<TileAction> actionList = new List<TileAction>();
+            foreach (var item in tileLs)
+            {
+            if (item.Type == TileType.Road)
+            {
+                  if (item.Position.X < Destination.X && item.Position.Y < Destination.Y)
+                  {
+                        if (item.Position.Y == Destination.Y + 1)
+                        {
+                            tileList.Add(item);
+                            tileLs.Remove(item);
+                        }
+                        else if (item.Position.X == Destination.X + 1)
+                        {
+                            tileList.Add(item);
+                            tileLs.Remove(item);
+                        }
+                  }
+                  else if (item.Position.X < Destination.X && item.Position.Y > Destination.Y)
+                  {
+                       if (item.Position.Y == Destination.Y - 1)
+                       {
+                            tileList.Add(item);
+                            tileLs.Remove(item);
+                       }
+                       else if (item.Position.X == Destination.X + 1)
+                       {
+                            tileList.Add(item);
+                            tileLs.Remove(item);
+                       }
+                  }
+                  else if (item.Position.X > Destination.X && item.Position.Y > Destination.Y)
+                  {
+                       if (item.Position.Y == Destination.Y - 1)
+                       {
+                            tileList.Add(item);
+                            tileLs.Remove(item);
+                       }
+                       else if (item.Position.X == Destination.X + 1)
+                       {
+                            tileList.Add(item);
+                            tileLs.Remove(item);
+                       }
+                  }
+                  else if (item.Position.X > Destination.X && item.Position.Y < Destination.Y)
+                  {
+                       if (item.Position.Y == Destination.Y + 1)
+                       {
+                            tileList.Add(item);
+                            tileLs.Remove(item);
+                       }
+                       else if (item.Position.X == Destination.X + 1)
+                       {
+                       tileList.Add(item);
+                       tileLs.Remove(item);
+                       }
+                  }
+            }
+            }
+            tileList.Add(this);
+            tileList.Reverse();
+            for(int i = 0; i < tileList.Count() - 1; i++)
+            {
+                if(tileList[i + 1].Position.X > tileList[i].Position.X)
+                {
+                    actionList.Add(new MoveAction(Direction.Right));
+                }
+                else if(tileList[i + 1].Position.X < tileList[i].Position.X)
+                {
+                    actionList.Add(new MoveAction(Direction.Left));
+                }
+                else if (tileList[i + 1].Position.Y < tileList[i].Position.Y)
+                {
+                    actionList.Add(new MoveAction(Direction.Down));
+                }
+                else if (tileList[i + 1].Position.Y > tileList[i].Position.Y)
+                {
+                    actionList.Add(new MoveAction(Direction.Up));
+                }
+            }
+            return actionList;
+            //Car could be checking sides of the road by looking at distance from the grass
         }
 
         public TileAction getNextAction()
