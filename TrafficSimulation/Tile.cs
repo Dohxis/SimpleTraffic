@@ -22,65 +22,42 @@ namespace TrafficSimulation
             this.Dirty = false;
         }
 
-        public List<TileAction> getRoute(Tile tile, List<Tile> tileLs)
+        public void getRoute(Position xy, List<Tile> tileLs)
         {
-            Position Destination = new Position(this.Position.X, this.Position.Y);
+            List<Tile> temp = tileLs;
             List<Tile> tileList = new List<Tile>();
             List<TileAction> actionList = new List<TileAction>();
-            foreach (var item in tileLs)
+            tileList.Add(new Tile(xy.X, xy.Y, TileType.Road, new List<TileAction>()));
+            foreach (Tile item in temp)
             {
             if (item.Type == TileType.Road)
             {
-                  if (item.Position.X < Destination.X && item.Position.Y < Destination.Y)
+                  if (item.Position.X < tileList[tileList.Count() - 1].Position.X && item.Position.Y == tileList[tileList.Count() - 1].Position.Y)
                   {
-                        if (item.Position.Y == Destination.Y + 1)
+                        if (item.Position.X == tileList[tileList.Count() - 1].Position.X - 1)
                         {
                             tileList.Add(item);
-                            tileLs.Remove(item);
-                        }
-                        else if (item.Position.X == Destination.X + 1)
-                        {
-                            tileList.Add(item);
-                            tileLs.Remove(item);
                         }
                   }
-                  else if (item.Position.X < Destination.X && item.Position.Y > Destination.Y)
+                  else if (item.Position.X > tileList[tileList.Count() - 1].Position.X && item.Position.Y == tileList[tileList.Count() - 1].Position.Y)
                   {
-                       if (item.Position.Y == Destination.Y - 1)
+                       if (item.Position.X == tileList[tileList.Count() - 1].Position.X + 1)
                        {
                             tileList.Add(item);
-                            tileLs.Remove(item);
-                       }
-                       else if (item.Position.X == Destination.X + 1)
-                       {
-                            tileList.Add(item);
-                            tileLs.Remove(item);
                        }
                   }
-                  else if (item.Position.X > Destination.X && item.Position.Y > Destination.Y)
+                  else if (item.Position.Y < tileList[tileList.Count() - 1].Position.Y && item.Position.X == tileList[tileList.Count() - 1].Position.X)
                   {
-                       if (item.Position.Y == Destination.Y - 1)
+                       if (item.Position.Y == tileList[tileList.Count() - 1].Position.Y - 1)
                        {
                             tileList.Add(item);
-                            tileLs.Remove(item);
-                       }
-                       else if (item.Position.X == Destination.X + 1)
-                       {
-                            tileList.Add(item);
-                            tileLs.Remove(item);
                        }
                   }
-                  else if (item.Position.X > Destination.X && item.Position.Y < Destination.Y)
+                  else if (item.Position.Y > tileList[tileList.Count() - 1].Position.Y && item.Position.X == tileList[tileList.Count() - 1].Position.X)
                   {
-                       if (item.Position.Y == Destination.Y + 1)
+                       if (item.Position.Y == tileList[tileList.Count() - 1].Position.Y + 1)
                        {
                             tileList.Add(item);
-                            tileLs.Remove(item);
-                       }
-                       else if (item.Position.X == Destination.X + 1)
-                       {
-                       tileList.Add(item);
-                       tileLs.Remove(item);
                        }
                   }
             }
@@ -106,7 +83,7 @@ namespace TrafficSimulation
                     actionList.Add(new MoveAction(Direction.Up));
                 }
             }
-            return actionList;
+            this.Actions = actionList;
             //Car could be checking sides of the road by looking at distance from the grass
         }
 

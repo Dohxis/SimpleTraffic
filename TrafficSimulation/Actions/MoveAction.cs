@@ -35,7 +35,9 @@ namespace TrafficSimulation.Actions
                 case Direction.Left:
                     updatedTiles = this.MoveLeft(car, tiles);
                     break;
-                // Need to do Down, but for this demo it was unnecessary
+                case Direction.Down:
+                    updatedTiles = this.MoveDown(car, tiles);
+                    break;
                 default:
                     updatedTiles = tiles;
                     break;
@@ -48,6 +50,16 @@ namespace TrafficSimulation.Actions
         {
             int newCarIndex = tiles.FindIndex(tile =>
                 tile.Position.Y == car.Position.Y - 1 &&
+                tile.Position.X == car.Position.X
+            );
+
+            return this.Move(newCarIndex, car, tiles);
+        }
+
+        private List<Tile> MoveDown(Tile car, List<Tile> tiles)
+        {
+            int newCarIndex = tiles.FindIndex(tile =>
+                tile.Position.Y == car.Position.Y + 1 &&
                 tile.Position.X == car.Position.X
             );
 
@@ -73,8 +85,6 @@ namespace TrafficSimulation.Actions
 
             return this.Move(newCarIndex, car, tiles);
         }
-
-        
 
         private List<Tile> Move(int newCarIndex, Tile car, List<Tile> tiles)
         {

@@ -143,41 +143,26 @@ namespace TrafficSimulation
         // removed later when our Grid can spawn cars itself
         private void spawnDemoCar()
         {
-            List<TileAction> actions;
+            List<TileAction> actions = new List<TileAction>();
             Random random = new Random();
+            Tile car = new Tile(2, 3, TileType.Car, actions);
 
             switch (random.Next(3))
             {
                 case 0:
-                    actions = new List<TileAction>() {
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left)
-                    };
+                    car.getRoute(new Position(2, 0), grid.Tiles);
                     break;
                 case 1:
-                    actions = new List<TileAction>() {
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right)
-                    };
+                    car.getRoute(new Position(3, 2), grid.Tiles);
                     break;
                 default:
                 case 2:
-                    actions = new List<TileAction>() {
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up)
-                    };
+                    car.getRoute(new Position(0, 1), grid.Tiles);
                     break;
             }
 
 
-            this.grid.UpdateTile(2, 3, TileType.Car, actions);
+            this.grid.UpdateTile(2, 3, TileType.Car, car.Actions);
             this.drawGrid(this.grid);
         }
     }

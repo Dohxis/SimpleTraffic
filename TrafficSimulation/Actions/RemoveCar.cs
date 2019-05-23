@@ -18,14 +18,5 @@ namespace TrafficSimulation.Actions
             Console.WriteLine(n);
             return tiles;
         }
-
-        public List<Tile> Remove(Tile tile, List<Tile> tiles)
-        {
-            int removeIndex = tiles.IndexOf(tile);
-            List<TileAction> actions;
-            actions = null;
-            tiles[removeIndex] = new Tile(tile.Position.X, tile.Position.Y, TileType.Road, actions);
-            return tiles;
-        }
     }
 }

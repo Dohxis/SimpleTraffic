@@ -23,25 +23,12 @@ namespace TrafficSimulation
         private TrafficRules trafficRules;
 
         public List<Tile> Tiles { get; private set; }
-        public List<Tile> CarTiles { get; private set; }
-        public List<Tile> RoadGrassTiles { get; private set; }
 
 
         public Grid(List<Tile> tiles, TrafficRules trafficRules)
         {
             this.Tiles = tiles;
             this.trafficRules = trafficRules;
-            for(int i = 0; i <= this.Tiles.Count; i++)
-            {
-                if(this.Tiles[i].Type == TileType.Road || this.Tiles[i].Type == TileType.Grass)
-                {
-                    RoadGrassTiles.Add(this.Tiles[i]);
-                }
-                else
-                {
-                    CarTiles.Add(this.Tiles[i]);
-                }
-            }
         }
 
         public void Tick()
