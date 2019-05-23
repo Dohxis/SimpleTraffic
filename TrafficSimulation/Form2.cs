@@ -484,6 +484,14 @@ namespace TrafficSimulation
                     Application.OpenForms[i].Close();
             }
         }
+
+        private void btn_Clear_Click(object sender, EventArgs e)
+        {
+            _intersectionCounter = 0;
+            grid.Clear();
+            grid.comparePoints.Clear();
+            this.CreateGrid(grid);
+        }
     }
 }
 

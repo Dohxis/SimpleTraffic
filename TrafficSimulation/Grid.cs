@@ -34,6 +34,10 @@ namespace TrafficSimulation
         public List<Tile> RightSpawnPoints { get; private set; }
 
         public List<Tile> exitPoints { get; private set; }
+        public List<Tile> DownExitPoints { get; private set; }
+        public List<Tile> UpExitPoints { get; private set; }
+        public List<Tile> LeftExitPoints { get; private set; }
+        public List<Tile> RightExitPoints { get; private set; }
 
         public Grid(List<Tile> tiles, TrafficRules trafficRules)
         {
@@ -717,6 +721,13 @@ namespace TrafficSimulation
             UpSpawnPoints = new List<Tile>();
             DownSpawnPoints = new List<Tile>();
 
+            exitPoints = new List<Tile>();
+            LeftExitPoints = new List<Tile>();
+            RightExitPoints = new List<Tile>();
+            UpExitPoints = new List<Tile>();
+            DownExitPoints = new List<Tile>();
+
+
             foreach (Tile t in Tiles)
             {   //Finding all the spawnpoints
                 Tile t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y - 1);
@@ -754,6 +765,14 @@ namespace TrafficSimulation
                     spawnPoints.Add(t);
                     DownSpawnPoints.Add(t);
                 }
+            }
+        }
+
+        public void Clear()
+        {
+            foreach (Tile t in Tiles)
+            {
+                t.Type = TileType.Empty;
             }
         }
     }
