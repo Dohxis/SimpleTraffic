@@ -730,18 +730,18 @@ namespace TrafficSimulation
 
             foreach (Tile t in Tiles)
             {   //Finding all the spawnpoints
-                Tile t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y - 1);
+                Tile t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y + 1);
                 Tile t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X - 1 && tile.Position.Y == t.Position.Y);
-                if (t.Type == TileType.Road && t1.Type == TileType.Road && t2.Type == TileType.Empty)
+                if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty)
                 {
                     t.Type = TileType.SpawnPoint;
                     spawnPoints.Add(t);
                     LeftSpawnPoints.Add(t);
                 }
 
-                t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X + 1 && tile.Position.Y == t.Position.Y);
+                t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X - 1 && tile.Position.Y == t.Position.Y);
                 t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y - 1);
-                if (t.Type == TileType.Road && t1.Type == TileType.Road && t2.Type == TileType.Empty)
+                if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty)
                 {
                     t.Type = TileType.SpawnPoint;
                     spawnPoints.Add(t);
@@ -764,6 +764,43 @@ namespace TrafficSimulation
                     t.Type = TileType.SpawnPoint;
                     spawnPoints.Add(t);
                     DownSpawnPoints.Add(t);
+                }
+
+                //Finding all the exitpoints
+                t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X + 1 && tile.Position.Y == t.Position.Y);
+                t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y - 1);
+                if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty) // upper exitpoint
+                {
+                    t.Type = TileType.ExitPoint;
+                    exitPoints.Add(t);
+                    UpExitPoints.Add(t);
+                }
+
+                t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y - 1);
+                t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X - 1 && tile.Position.Y == t.Position.Y);
+                if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty) // left exitpoint
+                {
+                    t.Type = TileType.ExitPoint;
+                    exitPoints.Add(t);
+                    LeftExitPoints.Add(t);
+                }
+
+                t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X - 1 && tile.Position.Y == t.Position.Y);
+                t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y + 1);
+                if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty) // down exipoint
+                {
+                    t.Type = TileType.ExitPoint;
+                    exitPoints.Add(t);
+                    DownExitPoints.Add(t);
+                }
+
+                t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y + 1);
+                t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X + 1 && tile.Position.Y == t.Position.Y);
+                if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty) // right exitpoint
+                {
+                    t.Type = TileType.ExitPoint;
+                    exitPoints.Add(t);
+                    RightExitPoints.Add(t);
                 }
             }
         }

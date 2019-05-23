@@ -395,7 +395,7 @@ namespace TrafficSimulation
         {
             foreach (Tile t in grid.Tiles)
             {
-                if (t.Type == TileType.SpawnPoint)
+                if (t.Type == TileType.SpawnPoint || t.Type == TileType.ExitPoint)
                 {
                     t.Type = TileType.Road;
                 }
