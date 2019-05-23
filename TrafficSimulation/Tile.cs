@@ -45,7 +45,7 @@ namespace TrafficSimulation
 
         public TileAction getNextAction()
         {
-            if(this.Actions.Count() == 0)
+            if(this.Actions == null)
             {
                 // Here we could return RemoveCarAction if tile 
                 // type is Car, which would allow us to simply 
@@ -57,9 +57,19 @@ namespace TrafficSimulation
                 return new NoAction();
             }
 
-            TileAction nextAction = this.Actions[0];
-            this.Actions.RemoveAt(0);
-            return nextAction;
+            if (this.Actions.Count != 0)
+            {
+                TileAction nextAction = this.Actions[0];
+                this.Actions.RemoveAt(0);
+                return nextAction;
+            }
+
+            if (this.Type == TileType.Car && this.Actions.Count == 0)
+            {
+                return new RemoveCar();
+            }
+
+            return new NoAction();
         }
     }
 }

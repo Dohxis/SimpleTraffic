@@ -35,6 +35,9 @@ namespace TrafficSimulation.Actions
                 case Direction.Left:
                     updatedTiles = this.MoveLeft(car, tiles);
                     break;
+                case Direction.Down:
+                    updatedTiles = this.MoveDown(car, tiles);
+                    break;
                 // Need to do Down, but for this demo it was unnecessary
                 default:
                     updatedTiles = tiles;
@@ -74,7 +77,16 @@ namespace TrafficSimulation.Actions
             return this.Move(newCarIndex, car, tiles);
         }
 
-        
+        private List<Tile> MoveDown(Tile car, List<Tile> tiles)
+        {
+            int newCarIndex = tiles.FindIndex(tile =>
+                tile.Position.Y == car.Position.Y + 1 &&
+                tile.Position.X == car.Position.X
+            );
+
+            return this.Move(newCarIndex, car, tiles);
+        }
+
 
         private List<Tile> Move(int newCarIndex, Tile car, List<Tile> tiles)
         {
@@ -85,20 +97,25 @@ namespace TrafficSimulation.Actions
                 tile.Position.X == car.Position.X
             );
 
-            
-
-            if (newCarIndex != -1)
+            if (tiles[newCarIndex].Type == TileType.Road)
             {
-                updatedTiles[newCarIndex].Type = TileType.Car;
-                updatedTiles[newCarIndex].Actions = car.Actions;
-                updatedTiles[newCarIndex].Dirty = true;
+                if (newCarIndex != -1)
+                {
+                    updatedTiles[newCarIndex].Type = TileType.Car;
+                    updatedTiles[newCarIndex].Actions = car.Actions;
+                    updatedTiles[newCarIndex].Dirty = true;
+                }
+
+                updatedTiles[newRoadIndex].Actions = new List<TileAction>();
+                updatedTiles[newRoadIndex].Type = TileType.Road;
+                updatedTiles[newRoadIndex].Dirty = true;
+
+                return updatedTiles;
             }
-
-            updatedTiles[newRoadIndex].Actions = new List<TileAction>();
-            updatedTiles[newRoadIndex].Type = TileType.Road;
-            updatedTiles[newRoadIndex].Dirty = true;
-
-            return updatedTiles;
+            else
+            {
+                return tiles;
+            }           
         }
     }
 }

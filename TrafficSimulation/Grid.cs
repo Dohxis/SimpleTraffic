@@ -28,6 +28,11 @@ namespace TrafficSimulation
         public List<Tile> comparePoints { get; private set; }
         public List<Tile> selectedOnes { get; private set; }
         public List<Tile> spawnPoints { get; private set; }
+        public List<Tile> DownSpawnPoints { get; private set; }
+        public List<Tile> UpSpawnPoints { get; private set; }
+        public List<Tile> LeftSpawnPoints { get; private set; }
+        public List<Tile> RightSpawnPoints { get; private set; }
+
         public List<Tile> exitPoints { get; private set; }
 
         public Grid(List<Tile> tiles, TrafficRules trafficRules)
@@ -51,6 +56,7 @@ namespace TrafficSimulation
         {
             this.Tiles = tiles;
             comparePoints = new List<Tile>();
+            trafficRules = new SimpleTrafficRules();
         }
 
         public void Tick()
@@ -706,6 +712,10 @@ namespace TrafficSimulation
         {
             spawnPoints = new List<Tile>();
             exitPoints = new List<Tile>();
+            LeftSpawnPoints = new List<Tile>();
+            RightSpawnPoints = new List<Tile>();
+            UpSpawnPoints = new List<Tile>();
+            DownSpawnPoints = new List<Tile>();
 
             foreach (Tile t in Tiles)
             {   //Finding all the spawnpoints
@@ -715,6 +725,7 @@ namespace TrafficSimulation
                 {
                     t.Type = TileType.SpawnPoint;
                     spawnPoints.Add(t);
+                    LeftSpawnPoints.Add(t);
                 }
 
                 t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X + 1 && tile.Position.Y == t.Position.Y);
@@ -723,6 +734,7 @@ namespace TrafficSimulation
                 {
                     t.Type = TileType.SpawnPoint;
                     spawnPoints.Add(t);
+                    UpSpawnPoints.Add(t);
                 }
 
                 t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y - 1);
@@ -731,6 +743,7 @@ namespace TrafficSimulation
                 {
                     t.Type = TileType.SpawnPoint;
                     spawnPoints.Add(t);
+                    RightSpawnPoints.Add(t);
                 }
 
                 t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X + 1 && tile.Position.Y == t.Position.Y);
@@ -739,6 +752,7 @@ namespace TrafficSimulation
                 {
                     t.Type = TileType.SpawnPoint;
                     spawnPoints.Add(t);
+                    DownSpawnPoints.Add(t);
                 }
             }
         }

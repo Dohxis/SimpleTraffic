@@ -24,6 +24,12 @@ namespace TrafficSimulation
 
         public Form1()
         {
+            // Form1 will be used for displaying statistics at the end of the Simulation             
+             
+
+
+
+
             InitializeComponent();
             //this.grid = this.createDemoGrid();
             // this.pictureBoxes = new List<PictureBox>();
