@@ -147,11 +147,11 @@ namespace TrafficSimulation
             Random random = new Random();
             Tile car = new Tile(2, 3, TileType.Car, actions);
 
-            switch (random.Next(3))
+            /*switch (random.Next(3))
             {
-                case 0:
+                case 0:*/
                     car.getRoute(new Position(2, 0), grid.Tiles);
-                    break;
+                    /*break;
                 case 1:
                     car.getRoute(new Position(3, 2), grid.Tiles);
                     break;
@@ -159,7 +159,7 @@ namespace TrafficSimulation
                 case 2:
                     car.getRoute(new Position(0, 1), grid.Tiles);
                     break;
-            }
+            }*/
 
 
             this.grid.UpdateTile(2, 3, TileType.Car, car.Actions);

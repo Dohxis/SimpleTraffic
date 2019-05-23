@@ -27,9 +27,18 @@ namespace TrafficSimulation
             List<Tile> temp = tileLs;
             List<Tile> tileList = new List<Tile>();
             List<TileAction> actionList = new List<TileAction>();
-            tileList.Add(new Tile(xy.X, xy.Y, TileType.Road, new List<TileAction>()));
+            Tile dest = new Tile(xy.X, xy.Y, TileType.Road, new List<TileAction>());
+            tileList.Add(dest);
             foreach (Tile item in temp)
             {
+            if(item.Position == dest.Position)
+            {
+                continue;
+            }
+            if (tileList.Contains(item))
+            {
+                continue;
+            }
             if (item.Type == TileType.Road)
             {
                   if (item.Position.X < tileList[tileList.Count() - 1].Position.X && item.Position.Y == tileList[tileList.Count() - 1].Position.Y)
@@ -94,10 +103,10 @@ namespace TrafficSimulation
                 // Here we could return RemoveCarAction if tile 
                 // type is Car, which would allow us to simply 
                 // calculate all statistics
-                if(this.Type == TileType.Car)
+                /*if(this.Type == TileType.Car)
                 {
                     return new RemoveCar();
-                }
+                }*/
                 return new NoAction();
             }
 
