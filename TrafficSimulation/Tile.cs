@@ -43,6 +43,95 @@ namespace TrafficSimulation
             Position.Y = y;
         }
 
+        public List<TileAction> getRoute(Tile spawn, List<Tile> Tiles, Tile exit)
+        {
+            List<Tile> routeList = new List<Tile>();
+             
+            MoveAction LeadAction = new MoveAction(Direction.Up);
+            Tile currentTile = spawn;
+            Tile nextTile;
+            do
+            {
+                nextTile = Tiles.Find(box =>
+                            box.Position.X == currentTile.Position.X &&
+                            box.Position.Y == currentTile.Position.Y - 1
+                        );
+                currentTile = nextTile;
+                Actions.Add(LeadAction);
+            } while (currentTile.Position.Y != exit.Position.Y);
+
+            if (exit.Position.X < currentTile.Position.X)
+            {
+                LeadAction = new MoveAction(Direction.Left);
+
+                do
+                {
+                    nextTile = Tiles.Find(box =>
+                                box.Position.X == currentTile.Position.X - 1 &&
+                                box.Position.Y == currentTile.Position.Y
+                            );
+                    currentTile = nextTile;
+                    Actions.Add(LeadAction);
+                } while (currentTile.Position.X != exit.Position.X);
+
+            }
+            else
+            {
+                LeadAction = new MoveAction(Direction.Right);
+                do
+                {
+                    nextTile = Tiles.Find(box =>
+                                box.Position.X == currentTile.Position.X + 1 &&
+                                box.Position.Y == currentTile.Position.Y
+                            );
+                    currentTile = nextTile;
+                    Actions.Add(LeadAction);
+                } while (currentTile.Position.X != exit.Position.X);
+            }
+
+            
+
+            return Actions;
+
+            /*for(int i = 0; i < routeList.Count(); i++)
+            {
+                if (routeList[i].Type == TileType.DownControlPoint && routeList[i+1].Type == TileType.DownControlPoint)
+                {
+                    MoveAction up = new MoveAction(Direction.Up);
+                    actionList.Add(up);
+                    actionList.Add(up);
+                    actionList.Add(up);
+                    actionList.Add(up);
+                    actionList.Add(up);
+                }
+                else if (routeList[i].Type == TileType.RightControlPoint)
+                {
+                    MoveAction up = new MoveAction(Direction.Up);
+                    actionList.Add(up);
+                    actionList.Add(up);
+                    actionList.Add(up);
+                }
+                else if (routeList[i].Type == TileType.LeftControlPoint)
+                {
+                    MoveAction up = new MoveAction(Direction.Up);
+                    actionList.Add(up);
+                    actionList.Add(up);
+                    actionList.Add(up);
+                }
+                else if (routeList[i].Type == TileType.UpControlPoint)
+                {
+                    MoveAction down = new MoveAction(Direction.Up);
+                    actionList.Add(up);
+                    actionList.Add(up);
+                    actionList.Add(up);
+                }
+                else if ()
+                {
+
+                }
+            }*/
+        }
+
         public TileAction getNextAction()
         {
             if(this.Actions == null)

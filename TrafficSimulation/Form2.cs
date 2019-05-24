@@ -74,14 +74,28 @@ namespace TrafficSimulation
 
         private void spawnDemoCar()
         {
-            List<TileAction> actions;
+            List<TileAction> actions = new List<TileAction>();
             Random random = new Random();
             Random ran = new Random();
 
             int i = ran.Next(grid.spawnPoints.Count);
             Tile point = grid.spawnPoints[i];
 
-            if (grid.LeftSpawnPoints.Contains(point))                    //spawnpoint is on the left edge of the map                                          
+            int a = ran.Next(grid.DownSpawnPoints.Count);
+            Tile spawn = grid.DownSpawnPoints[a];
+
+            int b = ran.Next(grid.LeftExitPoints.Count);
+            Tile exit = grid.LeftExitPoints[b];
+
+            Tile car = new Tile(spawn.Position.X, spawn.Position.Y, TileType.Car, actions);
+            
+
+
+
+            this.grid.UpdateTile(spawn.Position.X, spawn.Position.Y, TileType.Car, car.getRoute(spawn, grid.Tiles, exit));
+            this.CreateGrid(this.grid);
+
+            /*if (grid.LeftSpawnPoints.Contains(point))                    //spawnpoint is on the left edge of the map                                          
             {
                 //this pseudo-random is very weird, it always does the same shit
                 switch (random.Next(4))
@@ -314,10 +328,9 @@ namespace TrafficSimulation
                     };
                         break;
                 }
-            }                        
-
-            this.grid.UpdateTile(grid.spawnPoints[i].Position.X, grid.spawnPoints[i].Position.Y, TileType.Car, actions);
-            this.CreateGrid(this.grid);
+            }    */
+            //this.grid.UpdateTile(grid.spawnPoints[i].Position.X, grid.spawnPoints[i].Position.Y, TileType.Car, actions);
+            //this.CreateGrid(this.grid);
         }
 
         private Grid CreateInitialGrid()
@@ -381,7 +394,12 @@ namespace TrafficSimulation
                 case TileType.SpawnPoint:
                     return Color.Red;
                 case TileType.ExitPoint:
-                    return Color.Black;
+                    return Color.Pink;
+                case TileType.UpControlPoint:
+                case TileType.DownControlPoint:
+                case TileType.LeftControlPoint:
+                case TileType RightControlPoint:
+                    return Color.Purple;
 
                 // Compiler is stupid and cannot realize that
                 // there is no other type, so this will
