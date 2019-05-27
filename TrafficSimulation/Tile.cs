@@ -29,6 +29,9 @@ namespace TrafficSimulation
             List<TileAction> actionList = new List<TileAction>();
             Tile dest = new Tile(xy.X, xy.Y, TileType.Road, new List<TileAction>());
             tileList.Add(dest);
+
+
+
             foreach (Tile item in temp)
             {
             if(item.Position == dest.Position)
