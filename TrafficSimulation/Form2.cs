@@ -427,7 +427,7 @@ namespace TrafficSimulation
             if (rbPlusIntersection.Checked == true)
             {
                 RestoreGrid();
-                grid.Draw_PlusIntersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter);
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Plus);
                 grid.CheckGrid();
                 this.CreateGrid(grid);
                 _intersectionCounter++;
@@ -436,7 +436,7 @@ namespace TrafficSimulation
             else if (rbTUp.Checked == true)
             {
                 RestoreGrid();
-                grid.Draw_TIntersectionUp(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter);
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TUp);
                 grid.CheckGrid();
                 this.CreateGrid(grid);
                 _intersectionCounter++;
@@ -445,7 +445,7 @@ namespace TrafficSimulation
             else if (rbTDown.Checked == true)
             {
                 RestoreGrid();
-                grid.Draw_TIntersectionDown(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter);
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TDown);
                 grid.CheckGrid();
                 this.CreateGrid(grid);
                 _intersectionCounter++;
@@ -454,7 +454,7 @@ namespace TrafficSimulation
             else if (rbTLeft.Checked == true)
             {
                 RestoreGrid();
-                grid.Draw_TIntersectionLeft(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter);
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TLeft);
                 grid.CheckGrid();
                 this.CreateGrid(grid);
                 _intersectionCounter++;
@@ -462,7 +462,39 @@ namespace TrafficSimulation
             else if (rbTRight.Checked == true)
             {
                 RestoreGrid();
-                grid.Draw_TIntersectionRight(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter);
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TRight);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+            }
+            else if (rbCorner1.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Corner1);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+            }
+            else if (rbCorner2.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Corner2);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+            }
+            else if (rbCorner3.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Corner3);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+            }
+            else if (rbCorner4.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Corner4);
                 grid.CheckGrid();
                 this.CreateGrid(grid);
                 _intersectionCounter++;

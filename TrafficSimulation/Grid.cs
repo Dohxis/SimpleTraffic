@@ -85,13 +85,58 @@ namespace TrafficSimulation
             this.Tiles[tileIndex] = newTile;
         }
 
-        public void Draw_PlusIntersection(int x, int y, int intersectionCounter)
+
+
+        public void Draw_Intersection(int x, int y, int intersectionCounter, IntersectionType section_type)
         {
-            if (x + 7 <= Tiles[Tiles.Count - 1].Position.X && y + 7 <= Tiles[Tiles.Count - 1].Position.Y && Tiles[Tiles.Count - 1].Type == TileType.Empty)
+            var replaceSwitch1 = new Dictionary<IntersectionType, Action>
+            {
+                {IntersectionType.Plus, () => AddPlusToGrid(x,y)},
+                {IntersectionType.TUp, () => AddT_UpToGrid(x,y)},
+                {IntersectionType.TDown, () => AddT_DownToGrid(x,y) },
+                {IntersectionType.TLeft, () => AddT_LeftToGrid(x,y) },
+                {IntersectionType.TRight, () => AddT_RightToGrid(x,y) },
+                {IntersectionType.Corner1, () => Add_Corner1(x,y) },
+                {IntersectionType.Corner2, () => Add_Corner2(x,y) },
+                {IntersectionType.Corner3, () => AddT_DownToGrid(x,y) },
+                {IntersectionType.Corner4, () => AddT_DownToGrid(x,y) },
+            };
+
+
+            if (x + 7 < Tiles[Tiles.Count - 1].Position.X && y + 7 < Tiles[Tiles.Count - 1].Position.Y)
             {
                 if (intersectionCounter == 0)
                 {
-                    AddPlusToGrid(x,y);
+                    switch (section_type)
+                    {
+                        case IntersectionType.Plus:
+                            AddPlusToGrid(x,y);
+                            break;
+                        case IntersectionType.TUp:
+                            AddT_UpToGrid(x, y);
+                            break;
+                        case IntersectionType.TDown:
+                            AddT_DownToGrid(x, y);
+                            break;
+                        case IntersectionType.TLeft:
+                            AddT_LeftToGrid(x, y);
+                            break;
+                        case IntersectionType.TRight:
+                            AddT_RightToGrid(x, y);
+                            break;
+                        case IntersectionType.Corner1:
+                            Add_Corner1(x, y);
+                            break;
+                        case IntersectionType.Corner2:
+                            Add_Corner2(x, y);
+                            break;
+                        case IntersectionType.Corner3:
+                            Add_Corner3(x, y);
+                            break;
+                        case IntersectionType.Corner4:
+                            Add_Corner4(x, y);
+                            break;
+                    }
                 }
                 else
                 {
@@ -104,360 +149,177 @@ namespace TrafficSimulation
                     int _closestY = 0;
 
                     Tile e = this.Tiles.Find(tile => tile.Position.X == x && tile.Position.Y == y);
+
+
+
+                    foreach (Tile t in comparePoints)
+                    {
+                        _distance = Math.Abs(t.Position.X - e.Position.X);
+
+                        if (_distance < _newValueX)
+                        {
+                            _newValueX = _distance;
+                            _closestX = t.Position.X;
+                        }
+                    }
+
+                    foreach (Tile a in comparePoints)
+                    {
+                        if (a.Position.X == _closestX)
+                        {
+                            _distance = Math.Abs(a.Position.Y - e.Position.Y);
+
+                            if (_distance < _newValueY)
+                            {
+                                _newValueY = _distance;
+                                _closestY = a.Position.Y;
+                            }
+                        }
+                    }
+
+                    Tile _closest = this.Tiles.Find(tile => tile.Position.X == _closestX && tile.Position.Y == _closestY);
+
 
                     
 
-                    foreach (Tile t in comparePoints)
-                    {
-                        _distance = Math.Abs(t.Position.X - e.Position.X);
-
-                        if (_distance < _newValueX)
-                        {
-                            _newValueX = _distance;
-                            _closestX = t.Position.X;
-                        }
-                    }
-
-                    foreach (Tile a in comparePoints)
-                    {
-                        if (a.Position.X == _closestX)
-                        {
-                            _distance = Math.Abs(a.Position.Y - e.Position.Y);
-
-                            if (_distance < _newValueY)
-                            {
-                                _newValueY = _distance;
-                                _closestY = a.Position.Y;
-                            }
-                        }
-                    }
-
-                    Tile _closest = this.Tiles.Find(tile => tile.Position.X == _closestX && tile.Position.Y == _closestY);
-
-                    if (e.Position.Y >= _closest.Position.Y && e.Position.Y < _closest.Position.Y + 8 && e.Position.X < _closest.Position.X) // Add Left
-                    {
-                        AddPlusToGrid(_closestX - 8, _closestY);
-                    }
-                    else if (e.Position.Y >= _closest.Position.Y && e.Position.Y < _closest.Position.Y + 8 && e.Position.X > _closest.Position.X) // Add Right
-                    {
-                        AddPlusToGrid(_closestX + 8, _closestY);
-                    }
-                    else if (e.Position.X >= _closest.Position.X &&
-                             e.Position.X < _closest.Position.X + 8 &&
-                             e.Position.Y < _closest.Position.Y) // Add up
-                    {
-                        AddPlusToGrid(_closestX, _closestY - 8);
-                    }
-                    else if (e.Position.X >= _closest.Position.X &&
-                             e.Position.X < _closest.Position.X + 8 &&
-                             e.Position.Y > _closest.Position.Y) // Add Down
-                    {
-                        AddPlusToGrid(_closestX, _closestY + 8);
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("Out of boundaries!");
-            }
-        }
-
-        public void Draw_TIntersectionUp(int x, int y, int intersectionCounter)
-        {
-            if (x + 7 < Tiles[Tiles.Count - 1].Position.X && y + 7 < Tiles[Tiles.Count - 1].Position.Y)
-            {
-                if (intersectionCounter == 0)
-                {
-                    AddPlusToGrid(x, y);
-                }
-                else
-                {
-                    int _distance;
-
-                    int _newValueX = Int32.MaxValue;
-                    int _newValueY = Int32.MaxValue;
-
-                    int _closestX = 0;
-                    int _closestY = 0;
-
-                    Tile e = this.Tiles.Find(tile => tile.Position.X == x && tile.Position.Y == y);
-
-
-
-                    foreach (Tile t in comparePoints)
-                    {
-                        _distance = Math.Abs(t.Position.X - e.Position.X);
-
-                        if (_distance < _newValueX)
-                        {
-                            _newValueX = _distance;
-                            _closestX = t.Position.X;
-                        }
-                    }
-
-                    foreach (Tile a in comparePoints)
-                    {
-                        if (a.Position.X == _closestX)
-                        {
-                            _distance = Math.Abs(a.Position.Y - e.Position.Y);
-
-                            if (_distance < _newValueY)
-                            {
-                                _newValueY = _distance;
-                                _closestY = a.Position.Y;
-                            }
-                        }
-                    }
-
-                    Tile _closest = this.Tiles.Find(tile => tile.Position.X == _closestX && tile.Position.Y == _closestY);
-
-
                     if (e.Position.Y >= _closest.Position.Y && e.Position.Y < _closest.Position.Y + 8 && e.Position.X < e.Position.X) // Add Left
                     {
-                        AddT_UpToGrid(_closestX - 8, _closestY);
+                        switch (section_type)
+                        {
+                            case IntersectionType.Plus:
+                                AddPlusToGrid(_closestX - 8, _closestY);
+                                break;
+                            case IntersectionType.TUp:
+                                AddT_UpToGrid(_closestX - 8, _closestY);
+                                break;
+                            case IntersectionType.TDown:
+                                AddT_DownToGrid(_closestX - 8, _closestY);
+                                break;
+                            case IntersectionType.TLeft:
+                                AddT_LeftToGrid(_closestX - 8, _closestY);
+                                break;
+                            case IntersectionType.TRight:
+                                AddT_RightToGrid(_closestX - 8, _closestY);
+                                break;
+                            case IntersectionType.Corner1:
+                                Add_Corner1(_closestX - 8, _closestY);
+                                break;
+                            case IntersectionType.Corner2:
+                                Add_Corner2(_closestX - 8, _closestY);
+                                break;
+                            case IntersectionType.Corner3:
+                                Add_Corner3(_closestX - 8, _closestY);
+                                break;
+                            case IntersectionType.Corner4:
+                                Add_Corner4(_closestX - 8, _closestY);
+                                break;
+                        }
                     }
                     else if (e.Position.Y >= _closest.Position.Y && e.Position.Y < _closest.Position.Y + 8 && e.Position.X > _closest.Position.X) // Add Right
                     {
-                        AddT_UpToGrid(_closestX + 8, _closestY);
+                        switch (section_type)
+                        {
+                            case IntersectionType.Plus:
+                                AddPlusToGrid(_closestX + 8, _closestY);
+                                break;
+                            case IntersectionType.TUp:
+                                AddT_UpToGrid(_closestX + 8, _closestY);
+                                break;
+                            case IntersectionType.TDown:
+                                AddT_DownToGrid(_closestX + 8, _closestY);
+                                break;
+                            case IntersectionType.TLeft:
+                                AddT_LeftToGrid(_closestX + 8, _closestY);
+                                break;
+                            case IntersectionType.TRight:
+                                AddT_RightToGrid(_closestX + 8, _closestY);
+                                break;
+                            case IntersectionType.Corner1:
+                                Add_Corner1(_closestX + 8, _closestY);
+                                break;
+                            case IntersectionType.Corner2:
+                                Add_Corner2(_closestX + 8, _closestY);
+                                break;
+                            case IntersectionType.Corner3:
+                                Add_Corner3(_closestX + 8, _closestY);
+                                break;
+                            case IntersectionType.Corner4:
+                                Add_Corner4(_closestX + 8, _closestY);
+                                break;
+                        }
                     }
                     else if (e.Position.X >= _closest.Position.X &&
                              e.Position.X < _closest.Position.X + 8 &&
                              e.Position.Y < _closest.Position.Y) // Add up
-                    {
-                        AddT_UpToGrid(_closestX, _closestY - 8);
+                    { 
+                        switch (section_type)
+                        {
+                            case IntersectionType.Plus:
+                                AddPlusToGrid(_closestX, _closestY - 8);
+                                break;
+                            case IntersectionType.TUp:
+                                AddT_UpToGrid(_closestX + 8, _closestY);
+                                break;
+                            case IntersectionType.TDown:
+                                AddT_DownToGrid(_closestX, _closestY - 8);
+                                break;
+                            case IntersectionType.TLeft:
+                                AddT_LeftToGrid(_closestX, _closestY - 8);
+                                break;
+                            case IntersectionType.TRight:
+                                AddT_RightToGrid(_closestX, _closestY - 8);
+                                break;
+                            case IntersectionType.Corner1:
+                                Add_Corner1(_closestX, _closestY - 8);
+                                break;
+                            case IntersectionType.Corner2:
+                                Add_Corner2(_closestX, _closestY - 8);
+                                break;
+                             case IntersectionType.Corner3:
+                                Add_Corner3(_closestX, _closestY - 8);
+                                break;
+                             case IntersectionType.Corner4:
+                                Add_Corner4(_closestX, _closestY - 8);
+                                break;
+                        }
                     }
                     else if (e.Position.X >= _closest.Position.X &&
                              e.Position.X < _closest.Position.X + 8 &&
                              e.Position.Y > _closest.Position.Y) // Add Down
                     {
-                        AddT_UpToGrid(_closestX, _closestY + 8);
+                        switch (section_type)
+                        {
+                            case IntersectionType.Plus:
+                                AddPlusToGrid(_closestX, _closestY + 8);
+                                break;
+                            case IntersectionType.TUp:
+                                AddT_UpToGrid(_closestX, _closestY + 8);
+                                break;
+                            case IntersectionType.TDown:
+                                AddT_DownToGrid(_closestX, _closestY + 8);
+                                break;
+                            case IntersectionType.TLeft:
+                                AddT_LeftToGrid(_closestX, _closestY + 8);
+                                break;
+                            case IntersectionType.TRight:
+                                AddT_RightToGrid(_closestX, _closestY + 8);
+                                break;
+                            case IntersectionType.Corner1:
+                                Add_Corner1(_closestX, _closestY + 8);
+                                break;
+                            case IntersectionType.Corner2:
+                                Add_Corner2(_closestX, _closestY + 8);
+                                break;
+                            case IntersectionType.Corner3:
+                                Add_Corner3(_closestX, _closestY + 8);
+                                break;
+                            case IntersectionType.Corner4:
+                                Add_Corner4(_closestX, _closestY + 8);
+                                break;
+                        }
                     }
                 }
             }
-        }
-
-        public void Draw_TIntersectionDown(int x, int y,int intersectionCounter)
-        {
-            if (x + 7 < Tiles[Tiles.Count - 1].Position.X && y + 7 < Tiles[Tiles.Count - 1].Position.Y)
-            {
-                if (intersectionCounter == 0)
-                {
-                    AddT_DownToGrid(x, y);
-                }
-                else
-                {
-                    int _distance;
-
-                    int _newValueX = Int32.MaxValue;
-                    int _newValueY = Int32.MaxValue;
-
-                    int _closestX = 0;
-                    int _closestY = 0;
-
-                    Tile e = this.Tiles.Find(tile => tile.Position.X == x && tile.Position.Y == y);
-
-
-
-                    foreach (Tile t in comparePoints)
-                    {
-                        _distance = Math.Abs(t.Position.X - e.Position.X);
-
-                        if (_distance < _newValueX)
-                        {
-                            _newValueX = _distance;
-                            _closestX = t.Position.X;
-                        }
-                    }
-
-                    foreach (Tile a in comparePoints)
-                    {
-                        if (a.Position.X == _closestX)
-                        {
-                            _distance = Math.Abs(a.Position.Y - e.Position.Y);
-
-                            if (_distance < _newValueY)
-                            {
-                                _newValueY = _distance;
-                                _closestY = a.Position.Y;
-                            }
-                        }
-                    }
-
-                    Tile _closest = this.Tiles.Find(tile => tile.Position.X == _closestX && tile.Position.Y == _closestY);
-
-
-                    if (e.Position.Y >= _closest.Position.Y && e.Position.Y < _closest.Position.Y + 8 && e.Position.X < _closest.Position.X) // Add Left
-                    {
-                        AddT_DownToGrid(_closestX - 8, _closestY);
-                    }
-                    else if (e.Position.Y >= _closest.Position.Y && e.Position.Y < _closest.Position.Y + 8 && e.Position.X > _closest.Position.X) // Add Right
-                    {
-                        AddT_DownToGrid(_closestX + 8, _closestY);
-                    }
-                    else if (e.Position.X >= _closest.Position.X &&
-                             e.Position.X < _closest.Position.X + 8 &&
-                             e.Position.Y < _closest.Position.Y) // Add up
-                    {
-                        AddT_DownToGrid(_closestX, _closestY - 8);
-                    }
-                    else if (e.Position.X >= _closest.Position.X &&
-                             e.Position.X < _closest.Position.X + 8 &&
-                             e.Position.Y > _closest.Position.Y) // Add Down
-                    {
-                        AddT_DownToGrid(_closestX, _closestY + 8);
-                    }
-                }
-            }
-        }
-
-        public void Draw_TIntersectionLeft(int x, int y, int intersectionCounter)
-        {
-            if (x + 7 < Tiles[Tiles.Count - 1].Position.X && y + 7 < Tiles[Tiles.Count - 1].Position.Y)
-            {
-                if (intersectionCounter == 0)
-                {
-                    AddT_DownToGrid(x, y);
-                }
-                else
-                {
-                    int _distance;
-
-                    int _newValueX = Int32.MaxValue;
-                    int _newValueY = Int32.MaxValue;
-
-                    int _closestX = 0;
-                    int _closestY = 0;
-
-                    Tile e = this.Tiles.Find(tile => tile.Position.X == x && tile.Position.Y == y);
-
-
-
-                    foreach (Tile t in comparePoints)
-                    {
-                        _distance = Math.Abs(t.Position.X - e.Position.X);
-
-                        if (_distance < _newValueX)
-                        {
-                            _newValueX = _distance;
-                            _closestX = t.Position.X;
-                        }
-                    }
-
-                    foreach (Tile a in comparePoints)
-                    {
-                        if (a.Position.X == _closestX)
-                        {
-                            _distance = Math.Abs(a.Position.Y - e.Position.Y);
-
-                            if (_distance < _newValueY)
-                            {
-                                _newValueY = _distance;
-                                _closestY = a.Position.Y;
-                            }
-                        }
-                    }
-
-                    Tile _closest = this.Tiles.Find(tile => tile.Position.X == _closestX && tile.Position.Y == _closestY);
-
-
-                    if (e.Position.Y >= _closest.Position.Y && e.Position.Y < _closest.Position.Y + 8 && e.Position.X < _closest.Position.X) // Add Left
-                    {
-                        AddT_LeftToGrid(_closestX - 8, _closestY);
-                    }
-                    else if (e.Position.Y >= _closest.Position.Y && e.Position.Y < _closest.Position.Y + 8 && e.Position.X > _closest.Position.X) // Add Right
-                    {
-                        AddT_LeftToGrid(_closestX + 8, _closestY);
-                    }
-                    else if (e.Position.X >= _closest.Position.X &&
-                             e.Position.X < _closest.Position.X + 8 &&
-                             e.Position.Y < _closest.Position.Y) // Add up
-                    {
-                        AddT_LeftToGrid(_closestX, _closestY - 8);
-                    }
-                    else if (e.Position.X >= _closest.Position.X &&
-                             e.Position.X < _closest.Position.X + 8 &&
-                             e.Position.Y > _closest.Position.Y) // Add Down
-                    {
-                        AddT_LeftToGrid(_closestX, _closestY + 8);
-                    }
-                }
-            }
-        }
-
-        public void Draw_TIntersectionRight(int x, int y, int intersectionCounter)
-        {
-            if (x + 7 < Tiles[Tiles.Count - 1].Position.X && y + 7 < Tiles[Tiles.Count - 1].Position.Y)
-            {
-                if (intersectionCounter == 0)
-                {
-                    AddT_RightToGrid(x, y);
-                }
-                else
-                {
-                    int _distance;
-
-                    int _newValueX = Int32.MaxValue;
-                    int _newValueY = Int32.MaxValue;
-
-                    int _closestX = 0;
-                    int _closestY = 0;
-
-                    Tile e = this.Tiles.Find(tile => tile.Position.X == x && tile.Position.Y == y);
-
-
-
-                    foreach (Tile t in comparePoints)
-                    {
-                        _distance = Math.Abs(t.Position.X - e.Position.X);
-
-                        if (_distance < _newValueX)
-                        {
-                            _newValueX = _distance;
-                            _closestX = t.Position.X;
-                        }
-                    }
-
-                    foreach (Tile a in comparePoints)
-                    {
-                        if (a.Position.X == _closestX)
-                        {
-                            _distance = Math.Abs(a.Position.Y - e.Position.Y);
-
-                            if (_distance < _newValueY)
-                            {
-                                _newValueY = _distance;
-                                _closestY = a.Position.Y;
-                            }
-                        }
-                    }
-
-                    Tile _closest = this.Tiles.Find(tile => tile.Position.X == _closestX && tile.Position.Y == _closestY);
-
-
-                    if (e.Position.Y >= _closest.Position.Y && e.Position.Y < _closest.Position.Y + 8 && e.Position.X < _closest.Position.X) // Add Left
-                    {
-                        AddT_RightToGrid(_closestX - 8, _closestY);
-                    }
-                    else if (e.Position.Y >= _closest.Position.Y && e.Position.Y < _closest.Position.Y + 8 && e.Position.X > _closest.Position.X) // Add Right
-                    {
-                        AddT_RightToGrid(_closestX + 8, _closestY);
-                    }
-                    else if (e.Position.X >= _closest.Position.X &&
-                             e.Position.X < _closest.Position.X + 8 &&
-                             e.Position.Y < _closest.Position.Y) // Add up
-                    {
-                        AddT_RightToGrid(_closestX, _closestY - 8);
-                    }
-                    else if (e.Position.X >= _closest.Position.X &&
-                             e.Position.X < _closest.Position.X + 8 &&
-                             e.Position.Y > _closest.Position.Y) // Add Down
-                    {
-                        AddT_RightToGrid(_closestX, _closestY + 8);
-                    }
-                }
-            }
-
-
         }
 
         public void AddPlusToGrid(int x, int y) // Add method
@@ -483,7 +345,7 @@ namespace TrafficSimulation
                     {
                         if (b == y + 4)
                         {
-                            tiles.Add(new Tile(a, b, TileType.LeftControlPoint, new List<TileAction>()));
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); // change to LeftControlPoint
                         }
                         else if (b == y + 3)
                         {
@@ -498,7 +360,7 @@ namespace TrafficSimulation
                     {
                         if (b == y + 3)
                         {
-                            tiles.Add(new Tile(a, b, TileType.RightControlPoint, new List<TileAction>()));
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); // Change to rightControlPoint
                         }
                         else if (b == y + 4)
                         {
@@ -513,7 +375,7 @@ namespace TrafficSimulation
                     {
                         if (b == y + 2)
                         {
-                            tiles.Add(new Tile(a, b, TileType.UpControlPoint, new List<TileAction>()));
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); // change to upcontrol point
                         }
                         else
                         {
@@ -766,6 +628,344 @@ namespace TrafficSimulation
             }
         }
 
+        public void Add_Corner1(int x, int y)
+        {
+            List<Tile> tiles = new List<Tile>();
+            for (int a = x; a < x + 8; a++)
+            {
+                for (int b = y; b < y + 8; b++)
+                {
+                    if (a >= x && a < x + 2)
+                    {
+                        if (b == y + 3 || b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 2)
+                    {
+                        if (b == y + 3)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else if (b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); //lefcontrol
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 3)
+                    {
+                        if (b == y || b == y + 1 || b == y + 3 || b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else if (b == y + 2)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); // upcontrol
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 4)
+                    {
+                        if (b >= y && b <= y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else
+                    {
+                        tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                    }
+                    
+                }
+            }
+
+            for (int g = 0; g < Tiles.Count; g++)
+            {
+                for (int m = 0; m < tiles.Count; m++)
+                {
+                    if (Tiles[g].Position.X == tiles[m].Position.X && Tiles[g].Position.Y == tiles[m].Position.Y)
+                    {
+                        Tiles[g] = tiles[m];
+                    }
+                }
+            }
+
+            foreach (Tile t in Tiles)
+            {
+                if (t.Position.X == x && t.Position.Y == y)
+                {
+                    comparePoints.Add(t);
+                }
+            }
+        }
+
+        public void Add_Corner2(int x, int y)
+        {
+            List<Tile> tiles = new List<Tile>();
+            for (int a = x; a < x + 8; a++)
+            {
+                for (int b = y; b < y + 8; b++)
+                {
+                    if (a >= x && a <= x + 2)
+                    {
+                        if (b == y + 3 || b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 3)
+                    {
+                        if (b == y || b == y + 1 || b == y + 3 || b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else if (b == y + 2)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); 
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 4)
+                    {
+                        if (b >= y && b <= y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a >= x + 5 &&  a < x+8)
+                    {
+                        if (b == y + 3 || b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else
+                    {
+                        tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                    }
+
+                }
+            }
+
+            for (int g = 0; g < Tiles.Count; g++)
+            {
+                for (int m = 0; m < tiles.Count; m++)
+                {
+                    if (Tiles[g].Position.X == tiles[m].Position.X && Tiles[g].Position.Y == tiles[m].Position.Y)
+                    {
+                        Tiles[g] = tiles[m];
+                    }
+                }
+            }
+
+            foreach (Tile t in Tiles)
+            {
+                if (t.Position.X == x && t.Position.Y == y)
+                {
+                    comparePoints.Add(t);
+                }
+            }
+        }
+
+        public void Add_Corner3(int x, int y)
+        {
+            List<Tile> tiles = new List<Tile>();
+            for (int a = x; a < x + 8; a++)
+            {
+                for (int b = y; b < y + 8; b++)
+                {
+                    if (a >= x && a < x + 2)
+                    {
+                        if (b == y + 3 || b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 2)
+                    {
+                        if (b == y + 3)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else if (b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); //lefcontrol
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 3)
+                    {
+                        if (b >= y + 3 && b <= y + 7)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 4)
+                    {
+                        if (b >= y + 3 && b <= y + 7)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else
+                    {
+                        tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                    }
+
+                }
+            }
+
+            for (int g = 0; g < Tiles.Count; g++)
+            {
+                for (int m = 0; m < tiles.Count; m++)
+                {
+                    if (Tiles[g].Position.X == tiles[m].Position.X && Tiles[g].Position.Y == tiles[m].Position.Y)
+                    {
+                        Tiles[g] = tiles[m];
+                    }
+                }
+            }
+
+            foreach (Tile t in Tiles)
+            {
+                if (t.Position.X == x && t.Position.Y == y)
+                {
+                    comparePoints.Add(t);
+                }
+            }
+        }
+
+        public void Add_Corner4(int x, int y)
+        {
+            List<Tile> tiles = new List<Tile>();
+            for (int a = x; a < x + 8; a++)
+            {
+                for (int b = y; b < y + 8; b++)
+                {
+                    if (a >= x && a <= x + 2)
+                    {
+                        if (b == y + 3 || b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 3)
+                    {
+                        if (b >= y + 3 && b <= y + 7)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 4)
+                    {
+                        if (b >= y + 3 && b <= y + 7)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a >= x + 5 && a < x + 8)
+                    {
+                        if (b == y + 3 || b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else
+                    {
+                        tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                    }
+
+                }
+            }
+
+            for (int g = 0; g < Tiles.Count; g++)
+            {
+                for (int m = 0; m < tiles.Count; m++)
+                {
+                    if (Tiles[g].Position.X == tiles[m].Position.X && Tiles[g].Position.Y == tiles[m].Position.Y)
+                    {
+                        Tiles[g] = tiles[m];
+                    }
+                }
+            }
+
+            foreach (Tile t in Tiles)
+            {
+                if (t.Position.X == x && t.Position.Y == y)
+                {
+                    comparePoints.Add(t);
+                }
+            }
+        }
+
+        //public void Add_Corner();
+
         public void CheckGrid()
         {
             spawnPoints = new List<Tile>();
@@ -783,7 +983,7 @@ namespace TrafficSimulation
 
             
 
-            foreach (Tile t in Tiles)
+            /*foreach (Tile t in Tiles)
             {   //Finding all the spawnpoints
                 Tile t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y + 1);
                 Tile t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X - 1 && tile.Position.Y == t.Position.Y);
@@ -858,7 +1058,7 @@ namespace TrafficSimulation
                     RightExitPoints.Add(t);
                 }
 
-            }
+            }*/
         }
 
         public void Clear()
