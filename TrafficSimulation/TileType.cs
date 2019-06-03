@@ -8,6 +8,6 @@ namespace TrafficSimulation
 {
     enum TileType
     {
-        Grass, Road, Car, Empty, SpawnPoint, ExitPoint, DownControlPoint, UpControlPoint, LeftControlPoint, RightControlPoint
+        Grass, Road, Car, Empty, SpawnPoint, ExitPoint, DownControlPoint, UpControlPoint, LeftControlPoint, RightControlPoint, LeftExitPoint, RightExitPoint, UpExitPoint, DownExitPoint
     }
 }
