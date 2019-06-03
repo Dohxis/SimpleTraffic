@@ -13,7 +13,7 @@ namespace TrafficSimulation.Actions
 
     class MoveAction : TileAction
     {
-        private Direction direction;
+        public Direction direction;
 
         public MoveAction(Direction direction)
         {

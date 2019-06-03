@@ -38,67 +38,89 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tbSpawnedCars = new System.Windows.Forms.TextBox();
             this.btn_Clear = new System.Windows.Forms.Button();
+            this.rbCorner1 = new System.Windows.Forms.RadioButton();
+            this.rbCorner2 = new System.Windows.Forms.RadioButton();
+            this.rbCorner3 = new System.Windows.Forms.RadioButton();
+            this.rbCorner4 = new System.Windows.Forms.RadioButton();
+            this.gbIntersections = new System.Windows.Forms.GroupBox();
+            this.Corner3 = new System.Windows.Forms.PictureBox();
+            this.Corner1 = new System.Windows.Forms.PictureBox();
+            this.TLeft = new System.Windows.Forms.PictureBox();
+            this.TUp = new System.Windows.Forms.PictureBox();
+            this.PlusIntersection = new System.Windows.Forms.PictureBox();
+            this.TrafficPlusIntersection = new System.Windows.Forms.PictureBox();
+            this.TDown = new System.Windows.Forms.PictureBox();
+            this.TRight = new System.Windows.Forms.PictureBox();
+            this.Corner2 = new System.Windows.Forms.PictureBox();
+            this.Corner4 = new System.Windows.Forms.PictureBox();
+            this.rbTrafficPlus = new System.Windows.Forms.RadioButton();
+            this.gbIntersections.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Corner3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Corner1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TLeft)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TUp)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PlusIntersection)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TrafficPlusIntersection)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TRight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Corner2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Corner4)).BeginInit();
             this.SuspendLayout();
             // 
             // rbPlusIntersection
             // 
             this.rbPlusIntersection.AutoSize = true;
-            this.rbPlusIntersection.Location = new System.Drawing.Point(1113, 32);
+            this.rbPlusIntersection.Location = new System.Drawing.Point(23, 55);
             this.rbPlusIntersection.Name = "rbPlusIntersection";
-            this.rbPlusIntersection.Size = new System.Drawing.Size(103, 17);
+            this.rbPlusIntersection.Size = new System.Drawing.Size(14, 13);
             this.rbPlusIntersection.TabIndex = 0;
             this.rbPlusIntersection.TabStop = true;
-            this.rbPlusIntersection.Text = "Plus Intersection";
             this.rbPlusIntersection.UseVisualStyleBackColor = true;
             // 
             // rbTUp
             // 
             this.rbTUp.AutoSize = true;
-            this.rbTUp.Location = new System.Drawing.Point(1113, 55);
+            this.rbTUp.Location = new System.Drawing.Point(23, 135);
             this.rbTUp.Name = "rbTUp";
-            this.rbTUp.Size = new System.Drawing.Size(107, 17);
+            this.rbTUp.Size = new System.Drawing.Size(14, 13);
             this.rbTUp.TabIndex = 1;
             this.rbTUp.TabStop = true;
-            this.rbTUp.Text = "T Intersection Up";
             this.rbTUp.UseVisualStyleBackColor = true;
             // 
             // rbTDown
             // 
             this.rbTDown.AutoSize = true;
-            this.rbTDown.Location = new System.Drawing.Point(1113, 78);
+            this.rbTDown.Location = new System.Drawing.Point(140, 135);
             this.rbTDown.Name = "rbTDown";
-            this.rbTDown.Size = new System.Drawing.Size(121, 17);
+            this.rbTDown.Size = new System.Drawing.Size(14, 13);
             this.rbTDown.TabIndex = 2;
             this.rbTDown.TabStop = true;
-            this.rbTDown.Text = "T Intersection Down";
             this.rbTDown.UseVisualStyleBackColor = true;
             // 
             // rbTLeft
             // 
             this.rbTLeft.AutoSize = true;
-            this.rbTLeft.Location = new System.Drawing.Point(1113, 101);
+            this.rbTLeft.Location = new System.Drawing.Point(23, 217);
             this.rbTLeft.Name = "rbTLeft";
-            this.rbTLeft.Size = new System.Drawing.Size(111, 17);
+            this.rbTLeft.Size = new System.Drawing.Size(14, 13);
             this.rbTLeft.TabIndex = 3;
             this.rbTLeft.TabStop = true;
-            this.rbTLeft.Text = "T Intersection Left";
             this.rbTLeft.UseVisualStyleBackColor = true;
             // 
             // rbTRight
             // 
             this.rbTRight.AutoSize = true;
-            this.rbTRight.Location = new System.Drawing.Point(1113, 124);
+            this.rbTRight.Location = new System.Drawing.Point(140, 217);
             this.rbTRight.Name = "rbTRight";
-            this.rbTRight.Size = new System.Drawing.Size(118, 17);
+            this.rbTRight.Size = new System.Drawing.Size(14, 13);
             this.rbTRight.TabIndex = 4;
             this.rbTRight.TabStop = true;
-            this.rbTRight.Text = "T Intersection Right";
             this.rbTRight.UseVisualStyleBackColor = true;
             // 
             // btnLaunch
             // 
-            this.btnLaunch.Location = new System.Drawing.Point(1113, 214);
-            this.btnLaunch.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnLaunch.Location = new System.Drawing.Point(1113, 497);
+            this.btnLaunch.Margin = new System.Windows.Forms.Padding(2);
             this.btnLaunch.Name = "btnLaunch";
             this.btnLaunch.Size = new System.Drawing.Size(56, 19);
             this.btnLaunch.TabIndex = 5;
@@ -108,8 +130,8 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(1186, 214);
-            this.btnStop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnStop.Location = new System.Drawing.Point(1186, 497);
+            this.btnStop.Margin = new System.Windows.Forms.Padding(2);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(56, 19);
             this.btnStop.TabIndex = 6;
@@ -120,7 +142,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1113, 266);
+            this.label1.Location = new System.Drawing.Point(1098, 553);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(79, 13);
@@ -129,8 +151,8 @@
             // 
             // tbSpawnedCars
             // 
-            this.tbSpawnedCars.Location = new System.Drawing.Point(1196, 266);
-            this.tbSpawnedCars.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbSpawnedCars.Location = new System.Drawing.Point(1181, 550);
+            this.tbSpawnedCars.Margin = new System.Windows.Forms.Padding(2);
             this.tbSpawnedCars.Name = "tbSpawnedCars";
             this.tbSpawnedCars.ReadOnly = true;
             this.tbSpawnedCars.Size = new System.Drawing.Size(34, 20);
@@ -138,7 +160,7 @@
             // 
             // btn_Clear
             // 
-            this.btn_Clear.Location = new System.Drawing.Point(1141, 147);
+            this.btn_Clear.Location = new System.Drawing.Point(104, 437);
             this.btn_Clear.Name = "btn_Clear";
             this.btn_Clear.Size = new System.Drawing.Size(75, 23);
             this.btn_Clear.TabIndex = 9;
@@ -146,23 +168,200 @@
             this.btn_Clear.UseVisualStyleBackColor = true;
             this.btn_Clear.Click += new System.EventHandler(this.btn_Clear_Click);
             // 
+            // rbCorner1
+            // 
+            this.rbCorner1.AutoSize = true;
+            this.rbCorner1.Location = new System.Drawing.Point(23, 379);
+            this.rbCorner1.Name = "rbCorner1";
+            this.rbCorner1.Size = new System.Drawing.Size(14, 13);
+            this.rbCorner1.TabIndex = 10;
+            this.rbCorner1.TabStop = true;
+            this.rbCorner1.UseVisualStyleBackColor = true;
+            // 
+            // rbCorner2
+            // 
+            this.rbCorner2.AutoSize = true;
+            this.rbCorner2.Location = new System.Drawing.Point(140, 299);
+            this.rbCorner2.Name = "rbCorner2";
+            this.rbCorner2.Size = new System.Drawing.Size(14, 13);
+            this.rbCorner2.TabIndex = 11;
+            this.rbCorner2.TabStop = true;
+            this.rbCorner2.UseVisualStyleBackColor = true;
+            // 
+            // rbCorner3
+            // 
+            this.rbCorner3.AutoSize = true;
+            this.rbCorner3.Location = new System.Drawing.Point(23, 296);
+            this.rbCorner3.Name = "rbCorner3";
+            this.rbCorner3.Size = new System.Drawing.Size(14, 13);
+            this.rbCorner3.TabIndex = 12;
+            this.rbCorner3.TabStop = true;
+            this.rbCorner3.UseVisualStyleBackColor = true;
+            // 
+            // rbCorner4
+            // 
+            this.rbCorner4.AutoSize = true;
+            this.rbCorner4.Location = new System.Drawing.Point(140, 379);
+            this.rbCorner4.Name = "rbCorner4";
+            this.rbCorner4.Size = new System.Drawing.Size(14, 13);
+            this.rbCorner4.TabIndex = 13;
+            this.rbCorner4.TabStop = true;
+            this.rbCorner4.UseVisualStyleBackColor = true;
+            // 
+            // gbIntersections
+            // 
+            this.gbIntersections.Controls.Add(this.rbTrafficPlus);
+            this.gbIntersections.Controls.Add(this.btn_Clear);
+            this.gbIntersections.Controls.Add(this.Corner4);
+            this.gbIntersections.Controls.Add(this.rbCorner4);
+            this.gbIntersections.Controls.Add(this.Corner2);
+            this.gbIntersections.Controls.Add(this.Corner3);
+            this.gbIntersections.Controls.Add(this.rbCorner1);
+            this.gbIntersections.Controls.Add(this.PlusIntersection);
+            this.gbIntersections.Controls.Add(this.TLeft);
+            this.gbIntersections.Controls.Add(this.TUp);
+            this.gbIntersections.Controls.Add(this.TrafficPlusIntersection);
+            this.gbIntersections.Controls.Add(this.rbCorner3);
+            this.gbIntersections.Controls.Add(this.TRight);
+            this.gbIntersections.Controls.Add(this.rbCorner2);
+            this.gbIntersections.Controls.Add(this.TDown);
+            this.gbIntersections.Controls.Add(this.Corner1);
+            this.gbIntersections.Controls.Add(this.rbTRight);
+            this.gbIntersections.Controls.Add(this.rbPlusIntersection);
+            this.gbIntersections.Controls.Add(this.rbTLeft);
+            this.gbIntersections.Controls.Add(this.rbTUp);
+            this.gbIntersections.Controls.Add(this.rbTDown);
+            this.gbIntersections.Location = new System.Drawing.Point(1021, 12);
+            this.gbIntersections.Name = "gbIntersections";
+            this.gbIntersections.Size = new System.Drawing.Size(257, 469);
+            this.gbIntersections.TabIndex = 14;
+            this.gbIntersections.TabStop = false;
+            this.gbIntersections.Text = "Interections";
+            // 
+            // Corner3
+            // 
+            this.Corner3.Location = new System.Drawing.Point(43, 347);
+            this.Corner3.Name = "Corner3";
+            this.Corner3.Size = new System.Drawing.Size(80, 74);
+            this.Corner3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.Corner3.TabIndex = 0;
+            this.Corner3.TabStop = false;
+            // 
+            // Corner1
+            // 
+            this.Corner1.Location = new System.Drawing.Point(43, 264);
+            this.Corner1.Name = "Corner1";
+            this.Corner1.Size = new System.Drawing.Size(80, 74);
+            this.Corner1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.Corner1.TabIndex = 1;
+            this.Corner1.TabStop = false;
+            // 
+            // TLeft
+            // 
+            this.TLeft.Location = new System.Drawing.Point(43, 184);
+            this.TLeft.Name = "TLeft";
+            this.TLeft.Size = new System.Drawing.Size(80, 74);
+            this.TLeft.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.TLeft.TabIndex = 2;
+            this.TLeft.TabStop = false;
+            // 
+            // TUp
+            // 
+            this.TUp.Location = new System.Drawing.Point(43, 101);
+            this.TUp.Name = "TUp";
+            this.TUp.Size = new System.Drawing.Size(80, 74);
+            this.TUp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.TUp.TabIndex = 3;
+            this.TUp.TabStop = false;
+            // 
+            // PlusIntersection
+            // 
+            this.PlusIntersection.Location = new System.Drawing.Point(43, 19);
+            this.PlusIntersection.Name = "PlusIntersection";
+            this.PlusIntersection.Size = new System.Drawing.Size(80, 74);
+            this.PlusIntersection.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PlusIntersection.TabIndex = 4;
+            this.PlusIntersection.TabStop = false;
+            // 
+            // TrafficPlusIntersection
+            // 
+            this.TrafficPlusIntersection.Location = new System.Drawing.Point(160, 19);
+            this.TrafficPlusIntersection.Name = "TrafficPlusIntersection";
+            this.TrafficPlusIntersection.Size = new System.Drawing.Size(80, 73);
+            this.TrafficPlusIntersection.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.TrafficPlusIntersection.TabIndex = 5;
+            this.TrafficPlusIntersection.TabStop = false;
+            // 
+            // TDown
+            // 
+            this.TDown.Location = new System.Drawing.Point(160, 101);
+            this.TDown.Name = "TDown";
+            this.TDown.Size = new System.Drawing.Size(80, 74);
+            this.TDown.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.TDown.TabIndex = 6;
+            this.TDown.TabStop = false;
+            // 
+            // TRight
+            // 
+            this.TRight.Location = new System.Drawing.Point(160, 184);
+            this.TRight.Name = "TRight";
+            this.TRight.Size = new System.Drawing.Size(80, 74);
+            this.TRight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.TRight.TabIndex = 7;
+            this.TRight.TabStop = false;
+            // 
+            // Corner2
+            // 
+            this.Corner2.Location = new System.Drawing.Point(160, 264);
+            this.Corner2.Name = "Corner2";
+            this.Corner2.Size = new System.Drawing.Size(80, 74);
+            this.Corner2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.Corner2.TabIndex = 8;
+            this.Corner2.TabStop = false;
+            // 
+            // Corner4
+            // 
+            this.Corner4.Location = new System.Drawing.Point(160, 347);
+            this.Corner4.Name = "Corner4";
+            this.Corner4.Size = new System.Drawing.Size(80, 74);
+            this.Corner4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.Corner4.TabIndex = 9;
+            this.Corner4.TabStop = false;
+            // 
+            // rbTrafficPlus
+            // 
+            this.rbTrafficPlus.AutoSize = true;
+            this.rbTrafficPlus.Location = new System.Drawing.Point(142, 55);
+            this.rbTrafficPlus.Name = "rbTrafficPlus";
+            this.rbTrafficPlus.Size = new System.Drawing.Size(14, 13);
+            this.rbTrafficPlus.TabIndex = 14;
+            this.rbTrafficPlus.TabStop = true;
+            this.rbTrafficPlus.UseVisualStyleBackColor = true;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1290, 845);
-            this.Controls.Add(this.btn_Clear);
+            this.Controls.Add(this.gbIntersections);
             this.Controls.Add(this.tbSpawnedCars);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnLaunch);
-            this.Controls.Add(this.rbTRight);
-            this.Controls.Add(this.rbTLeft);
-            this.Controls.Add(this.rbTDown);
-            this.Controls.Add(this.rbTUp);
-            this.Controls.Add(this.rbPlusIntersection);
             this.Name = "Form2";
             this.Text = "Simulation";
+            this.gbIntersections.ResumeLayout(false);
+            this.gbIntersections.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Corner3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Corner1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TLeft)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TUp)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PlusIntersection)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TrafficPlusIntersection)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TRight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Corner2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Corner4)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -180,5 +379,21 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbSpawnedCars;
         private System.Windows.Forms.Button btn_Clear;
+        private System.Windows.Forms.RadioButton rbCorner1;
+        private System.Windows.Forms.RadioButton rbCorner2;
+        private System.Windows.Forms.RadioButton rbCorner3;
+        private System.Windows.Forms.RadioButton rbCorner4;
+        private System.Windows.Forms.GroupBox gbIntersections;
+        private System.Windows.Forms.RadioButton rbTrafficPlus;
+        private System.Windows.Forms.PictureBox Corner4;
+        private System.Windows.Forms.PictureBox Corner2;
+        private System.Windows.Forms.PictureBox TRight;
+        private System.Windows.Forms.PictureBox TDown;
+        private System.Windows.Forms.PictureBox TrafficPlusIntersection;
+        private System.Windows.Forms.PictureBox PlusIntersection;
+        private System.Windows.Forms.PictureBox TUp;
+        private System.Windows.Forms.PictureBox TLeft;
+        private System.Windows.Forms.PictureBox Corner1;
+        private System.Windows.Forms.PictureBox Corner3;
     }
 }

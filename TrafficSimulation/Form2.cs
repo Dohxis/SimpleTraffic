@@ -39,6 +39,17 @@ namespace TrafficSimulation
             InitializeComponent();
             this.grid = CreateInitialGrid();
             this.pictureBoxes = new List<PictureBox>();
+            this.PlusIntersection.ImageLocation = "plus_intersection.PNG";
+            this.TrafficPlusIntersection.ImageLocation = "TrafficPlus.PNG";
+            this.TUp.ImageLocation = "TUp.PNG";
+            this.TDown.ImageLocation = "TDown.PNG";
+            this.TLeft.ImageLocation = "TLeft.PNG";
+            this.TRight.ImageLocation = "TRight.PNG";
+            this.Corner1.ImageLocation = "Corner1.PNG";
+            this.Corner2.ImageLocation = "Corner2.PNG";
+            this.Corner3.ImageLocation = "Corner3.PNG";
+            this.Corner4.ImageLocation = "Corner4.PNG";
+
             //createTimer();
             CreateGrid(grid);
             btnStop.Enabled = false;
@@ -68,6 +79,11 @@ namespace TrafficSimulation
             {
                 //tbSpawnedCars.Text = carsspawned++.ToString();                    //pops up a cross-threading error, probably need an event to listen to carsspawned changes, and update tbSpawnedCars effectively.
                 this.spawnDemoCar();
+            }
+            if (this.timesUpdated % 3 == 0)
+            {
+
+                grid.ChangeTrafficLightsColor();
             }
         }
 
@@ -437,17 +453,22 @@ namespace TrafficSimulation
                     return Color.Red;
                 case TileType.ExitPoint:
                     return Color.Pink;
+                case TileType.TrafficLightRed:
+                    return Color.DarkRed;
+                case TileType.TrafficLightGreen:
+                    return Color.DarkGreen;
                 case TileType.UpControlPoint:
                 case TileType.DownControlPoint:
                 case TileType.LeftControlPoint:
                 case TileType RightControlPoint:
                     return Color.Purple;
 
+
                 // Compiler is stupid and cannot realize that
                 // there is no other type, so this will
                 // never happen
                 default:
-                    return Color.Red;
+                    return Color.White;
             }
         }
 
@@ -469,16 +490,24 @@ namespace TrafficSimulation
             if (rbPlusIntersection.Checked == true)
             {
                 RestoreGrid();
-                grid.Draw_PlusIntersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter);
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Plus);
                 grid.CheckGrid();
                 this.CreateGrid(grid);
                 _intersectionCounter++;
                 
             }
+            else if (rbTrafficPlus.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TrafficPlus);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+            }
             else if (rbTUp.Checked == true)
             {
                 RestoreGrid();
-                grid.Draw_TIntersectionUp(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter);
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TUp);
                 grid.CheckGrid();
                 this.CreateGrid(grid);
                 _intersectionCounter++;
@@ -487,7 +516,7 @@ namespace TrafficSimulation
             else if (rbTDown.Checked == true)
             {
                 RestoreGrid();
-                grid.Draw_TIntersectionDown(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter);
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TDown);
                 grid.CheckGrid();
                 this.CreateGrid(grid);
                 _intersectionCounter++;
@@ -496,7 +525,7 @@ namespace TrafficSimulation
             else if (rbTLeft.Checked == true)
             {
                 RestoreGrid();
-                grid.Draw_TIntersectionLeft(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter);
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TLeft);
                 grid.CheckGrid();
                 this.CreateGrid(grid);
                 _intersectionCounter++;
@@ -504,7 +533,39 @@ namespace TrafficSimulation
             else if (rbTRight.Checked == true)
             {
                 RestoreGrid();
-                grid.Draw_TIntersectionRight(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter);
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TRight);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+            }
+            else if (rbCorner1.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Corner1);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+            }
+            else if (rbCorner2.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Corner2);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+            }
+            else if (rbCorner3.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Corner3);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+            }
+            else if (rbCorner4.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Corner4);
                 grid.CheckGrid();
                 this.CreateGrid(grid);
                 _intersectionCounter++;
