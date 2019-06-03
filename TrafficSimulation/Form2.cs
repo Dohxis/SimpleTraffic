@@ -81,18 +81,60 @@ namespace TrafficSimulation
             int i = ran.Next(grid.spawnPoints.Count);
             Tile point = grid.spawnPoints[i];
 
-            int a = ran.Next(grid.DownSpawnPoints.Count);
-            Tile spawn = grid.DownSpawnPoints[a];
+            int r = ran.Next(4);
+            int a = 0;
+            Tile spawn = new Tile(0, 0, TileType.SpawnPoint);
+            switch (r)
+            {
+                case 0:
+                    a = ran.Next(grid.DownSpawnPoints.Count);
+                    spawn = grid.DownSpawnPoints[a];
+                    break;
+                case 1:
+                    a = ran.Next(grid.LeftSpawnPoints.Count);
+                    spawn = grid.LeftSpawnPoints[a];
+                    break;
+                case 2:
+                    a = ran.Next(grid.RightSpawnPoints.Count);
+                    spawn = grid.RightSpawnPoints[a];
+                    break;
+                case 3:
+                    a = ran.Next(grid.UpSpawnPoints.Count);
+                    spawn = grid.UpSpawnPoints[a];
+                    break;
 
-            int b = ran.Next(grid.LeftExitPoints.Count);
-            Tile exit = grid.LeftExitPoints[b];
+            }
+
+            r = ran.Next(3);
+            int b = 0;
+            Tile exit = new Tile(0, 0, TileType.ExitPoint);
+            switch (r)
+            {
+                case 0:
+                    b = ran.Next(grid.UpExitPoints.Count);
+                    exit = grid.UpExitPoints[b];
+                    break;
+                case 1:
+                    b = ran.Next(grid.RightExitPoints.Count);
+                    exit = grid.RightExitPoints[b];
+                    break;
+                case 2:
+                    b = ran.Next(grid.LeftExitPoints.Count);
+                    exit = grid.LeftExitPoints[b];
+                    break;
+                case 3:
+                    b = ran.Next(grid.DownExitPoints.Count);
+                    exit = grid.DownExitPoints[b];
+                    break;
+
+            }
 
             Tile car = new Tile(spawn.Position.X, spawn.Position.Y, TileType.Car, actions);
             
 
 
 
-            this.grid.UpdateTile(spawn.Position.X, spawn.Position.Y, TileType.Car, car.getRoute(spawn, grid.Tiles, exit));
+            this.grid.UpdateTile(spawn.Position.X, spawn.Position.Y, TileType.Car, car.getRoute(spawn, grid.Tiles, this.grid, exit));
             this.CreateGrid(this.grid);
 
             /*if (grid.LeftSpawnPoints.Contains(point))                    //spawnpoint is on the left edge of the map                                          

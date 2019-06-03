@@ -483,7 +483,7 @@ namespace TrafficSimulation
                     {
                         if (b == y + 4)
                         {
-                            tiles.Add(new Tile(a, b, TileType.LeftControlPoint, new List<TileAction>()));
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); // Left control point
                         }
                         else if (b == y + 3)
                         {
@@ -498,7 +498,7 @@ namespace TrafficSimulation
                     {
                         if (b == y + 3)
                         {
-                            tiles.Add(new Tile(a, b, TileType.RightControlPoint, new List<TileAction>()));
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); // Right control point
                         }
                         else if (b == y + 4)
                         {
@@ -513,7 +513,7 @@ namespace TrafficSimulation
                     {
                         if (b == y + 2)
                         {
-                            tiles.Add(new Tile(a, b, TileType.UpControlPoint, new List<TileAction>()));
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); // Up control point
                         }
                         else
                         {
