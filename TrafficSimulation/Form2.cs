@@ -69,6 +69,11 @@ namespace TrafficSimulation
                 //tbSpawnedCars.Text = carsspawned++.ToString();                    //pops up a cross-threading error, probably need an event to listen to carsspawned changes, and update tbSpawnedCars effectively.
                 this.spawnDemoCar();
             }
+            if (this.timesUpdated % 3 == 0)
+            {
+
+                grid.ChangeTrafficLightsColor();
+            }
         }
 
 

@@ -868,5 +868,9 @@ namespace TrafficSimulation
                 t.Type = TileType.Empty;
             }
         }
+        public void ChangeTrafficLightsColor()
+        {
+            ((SimpleTrafficRules)trafficRules).ChangeTrafficLights(Tiles);
+        }
     }
 }
