@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
@@ -12,6 +13,7 @@ using System.Timers;
 using System.Windows.Forms;
 using TrafficSimulation.Actions;
 using TrafficSimulation.Rules;
+using System.Reflection;
 
 namespace TrafficSimulation
 {
@@ -39,7 +41,14 @@ namespace TrafficSimulation
             InitializeComponent();
             this.grid = CreateInitialGrid();
             this.pictureBoxes = new List<PictureBox>();
-            this.PlusIntersection.ImageLocation = "plus_intersection.PNG";
+            string ImagesDirectory =
+                    Path.Combine(
+                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                    "Resources"
+                );
+            PlusIntersection.Image = Properties.Resources.rose;
+            
+
             this.TrafficPlusIntersection.ImageLocation = "TrafficPlus.PNG";
             this.TUp.ImageLocation = "TUp.PNG";
             this.TDown.ImageLocation = "TDown.PNG";
