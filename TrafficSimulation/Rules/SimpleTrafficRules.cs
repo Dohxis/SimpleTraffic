@@ -28,7 +28,7 @@ namespace TrafficSimulation.Rules
                 bool lightstrue = true;
                 TileAction nextAction = new NoAction();
 
-                if (tile.Actions.Count > 0)
+                if (tile != null &&tile.Actions.Count > 0)
                 {
                     nextAction = tile.Actions[0];
                 }
@@ -42,25 +42,25 @@ namespace TrafficSimulation.Rules
                     {
                         case Direction.Up:
                             canMove = checkFront(tile.Position.X, tile.Position.Y - 1, initialTiles);
-                            lightstrue = (checkTrafficLight(tile.Position.X + 1, tile.Position.Y, initialTiles) &&/* checkTrafficLight(tile.Position.X + 2, tile.Position.Y, initialTiles) &&*/ checkRightLight(tile.Position.X + 1, tile.Position.Y - 1, initialTiles));
+                            lightstrue = !(checkTrafficLight(tile.Position.X + 1, tile.Position.Y, initialTiles) && checkRightLight(tile.Position.X + 1, tile.Position.Y - 1, initialTiles));
 
                             break;
                         case Direction.Down:
                             canMove = checkFront(tile.Position.X, tile.Position.Y + 1, initialTiles);
-                            lightstrue = (checkTrafficLight(tile.Position.X - 1, tile.Position.Y, initialTiles) && /*checkTrafficLight(tile.Position.X - 2, tile.Position.Y, initialTiles) &&*/ checkRightLight(tile.Position.X - 1, tile.Position.Y + 1, initialTiles));
+                            lightstrue = !(checkTrafficLight(tile.Position.X - 1, tile.Position.Y, initialTiles) &&  checkRightLight(tile.Position.X - 1, tile.Position.Y + 1, initialTiles));
                             break;
                         case Direction.Left:
                             canMove = checkFront(tile.Position.X - 1, tile.Position.Y, initialTiles);
-                            lightstrue = (checkTrafficLight(tile.Position.X, tile.Position.Y - 1, initialTiles) && /*checkTrafficLight(tile.Position.X, tile.Position.Y - 2, initialTiles) &&*/ checkRightLight(tile.Position.X - 1, tile.Position.Y - 1, initialTiles));
+                            lightstrue = !(checkTrafficLight(tile.Position.X, tile.Position.Y - 1, initialTiles) &&  checkRightLight(tile.Position.X - 1, tile.Position.Y - 1, initialTiles));
                             break;
                         case Direction.Right:
                             canMove = checkFront(tile.Position.X + 1, tile.Position.Y, initialTiles);
-                            lightstrue = (checkTrafficLight(tile.Position.X, tile.Position.Y + 1, initialTiles) && /*checkTrafficLight(tile.Position.X, tile.Position.Y + 2, initialTiles) &&*/ checkRightLight(tile.Position.X + 1, tile.Position.Y + 1, initialTiles));
+                            lightstrue = !(checkTrafficLight(tile.Position.X, tile.Position.Y + 1, initialTiles) &&  checkRightLight(tile.Position.X + 1, tile.Position.Y + 1, initialTiles));
                             break;
                     }
                 }
 
-                if (!tile.Dirty /*&&canDown &&canLeft &&canRight &&canUp&& lightstrue*/ && canMove)
+                if (!tile.Dirty /*&&canDown &&canLeft &&canRight &&canUp&&*/&& lightstrue && canMove)
                 {
                     updatedTiles = action.Handle(tile, initialTiles);
                 }
@@ -79,7 +79,7 @@ namespace TrafficSimulation.Rules
         {
             Tile tile = tiles.Find(t => t.Position.X == x && t.Position.Y == y);
 
-            return tile == null || (tile != null && tile.Type != TileType.TrafficLightRed);
+            return tile == null || (tile != null && tile.Type == TileType.TrafficLightRed);
         }
         private bool checkFront(int x, int y, List<Tile> tiles)
         {
@@ -91,7 +91,7 @@ namespace TrafficSimulation.Rules
         {
             Tile tile = tiles.Find(t => t.Position.X == x && t.Position.Y == y);
 
-            return tile == null || (tile != null && tile.Type != TileType.Grass);
+            return tile == null || (tile != null && tile.Type == TileType.Road);
         }
         public void ChangeTrafficLights(List<Tile> tiles)
         {

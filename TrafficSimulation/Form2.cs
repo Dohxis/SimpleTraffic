@@ -75,7 +75,7 @@ namespace TrafficSimulation
             this.timesUpdated++;           
             // For demo purposes I will spawn a new car with random
             // actions every 3 ticks
-            /*if (this.timesUpdated % 3 == 0)
+            if (this.timesUpdated % 3 == 0)
             {
                 //tbSpawnedCars.Text = carsspawned++.ToString();                    //pops up a cross-threading error, probably need an event to listen to carsspawned changes, and update tbSpawnedCars effectively.
                 this.spawnDemoCar();
@@ -84,7 +84,7 @@ namespace TrafficSimulation
             {
 
                 grid.ChangeTrafficLightsColor();
-            }*/
+            }
         }
 
 
@@ -639,7 +639,6 @@ namespace TrafficSimulation
             if (grid.spawnPoints != null)
             {
                 createTimer();
-                spawnDemoCar();
             }
             else
             {
