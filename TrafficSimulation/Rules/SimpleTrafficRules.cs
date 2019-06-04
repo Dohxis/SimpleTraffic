@@ -60,7 +60,7 @@ namespace TrafficSimulation.Rules
                     }
                 }
 
-                if (!tile.Dirty /*&&canDown &&canLeft &&canRight &&canUp*/&& lightstrue && canMove)
+                if (!tile.Dirty /*&&canDown &&canLeft &&canRight &&canUp&& lightstrue*/ && canMove)
                 {
                     updatedTiles = action.Handle(tile, initialTiles);
                 }
