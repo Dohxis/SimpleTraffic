@@ -47,13 +47,14 @@ namespace TrafficSimulation
         {
             List<Tile> routeList = new List<Tile>();
 
-            MoveAction LeadAction = new MoveAction(Direction.Up);
+            MoveAction LeadAction;
             Tile currentTile = spawn;
-            Tile nextTile;
+            Tile nextTile = currentTile;
             //нужно добавить условие для проверки самих spawn точек и отредактировать направление в зависимости от начальной и конечной точек
             if (grid.DownSpawnPoints.Contains(spawn))
             {
-                do
+                LeadAction = new MoveAction(Direction.Up);
+                /*do
                 {
                     nextTile = Tiles.Find(box =>
                                 box.Position.X == currentTile.Position.X &&
@@ -61,13 +62,23 @@ namespace TrafficSimulation
                             );
                     currentTile = nextTile;
                     Actions.Add(LeadAction);
-                } while (currentTile.Position.Y != exit.Position.Y);
+                } while (currentTile.Position.Y != exit.Position.Y);*/
+
+                while(currentTile.Position.Y != exit.Position.Y)
+                {
+                    nextTile = Tiles.Find(box =>
+                                box.Position.X == currentTile.Position.X &&
+                                box.Position.Y == currentTile.Position.Y - 1
+                            );
+                    currentTile = nextTile;
+                    Actions.Add(LeadAction);
+                }
 
                 if (exit.Position.X < currentTile.Position.X)
                 {
                     LeadAction = new MoveAction(Direction.Left);
 
-                    do
+                    /*do
                     {
                         nextTile = Tiles.Find(box =>
                                     box.Position.X == currentTile.Position.X - 1 &&
@@ -75,13 +86,23 @@ namespace TrafficSimulation
                                 );
                         currentTile = nextTile;
                         Actions.Add(LeadAction);
-                    } while (currentTile.Position.X != exit.Position.X);
+                    } while (currentTile.Position.X != exit.Position.X);*/
+
+                    while(currentTile.Position.X != exit.Position.X)
+                    {
+                        nextTile = Tiles.Find(box =>
+                                    box.Position.X == currentTile.Position.X - 1 &&
+                                    box.Position.Y == currentTile.Position.Y
+                                );
+                        currentTile = nextTile;
+                        Actions.Add(LeadAction);
+                    }
 
                 }
-                else
+                else if (exit.Position.X > currentTile.Position.X)
                 {
                     LeadAction = new MoveAction(Direction.Right);
-                    do
+                    /*do
                     {
                         nextTile = Tiles.Find(box =>
                                     box.Position.X == currentTile.Position.X + 1 &&
@@ -89,7 +110,17 @@ namespace TrafficSimulation
                                 );
                         currentTile = nextTile;
                         Actions.Add(LeadAction);
-                    } while (currentTile.Position.X != exit.Position.X);
+                    } while (currentTile.Position.X != exit.Position.X);*/
+
+                    while(currentTile.Position.X != exit.Position.X)
+                    {
+                        nextTile = Tiles.Find(box =>
+                                    box.Position.X == currentTile.Position.X + 1 &&
+                                    box.Position.Y == currentTile.Position.Y
+                                );
+                        currentTile = nextTile;
+                        Actions.Add(LeadAction);
+                    }
                 }
 
 
@@ -109,7 +140,7 @@ namespace TrafficSimulation
                     Actions.Add(LeadAction);
                 } while (currentTile.Position.X != exit.Position.X);
 
-                if (exit.Position.Y < currentTile.Position.X)
+                if (exit.Position.Y < currentTile.Position.Y)
                 {
                     LeadAction = new MoveAction(Direction.Up);
 
@@ -124,7 +155,7 @@ namespace TrafficSimulation
                     } while (currentTile.Position.Y != exit.Position.Y);
 
                 }
-                else
+                else if (exit.Position.Y > currentTile.Position.Y)
                 {
                     LeadAction = new MoveAction(Direction.Down);
                     do
@@ -216,7 +247,7 @@ namespace TrafficSimulation
                     } while (currentTile.Position.X != exit.Position.X);
 
                 }
-                else
+                else if (exit.Position.X < currentTile.Position.X)
                 {
                     LeadAction = new MoveAction(Direction.Right);
                     do
@@ -234,8 +265,44 @@ namespace TrafficSimulation
 
                 
             }
+
+
             return Actions;
-            /*List<Tile> routeList = new List<Tile>();
+            
+        }
+
+        public TileAction getNextAction()
+        {
+            if(this.Actions == null)
+            {
+                // Here we could return RemoveCarAction if tile 
+                // type is Car, which would allow us to simply 
+                // calculate all statistics
+                if(this.Type == TileType.Car)
+                {
+                    return new RemoveCar();
+                }
+                return new NoAction();
+            }
+
+            if (this.Actions.Count != 0)
+            {
+                TileAction nextAction = this.Actions[0];
+                this.Actions.RemoveAt(0);
+                return nextAction;
+            }
+
+            if (this.Type == TileType.Car && this.Actions.Count == 0)
+            {
+                return new RemoveCar();
+            }
+
+            return new NoAction();
+        }
+    }
+}
+
+/*List<Tile> routeList = new List<Tile>();
             List<TileAction> actionList = new List<TileAction>();
             MoveAction LeadAction = new MoveAction(Direction.Up);
             Tile currentTile = spawn;
@@ -562,35 +629,3 @@ namespace TrafficSimulation
                 }
             }
             return actionList;*/
-        }
-
-        public TileAction getNextAction()
-        {
-            if(this.Actions == null)
-            {
-                // Here we could return RemoveCarAction if tile 
-                // type is Car, which would allow us to simply 
-                // calculate all statistics
-                if(this.Type == TileType.Car)
-                {
-                    return new RemoveCar();
-                }
-                return new NoAction();
-            }
-
-            if (this.Actions.Count != 0)
-            {
-                TileAction nextAction = this.Actions[0];
-                this.Actions.RemoveAt(0);
-                return nextAction;
-            }
-
-            if (this.Type == TileType.Car && this.Actions.Count == 0)
-            {
-                return new RemoveCar();
-            }
-
-            return new NoAction();
-        }
-    }
-}
