@@ -38,7 +38,6 @@ namespace TrafficSimulation.Actions
                 case Direction.Down:
                     updatedTiles = this.MoveDown(car, tiles);
                     break;
-                // Need to do Down, but for this demo it was unnecessary
                 default:
                     updatedTiles = tiles;
                     break;

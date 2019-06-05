@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TrafficSimulation.Actions;
 
@@ -32,10 +33,7 @@ namespace TrafficSimulation.Rules
                 {
                     nextAction = tile.Actions[0];
                 }
-                // bool canUp = (checkTrafficLight(tile.Position.X + 1, tile.Position.Y, initialTiles) && checkTrafficLight(tile.Position.X + 2, tile.Position.Y, initialTiles));
-                // bool canDown = (checkTrafficLight(tile.Position.X - 1, tile.Position.Y, initialTiles) && checkTrafficLight(tile.Position.X - 2, tile.Position.Y, initialTiles));
-                // bool canLeft = (checkTrafficLight(tile.Position.X, tile.Position.Y - 1, initialTiles) && checkTrafficLight(tile.Position.X, tile.Position.Y - 2, initialTiles));
-                // bool canRight = (checkTrafficLight(tile.Position.X, tile.Position.Y + 1, initialTiles) && checkTrafficLight(tile.Position.X, tile.Position.Y + 2, initialTiles));
+               
                 if (nextAction.GetType() == typeof(MoveAction))
                 {
                     switch (((MoveAction)nextAction).direction)
@@ -60,7 +58,7 @@ namespace TrafficSimulation.Rules
                     }
                 }
 
-                if (!tile.Dirty /*&&canDown &&canLeft &&canRight &&canUp&&*/&& lightstrue && canMove)
+                if (!tile.Dirty && lightstrue && canMove)
                 {
                     updatedTiles = action.Handle(tile, initialTiles);
                 }
@@ -79,7 +77,7 @@ namespace TrafficSimulation.Rules
         {
             Tile tile = tiles.Find(t => t.Position.X == x && t.Position.Y == y);
 
-            return tile == null || (tile != null && tile.Type == TileType.TrafficLightRed);
+            return tile == null || (tile != null && (tile.Type == TileType.TrafficLightRed || tile.Type == TileType.TrafficLightYellow));
         }
         private bool checkFront(int x, int y, List<Tile> tiles)
         {
@@ -93,20 +91,39 @@ namespace TrafficSimulation.Rules
 
             return tile == null || (tile != null && tile.Type == TileType.Road);
         }
-        public void ChangeTrafficLights(List<Tile> tiles)
+        public void ChangeRed(List<Tile> tiles)
         {
             foreach (Tile t in tiles)
             {
-                if (t.Type == TileType.TrafficLightGreen)
-                {
-                    t.Type = TileType.TrafficLightRed;
-                }
-                else if (t.Type == TileType.TrafficLightRed)
+                if (t.Type == TileType.TrafficLightRed)
                 {
                     t.Type = TileType.TrafficLightGreen;
                 }
             }
 
         }
+        public void ChangeGreen(List<Tile> tiles)
+        {
+            foreach (Tile t in tiles)
+            {
+                if (t.Type == TileType.TrafficLightGreen)
+                {
+                    t.Type = TileType.TrafficLightYellow;
+                }
+            }
+
+        }
+        public void ChangeYellow(List<Tile> tiles)
+        {
+            foreach (Tile t in tiles)
+            {
+                if (t.Type == TileType.TrafficLightYellow)
+                {
+                    t.Type = TileType.TrafficLightRed;
+                }
+            }
+
+        }
+
     }
 }

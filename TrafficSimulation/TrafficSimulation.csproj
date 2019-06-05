@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\LightAction.cs" />
     <Compile Include="Actions\MoveAction.cs" />
     <Compile Include="Actions\NoAction.cs" />
     <Compile Include="Actions\RemoveCar.cs" />

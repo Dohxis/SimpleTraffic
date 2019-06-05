@@ -29,7 +29,9 @@ namespace TrafficSimulation
         private int timesUpdated = 0;
         System.Timers.Timer timer;
         private int carsspawned = 0;
-        
+
+        private int nrred = 5 ;
+        private int nrgreen = 3;
 
         private List<PictureBox> comparePoints = new List<PictureBox>();
         
@@ -79,23 +81,20 @@ namespace TrafficSimulation
 
         private void updateSimulation(object source, ElapsedEventArgs e)
         {
-            this.grid.Tick();
+            
+            this.grid.Tick(nrred,nrgreen);
             CreateGrid(this.grid);
-            this.timesUpdated++;           
+            this.timesUpdated++;
+           
             // For demo purposes I will spawn a new car with random
             // actions every 3 ticks
-            if (this.timesUpdated % 3 == 0)
+            if (this.timesUpdated % 1 == 0)
             {
                 //tbSpawnedCars.Text = carsspawned++.ToString();                    //pops up a cross-threading error, probably need an event to listen to carsspawned changes, and update tbSpawnedCars effectively.
                 this.spawnDemoCar();
             }
-            if (this.timesUpdated % 3 == 0)
-            {
-
-                grid.ChangeTrafficLightsColor();
-            }
+           
         }
-
 
         private void spawnDemoCar()
         {
@@ -106,7 +105,7 @@ namespace TrafficSimulation
             int i = ran.Next(grid.spawnPoints.Count);
             Tile point = grid.spawnPoints[i];
 
-            int r = ran.Next(1);
+            int r = ran.Next(3);
 
             int a = 0;
             int b = 0;
@@ -523,6 +522,8 @@ namespace TrafficSimulation
                     return Color.DarkRed;
                 case TileType.TrafficLightGreen:
                     return Color.DarkGreen;
+                case TileType.TrafficLightYellow:
+                    return Color.Yellow;
                 case TileType.UpControlPoint:
                 case TileType.DownControlPoint:
                 case TileType.LeftControlPoint:

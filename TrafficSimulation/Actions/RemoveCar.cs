@@ -12,8 +12,7 @@ namespace TrafficSimulation.Actions
         {
             int removeIndex = tiles.IndexOf(tile);
             int n = 1;
-            List<TileAction> actions;
-            actions = null;
+            List<TileAction> actions = new List<TileAction>();
             tiles[removeIndex] = new Tile(tile.Position.X, tile.Position.Y, TileType.Road, actions);
             Console.WriteLine(n);
             return tiles;

@@ -21,6 +21,7 @@ namespace TrafficSimulation
     class Grid
     {
         private TrafficRules trafficRules;
+        private int timesUpdated = 1;
 
         public List<Tile> Tiles { get; private set; }
         public List<Tile> CarTiles { get; private set; }
@@ -45,6 +46,8 @@ namespace TrafficSimulation
         public List<Tile> LeftcontrolPoints { get; private set; }
         public List<Tile> RightcontrolPoints { get; private set; }
 
+        public List<Tile> StartRed { get; set; }
+        public List<Tile> StartGreen { get; set; }
 
         public Grid(List<Tile> tiles, TrafficRules trafficRules)
         {
@@ -71,10 +74,40 @@ namespace TrafficSimulation
             trafficRules = new SimpleTrafficRules();
         }
 
-        public void Tick()
+        public void Tick(int nrred, int nrgreen)
         {
             this.Tiles = this.trafficRules.Handle(this.Tiles);
             this.Tiles = this.trafficRules.CleanDirtyTiles(this.Tiles);
+            int nryellow = nrred - nrgreen;
+            int numberforred = timesUpdated + nrgreen + nryellow + nrred;
+            Console.WriteLine(numberforred);
+            Console.WriteLine(timesUpdated);
+            if (numberforred % nrgreen == 0)
+            {
+                ChangeTrafficLightsGreen(StartRed);
+            }
+            else if (numberforred % nrred == 0)
+            {
+                ChangeTrafficLightsRed(StartRed);
+            }
+            else if (numberforred% nryellow == 0)
+            {
+                ChangeTrafficLightsYellow(StartRed);
+            }
+
+            if (timesUpdated % nryellow == 0)
+            {
+                ChangeTrafficLightsYellow(StartGreen);
+            }
+            else if (timesUpdated % nrgreen == 0)
+            {
+                ChangeTrafficLightsGreen(StartGreen);
+            }
+            else if (timesUpdated % nrred == 0)
+            {
+                ChangeTrafficLightsRed(StartGreen);
+            }
+            timesUpdated++;
         }
 
         // We should remove this when Grid class can spawn cars itself
@@ -462,7 +495,7 @@ namespace TrafficSimulation
                         {
                             tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); 
                         }
-                        else if (b == y + 2)
+                        else if (b == y + 2) 
                         {
                             tiles.Add(new Tile(a,b, TileType.TrafficLightGreen, new List<TileAction>()));
                         }
@@ -470,7 +503,7 @@ namespace TrafficSimulation
                         {
                             tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); //leftcontrol point
                         }
-                        else if (b == y + 5)
+                        else if (b == y + 5) 
                         {
                             tiles.Add(new Tile(a,b, TileType.TrafficLightRed, new List<TileAction>()));
                         }
@@ -508,7 +541,7 @@ namespace TrafficSimulation
                         {
                             tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); //right control point
                         }
-                        else if (b == y + 2)
+                        else if (b == y + 2) 
                         {
                             tiles.Add(new Tile(a,b, TileType.TrafficLightRed, new List<TileAction>()));
                         }
@@ -516,7 +549,7 @@ namespace TrafficSimulation
                         {
                             tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
                         }
-                        else if (b == y + 5)
+                        else if (b == y + 5) 
                         {
                             tiles.Add(new Tile(a,b, TileType.TrafficLightGreen, new List<TileAction>()));
                         }
@@ -1115,8 +1148,10 @@ namespace TrafficSimulation
             RightExitPoints = new List<Tile>();
             UpExitPoints = new List<Tile>();
             DownExitPoints = new List<Tile>();
+            StartRed = new List<Tile>();
+            StartGreen = new List<Tile>();
 
-            
+
 
             foreach (Tile t in Tiles)
             {   //Finding all the spawnpoints
@@ -1149,7 +1184,7 @@ namespace TrafficSimulation
 
                 t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X + 1 && tile.Position.Y == t.Position.Y);
                 t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y + 1);
-                if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty)
+                 if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty)
                 {
                     t.Type = TileType.SpawnPoint;
                     spawnPoints.Add(t);
@@ -1192,10 +1227,17 @@ namespace TrafficSimulation
                     exitPoints.Add(t);
                     RightExitPoints.Add(t);
                 }
+                if(t.Type == TileType.TrafficLightGreen)
+                {
+                    StartGreen.Add(t);
+                }
+                if(t.Type == TileType.TrafficLightRed)
+                {
+                    StartRed.Add(t);
+                }
 
             }
         }
-
         public void Clear()
         {
             foreach (Tile t in Tiles)
@@ -1203,9 +1245,17 @@ namespace TrafficSimulation
                 t.Type = TileType.Empty;
             }
         }
-        public void ChangeTrafficLightsColor()
+        public void ChangeTrafficLightsRed(List<Tile> trafficlights)
         {
-            ((SimpleTrafficRules)trafficRules).ChangeTrafficLights(Tiles);
+            ((SimpleTrafficRules)trafficRules).ChangeRed(trafficlights);
+        }
+        public void ChangeTrafficLightsGreen(List<Tile> trafficlights)
+        {
+            ((SimpleTrafficRules)trafficRules).ChangeGreen(trafficlights);
+        }
+        public void ChangeTrafficLightsYellow(List<Tile> trafficlights)
+        {
+            ((SimpleTrafficRules)trafficRules).ChangeYellow(trafficlights);
         }
     }
 }

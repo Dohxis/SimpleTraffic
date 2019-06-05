@@ -14,6 +14,7 @@ namespace TrafficSimulation
         public List<TileAction> Actions { get; set; }
         public bool Dirty { get; set; }
         public TileType Type { get; set; }
+        public int Id { get; set; }
 
         public Tile(int x, int y, TileType type, List<TileAction> actions)
         {
@@ -42,7 +43,6 @@ namespace TrafficSimulation
             Position.X = x;
             Position.Y = y;
         }
-
         public List<TileAction> getRoute(Tile spawn, List<Tile> Tiles, Grid grid, Tile exit)
         {
             List<Tile> routeList = new List<Tile>();
@@ -52,7 +52,7 @@ namespace TrafficSimulation
             Tile nextTile = currentTile;
             //нужно добавить условие для проверки самих spawn точек и отредактировать направление в зависимости от начальной и конечной точек
             if (grid.DownSpawnPoints.Contains(spawn))
-            {
+            { 
                 LeadAction = new MoveAction(Direction.Up);
                 /*do
                 {
@@ -201,7 +201,7 @@ namespace TrafficSimulation
                     } while (currentTile.Position.Y != exit.Position.Y);
 
                 }
-                else
+                else if (exit.Position.Y > currentTile.Position.Y)
                 {
                     LeadAction = new MoveAction(Direction.Down);
                     do
