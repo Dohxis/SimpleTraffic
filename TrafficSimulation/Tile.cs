@@ -132,21 +132,23 @@ namespace TrafficSimulation
             else if (grid.RightSpawnPoints.Contains(spawn))
             {
                 LeadAction = new MoveAction(Direction.Left);
-                do
+                
+
+                while (currentTile.Position.X != exit.Position.X)
                 {
                     nextTile = Tiles.Find(box =>
-                                box.Position.X == currentTile.Position.X - 1 &&
-                                box.Position.Y == currentTile.Position.Y
-                            );
+                        box.Position.X == currentTile.Position.X - 1 &&
+                        box.Position.Y == currentTile.Position.Y
+                    );
                     currentTile = nextTile;
                     Actions.Add(LeadAction);
-                } while (currentTile.Position.X != exit.Position.X);
+                }
 
                 if (exit.Position.Y < currentTile.Position.Y)
                 {
                     LeadAction = new MoveAction(Direction.Up);
 
-                    do
+                    while (currentTile.Position.Y != exit.Position.Y) 
                     {
                         nextTile = Tiles.Find(box =>
                                     box.Position.X == currentTile.Position.X &&
@@ -154,13 +156,13 @@ namespace TrafficSimulation
                                 );
                         currentTile = nextTile;
                         Actions.Add(LeadAction);
-                    } while (currentTile.Position.Y != exit.Position.Y);
+                    } 
 
                 }
                 else if (exit.Position.Y > currentTile.Position.Y)
                 {
                     LeadAction = new MoveAction(Direction.Down);
-                    do
+                    while (currentTile.Position.Y != exit.Position.Y)
                     {
                         nextTile = Tiles.Find(box =>
                                     box.Position.X == currentTile.Position.X &&
@@ -168,7 +170,7 @@ namespace TrafficSimulation
                                 );
                         currentTile = nextTile;
                         Actions.Add(LeadAction);
-                    } while (currentTile.Position.Y != exit.Position.Y);
+                    } 
                 }
 
 
@@ -178,21 +180,22 @@ namespace TrafficSimulation
             else if (grid.LeftSpawnPoints.Contains(spawn))
             {
                 LeadAction = new MoveAction(Direction.Right);
-                do
+
+                while(currentTile.Position.X != exit.Position.X)
                 {
                     nextTile = Tiles.Find(box =>
-                                box.Position.X == currentTile.Position.X + 1 &&
-                                box.Position.Y == currentTile.Position.Y
-                            );
+                        box.Position.X == currentTile.Position.X + 1 &&
+                        box.Position.Y == currentTile.Position.Y
+                    );
                     currentTile = nextTile;
                     Actions.Add(LeadAction);
-                } while (currentTile.Position.X != exit.Position.X);
+                }
 
                 if (exit.Position.Y < currentTile.Position.Y)
                 {
                     LeadAction = new MoveAction(Direction.Up);
 
-                    do
+                    while (currentTile.Position.Y != exit.Position.Y)
                     {
                         nextTile = Tiles.Find(box =>
                                     box.Position.X == currentTile.Position.X &&
@@ -200,13 +203,13 @@ namespace TrafficSimulation
                                 );
                         currentTile = nextTile;
                         Actions.Add(LeadAction);
-                    } while (currentTile.Position.Y != exit.Position.Y);
+                    } 
 
                 }
                 else if (exit.Position.Y > currentTile.Position.Y)
                 {
                     LeadAction = new MoveAction(Direction.Down);
-                    do
+                    while (currentTile.Position.Y != exit.Position.Y) 
                     {
                         nextTile = Tiles.Find(box =>
                                     box.Position.X == currentTile.Position.X &&
@@ -214,7 +217,7 @@ namespace TrafficSimulation
                                 );
                         currentTile = nextTile;
                         Actions.Add(LeadAction);
-                    } while (currentTile.Position.Y != exit.Position.Y);
+                    } 
                 }
 
 
@@ -224,7 +227,7 @@ namespace TrafficSimulation
             else if (grid.UpSpawnPoints.Contains(spawn))
             {
                 LeadAction = new MoveAction(Direction.Down);
-                do
+                while (currentTile.Position.Y != exit.Position.Y) 
                 {
                     nextTile = Tiles.Find(box =>
                                 box.Position.X == currentTile.Position.X &&
@@ -232,13 +235,13 @@ namespace TrafficSimulation
                             );
                     currentTile = nextTile;
                     Actions.Add(LeadAction);
-                } while (currentTile.Position.Y != exit.Position.Y);
+                } 
 
                 if (exit.Position.X < currentTile.Position.X)
                 {
                     LeadAction = new MoveAction(Direction.Left);
 
-                    do
+                    while (currentTile.Position.X != exit.Position.X) 
                     {
                         nextTile = Tiles.Find(box =>
                                     box.Position.X == currentTile.Position.X - 1 &&
@@ -246,13 +249,13 @@ namespace TrafficSimulation
                                 );
                         currentTile = nextTile;
                         Actions.Add(LeadAction);
-                    } while (currentTile.Position.X != exit.Position.X);
+                    } 
 
                 }
                 else if (exit.Position.X < currentTile.Position.X)
                 {
                     LeadAction = new MoveAction(Direction.Right);
-                    do
+                    while (currentTile.Position.X != exit.Position.X) 
                     {
                         nextTile = Tiles.Find(box =>
                                     box.Position.X == currentTile.Position.X + 1 &&
@@ -260,12 +263,8 @@ namespace TrafficSimulation
                                 );
                         currentTile = nextTile;
                         Actions.Add(LeadAction);
-                    } while (currentTile.Position.X != exit.Position.X);
+                    } 
                 }
-
-
-
-                
             }
 
 
