@@ -43,28 +43,30 @@
             this.rbCorner3 = new System.Windows.Forms.RadioButton();
             this.rbCorner4 = new System.Windows.Forms.RadioButton();
             this.gbIntersections = new System.Windows.Forms.GroupBox();
+            this.rbTrafficPlus = new System.Windows.Forms.RadioButton();
+            this.Corner4 = new System.Windows.Forms.PictureBox();
+            this.Corner2 = new System.Windows.Forms.PictureBox();
             this.Corner3 = new System.Windows.Forms.PictureBox();
-            this.Corner1 = new System.Windows.Forms.PictureBox();
+            this.PlusIntersection = new System.Windows.Forms.PictureBox();
             this.TLeft = new System.Windows.Forms.PictureBox();
             this.TUp = new System.Windows.Forms.PictureBox();
-            this.PlusIntersection = new System.Windows.Forms.PictureBox();
             this.TrafficPlusIntersection = new System.Windows.Forms.PictureBox();
-            this.TDown = new System.Windows.Forms.PictureBox();
             this.TRight = new System.Windows.Forms.PictureBox();
-            this.Corner2 = new System.Windows.Forms.PictureBox();
-            this.Corner4 = new System.Windows.Forms.PictureBox();
-            this.rbTrafficPlus = new System.Windows.Forms.RadioButton();
+            this.TDown = new System.Windows.Forms.PictureBox();
+            this.Corner1 = new System.Windows.Forms.PictureBox();
+            this.lblCarsQuit = new System.Windows.Forms.Label();
+            this.tbCarsQuit = new System.Windows.Forms.TextBox();
             this.gbIntersections.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Corner4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Corner2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Corner3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Corner1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PlusIntersection)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TLeft)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TUp)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PlusIntersection)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TrafficPlusIntersection)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TRight)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Corner2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Corner4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Corner1)).BeginInit();
             this.SuspendLayout();
             // 
             // rbPlusIntersection
@@ -238,6 +240,34 @@
             this.gbIntersections.TabStop = false;
             this.gbIntersections.Text = "Interections";
             // 
+            // rbTrafficPlus
+            // 
+            this.rbTrafficPlus.AutoSize = true;
+            this.rbTrafficPlus.Location = new System.Drawing.Point(142, 55);
+            this.rbTrafficPlus.Name = "rbTrafficPlus";
+            this.rbTrafficPlus.Size = new System.Drawing.Size(14, 13);
+            this.rbTrafficPlus.TabIndex = 14;
+            this.rbTrafficPlus.TabStop = true;
+            this.rbTrafficPlus.UseVisualStyleBackColor = true;
+            // 
+            // Corner4
+            // 
+            this.Corner4.Location = new System.Drawing.Point(160, 347);
+            this.Corner4.Name = "Corner4";
+            this.Corner4.Size = new System.Drawing.Size(80, 74);
+            this.Corner4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.Corner4.TabIndex = 9;
+            this.Corner4.TabStop = false;
+            // 
+            // Corner2
+            // 
+            this.Corner2.Location = new System.Drawing.Point(160, 264);
+            this.Corner2.Name = "Corner2";
+            this.Corner2.Size = new System.Drawing.Size(80, 74);
+            this.Corner2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.Corner2.TabIndex = 8;
+            this.Corner2.TabStop = false;
+            // 
             // Corner3
             // 
             this.Corner3.Location = new System.Drawing.Point(43, 347);
@@ -247,14 +277,14 @@
             this.Corner3.TabIndex = 0;
             this.Corner3.TabStop = false;
             // 
-            // Corner1
+            // PlusIntersection
             // 
-            this.Corner1.Location = new System.Drawing.Point(43, 264);
-            this.Corner1.Name = "Corner1";
-            this.Corner1.Size = new System.Drawing.Size(80, 74);
-            this.Corner1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.Corner1.TabIndex = 1;
-            this.Corner1.TabStop = false;
+            this.PlusIntersection.Location = new System.Drawing.Point(43, 19);
+            this.PlusIntersection.Name = "PlusIntersection";
+            this.PlusIntersection.Size = new System.Drawing.Size(80, 74);
+            this.PlusIntersection.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PlusIntersection.TabIndex = 4;
+            this.PlusIntersection.TabStop = false;
             // 
             // TLeft
             // 
@@ -274,15 +304,6 @@
             this.TUp.TabIndex = 3;
             this.TUp.TabStop = false;
             // 
-            // PlusIntersection
-            // 
-            this.PlusIntersection.Location = new System.Drawing.Point(43, 19);
-            this.PlusIntersection.Name = "PlusIntersection";
-            this.PlusIntersection.Size = new System.Drawing.Size(80, 74);
-            this.PlusIntersection.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.PlusIntersection.TabIndex = 4;
-            this.PlusIntersection.TabStop = false;
-            // 
             // TrafficPlusIntersection
             // 
             this.TrafficPlusIntersection.Location = new System.Drawing.Point(160, 19);
@@ -291,15 +312,6 @@
             this.TrafficPlusIntersection.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.TrafficPlusIntersection.TabIndex = 5;
             this.TrafficPlusIntersection.TabStop = false;
-            // 
-            // TDown
-            // 
-            this.TDown.Location = new System.Drawing.Point(160, 101);
-            this.TDown.Name = "TDown";
-            this.TDown.Size = new System.Drawing.Size(80, 74);
-            this.TDown.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.TDown.TabIndex = 6;
-            this.TDown.TabStop = false;
             // 
             // TRight
             // 
@@ -310,58 +322,69 @@
             this.TRight.TabIndex = 7;
             this.TRight.TabStop = false;
             // 
-            // Corner2
+            // TDown
             // 
-            this.Corner2.Location = new System.Drawing.Point(160, 264);
-            this.Corner2.Name = "Corner2";
-            this.Corner2.Size = new System.Drawing.Size(80, 74);
-            this.Corner2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.Corner2.TabIndex = 8;
-            this.Corner2.TabStop = false;
+            this.TDown.Location = new System.Drawing.Point(160, 101);
+            this.TDown.Name = "TDown";
+            this.TDown.Size = new System.Drawing.Size(80, 74);
+            this.TDown.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.TDown.TabIndex = 6;
+            this.TDown.TabStop = false;
             // 
-            // Corner4
+            // Corner1
             // 
-            this.Corner4.Location = new System.Drawing.Point(160, 347);
-            this.Corner4.Name = "Corner4";
-            this.Corner4.Size = new System.Drawing.Size(80, 74);
-            this.Corner4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.Corner4.TabIndex = 9;
-            this.Corner4.TabStop = false;
+            this.Corner1.Location = new System.Drawing.Point(43, 264);
+            this.Corner1.Name = "Corner1";
+            this.Corner1.Size = new System.Drawing.Size(80, 74);
+            this.Corner1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.Corner1.TabIndex = 1;
+            this.Corner1.TabStop = false;
             // 
-            // rbTrafficPlus
+            // lblCarsQuit
             // 
-            this.rbTrafficPlus.AutoSize = true;
-            this.rbTrafficPlus.Location = new System.Drawing.Point(142, 55);
-            this.rbTrafficPlus.Name = "rbTrafficPlus";
-            this.rbTrafficPlus.Size = new System.Drawing.Size(14, 13);
-            this.rbTrafficPlus.TabIndex = 14;
-            this.rbTrafficPlus.TabStop = true;
-            this.rbTrafficPlus.UseVisualStyleBackColor = true;
+            this.lblCarsQuit.AutoSize = true;
+            this.lblCarsQuit.Location = new System.Drawing.Point(1042, 587);
+            this.lblCarsQuit.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblCarsQuit.Name = "lblCarsQuit";
+            this.lblCarsQuit.Size = new System.Drawing.Size(135, 13);
+            this.lblCarsQuit.TabIndex = 7;
+            this.lblCarsQuit.Text = "Cars Arrived at Destination:";
             // 
-            // Form2
+            // tbCarsQuit
+            // 
+            this.tbCarsQuit.Location = new System.Drawing.Point(1181, 584);
+            this.tbCarsQuit.Margin = new System.Windows.Forms.Padding(2);
+            this.tbCarsQuit.Name = "tbCarsQuit";
+            this.tbCarsQuit.ReadOnly = true;
+            this.tbCarsQuit.Size = new System.Drawing.Size(34, 20);
+            this.tbCarsQuit.TabIndex = 8;
+            // 
+            // Form_Simulation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1290, 845);
             this.Controls.Add(this.gbIntersections);
+            this.Controls.Add(this.tbCarsQuit);
             this.Controls.Add(this.tbSpawnedCars);
+            this.Controls.Add(this.lblCarsQuit);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnLaunch);
-            this.Name = "Form2";
+            this.Name = "Form_Simulation";
             this.Text = "Simulation";
             this.gbIntersections.ResumeLayout(false);
             this.gbIntersections.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Corner4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Corner2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Corner3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Corner1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PlusIntersection)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TLeft)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TUp)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PlusIntersection)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TrafficPlusIntersection)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TRight)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Corner2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Corner4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Corner1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -395,5 +418,7 @@
         private System.Windows.Forms.PictureBox TLeft;
         private System.Windows.Forms.PictureBox Corner1;
         private System.Windows.Forms.PictureBox Corner3;
+        private System.Windows.Forms.Label lblCarsQuit;
+        private System.Windows.Forms.TextBox tbCarsQuit;
     }
 }

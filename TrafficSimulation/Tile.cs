@@ -16,6 +16,8 @@ namespace TrafficSimulation
         public TileType Type { get; set; }
         public int Id { get; set; }
 
+        public static int Cars_Removed { get; set; }
+
         public Tile(int x, int y, TileType type, List<TileAction> actions)
         {
             this.Position = new Position(x, y);
@@ -280,7 +282,8 @@ namespace TrafficSimulation
                 // calculate all statistics
                 if(this.Type == TileType.Car)
                 {
-                    return new RemoveCar();
+                    
+                    return new RemoveCar();                    
                 }
                 return new NoAction();
             }
@@ -294,6 +297,7 @@ namespace TrafficSimulation
 
             if (this.Type == TileType.Car && this.Actions.Count == 0)
             {
+                Cars_Removed++;
                 return new RemoveCar();
             }
 

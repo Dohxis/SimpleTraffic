@@ -19,16 +19,15 @@ namespace TrafficSimulation
 {
     public partial class Form_Simulation : Form
     {
-        //List<List<PictureBox>> grid = new List<List<PictureBox>>();
         private Grid grid;
         private List<PictureBox> pictureBoxes;
         private int _intersectionCounter = 0;
         private int simuationUpdateInterval = 1000;
         private int pictureBoxSize = 20;
         private int pictureBoxGap = 1;
-        private int timesUpdated = 0;
-        System.Windows.Forms.Timer timer;
+        private int timesUpdated = 0;        
         private int carsspawned = 0;
+        System.Windows.Forms.Timer timer;
 
         private int nrred = 5 ;
         private int nrgreen = 3;
@@ -70,7 +69,7 @@ namespace TrafficSimulation
 
         void Form_Simulation_Closed(object sender, FormClosedEventArgs e)
         {
-            Form_Stats f = new Form_Stats(carsspawned);
+            Form_Stats f = new Form_Stats(carsspawned,Tile.Cars_Removed);
             f.ShowDialog();
         }
 
@@ -92,11 +91,12 @@ namespace TrafficSimulation
             this.grid.Tick(nrred, nrgreen);
             CreateGrid(this.grid);
             this.timesUpdated++;
+            tbCarsQuit.Text = Tile.Cars_Removed.ToString();
 
             if (this.timesUpdated % 2 == 0)
-            {
-                carsspawned++;                                                                 
+            {                                                                               
                 this.spawnDemoCar();
+                carsspawned++;
                 tbSpawnedCars.Text = carsspawned.ToString();
             }
         }
@@ -211,14 +211,9 @@ namespace TrafficSimulation
                     break;
 
             }
-
-            
-            
-
+                    
             Tile car = new Tile(spawn.Position.X, spawn.Position.Y, TileType.Car, new List<TileAction>());
             car.Actions = car.getRoute(spawn, grid.Tiles, this.grid, exit);
-
-
 
             this.grid.UpdateTile(spawn.Position.X, spawn.Position.Y, TileType.Car, car.Actions);
             this.CreateGrid(this.grid);            
