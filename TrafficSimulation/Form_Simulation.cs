@@ -48,17 +48,18 @@ namespace TrafficSimulation
                     "Resources"
                 );
             this.PlusIntersection.Image = Properties.Resources.plus_intersection;
-            
-
             this.TrafficPlusIntersection.Image = Properties.Resources.TrafficPlus;
             this.TUp.Image = Properties.Resources.TUp;
             this.TDown.Image = Properties.Resources.TDown;
             this.TLeft.Image = Properties.Resources.TLeft;
             this.TRight.Image = Properties.Resources.TRight;
-            this.Corner1.Image = Properties.Resources.Corner1;
+            this.Corner1.Image = Properties.Resources.Corner3;
             this.Corner2.Image = Properties.Resources.Corner2;
-            this.Corner3.Image = Properties.Resources.Corner3;
+            this.Corner3.Image = Properties.Resources.Corner1;
             this.Corner4.Image = Properties.Resources.Corner4;
+
+            tbSpawnedCars.Text = "0";
+
             this.FormClosed += new FormClosedEventHandler(Form_Simulation_Closed);
 
             //createTimer();
@@ -85,6 +86,8 @@ namespace TrafficSimulation
         private void StopTimer()
         {
             timer.Stop();
+            btnStop.Enabled = false;
+            btnLaunch.Enabled = true;
         }
 
         void updateSimulation(object sender, EventArgs e)
@@ -95,10 +98,18 @@ namespace TrafficSimulation
             tbCarsQuit.Text = Tile.Cars_Removed.ToString();
 
             if (this.timesUpdated % 2 == 0)
-            {                                                                      
-                this.spawnDemoCar();
-                carsspawned++;
-                tbSpawnedCars.Text = carsspawned.ToString();
+            {
+                if (grid.spawnPoints.Count != 0)
+                {
+                    this.spawnDemoCar();
+                    carsspawned++;
+                    tbSpawnedCars.Text = carsspawned.ToString();
+                }
+                else
+                {
+                    StopTimer();
+                    MessageBox.Show("No spawn Points!");
+                }
             }
         }
 
@@ -248,7 +259,7 @@ namespace TrafficSimulation
                          tile.Position.X * (this.pictureBoxSize + this.pictureBoxGap),
                          tile.Position.Y * (this.pictureBoxSize + this.pictureBoxGap)
                      );
-                     pictureBox.Size = new Size(this.pictureBoxSize, this.pictureBoxSize);                                       
+                     pictureBox.Size = new Size(this.pictureBoxSize, this.pictureBoxSize); 
                      pictureBox.BackColor = this.getTileColor(tile.Type);                    
                      
                      pictureBox.Click += new EventHandler(this.pictureBoxClick);
@@ -415,21 +426,19 @@ namespace TrafficSimulation
         {
             if (grid.spawnPoints != null)
             {
-                createTimer();
+                btnStop.Enabled = true;
+                btnLaunch.Enabled = false;
+                createTimer();                
             }
             else
             {
                 MessageBox.Show("Cars would drown.");
-            }
-            btnStop.Enabled = true;
-            btnLaunch.Enabled = false;
+            }            
         }
 
         private void btnStop_Click(object sender, EventArgs e)
         {
             StopTimer();
-            btnStop.Enabled = false;
-            btnLaunch.Enabled = true;
         }
 
         private void btn_Clear_Click(object sender, EventArgs e)
@@ -437,6 +446,11 @@ namespace TrafficSimulation
             _intersectionCounter = 0;
             grid.Clear();
             grid.comparePoints.Clear();
+            grid.spawnPoints.Clear();
+            carsspawned = 0;
+            Tile.Cars_Removed = 0;
+            tbSpawnedCars.Text = carsspawned.ToString();
+            tbCarsQuit.Text = Tile.Cars_Removed.ToString();
             this.CreateGrid(grid);
         }
     }
