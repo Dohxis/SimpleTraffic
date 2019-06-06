@@ -22,7 +22,7 @@ namespace TrafficSimulation
         private Grid grid;
         private List<PictureBox> pictureBoxes;
         private int _intersectionCounter = 0;
-        private int simuationUpdateInterval = 1000;
+        private int simuationUpdateInterval = 200;
         private int pictureBoxSize = 20;
         private int pictureBoxGap = 1;
         private int timesUpdated = 0;        
@@ -69,6 +69,7 @@ namespace TrafficSimulation
 
         void Form_Simulation_Closed(object sender, FormClosedEventArgs e)
         {
+            this.Visible = false;
             Form_Stats f = new Form_Stats(carsspawned,Tile.Cars_Removed);
             f.ShowDialog();
         }
@@ -94,7 +95,7 @@ namespace TrafficSimulation
             tbCarsQuit.Text = Tile.Cars_Removed.ToString();
 
             if (this.timesUpdated % 2 == 0)
-            {                                                                               
+            {                                                                      
                 this.spawnDemoCar();
                 carsspawned++;
                 tbSpawnedCars.Text = carsspawned.ToString();
@@ -242,16 +243,17 @@ namespace TrafficSimulation
             {
                 if (isFirstTime)
                 {
-                    PictureBox pictureBox = new PictureBox();
-                    pictureBox.Location = new Point(
-                        tile.Position.X * (this.pictureBoxSize + this.pictureBoxGap),
-                        tile.Position.Y * (this.pictureBoxSize + this.pictureBoxGap)
-                    );
-                    pictureBox.Size = new Size(this.pictureBoxSize, this.pictureBoxSize);
-                    pictureBox.BackColor = this.getTileColor(tile.Type);
-                    pictureBox.Click += new EventHandler(this.pictureBoxClick);
-                    this.pictureBoxes.Add(pictureBox);
-                    this.Controls.Add(pictureBox);
+                     PictureBox pictureBox = new PictureBox();
+                     pictureBox.Location = new Point(
+                         tile.Position.X * (this.pictureBoxSize + this.pictureBoxGap),
+                         tile.Position.Y * (this.pictureBoxSize + this.pictureBoxGap)
+                     );
+                     pictureBox.Size = new Size(this.pictureBoxSize, this.pictureBoxSize);                                       
+                     pictureBox.BackColor = this.getTileColor(tile.Type);                    
+                     
+                     pictureBox.Click += new EventHandler(this.pictureBoxClick);
+                     this.pictureBoxes.Add(pictureBox);
+                     this.Controls.Add(pictureBox);
                 }
                 else
                 {
@@ -259,7 +261,9 @@ namespace TrafficSimulation
                         box.Location.X == tile.Position.X * (this.pictureBoxSize + this.pictureBoxGap) &&
                         box.Location.Y == tile.Position.Y * (this.pictureBoxSize + this.pictureBoxGap)
                     );
+
                     pictureBox.BackColor = this.getTileColor(tile.Type);
+
                 }
 
             }
