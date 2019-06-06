@@ -102,7 +102,34 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\rose.jpeg" />
+    <None Include="Resources\Corner1.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Corner2.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Corner3.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Corner4.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\plus_intersection.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TDown.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TLeft.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TrafficPlus.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TRight.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TUp.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

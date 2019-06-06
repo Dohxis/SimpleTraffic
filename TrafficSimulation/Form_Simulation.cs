@@ -47,18 +47,18 @@ namespace TrafficSimulation
                     Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
                     "Resources"
                 );
-            PlusIntersection.Image = Properties.Resources.rose;
+            this.PlusIntersection.Image = Properties.Resources.plus_intersection;
             
 
-            this.TrafficPlusIntersection.ImageLocation = "TrafficPlus.PNG";
-            this.TUp.ImageLocation = "TUp.PNG";
-            this.TDown.ImageLocation = "TDown.PNG";
-            this.TLeft.ImageLocation = "TLeft.PNG";
-            this.TRight.ImageLocation = "TRight.PNG";
-            this.Corner1.ImageLocation = "Corner1.PNG";
-            this.Corner2.ImageLocation = "Corner2.PNG";
-            this.Corner3.ImageLocation = "Corner3.PNG";
-            this.Corner4.ImageLocation = "Corner4.PNG";
+            this.TrafficPlusIntersection.Image = Properties.Resources.TrafficPlus;
+            this.TUp.Image = Properties.Resources.TUp;
+            this.TDown.Image = Properties.Resources.TDown;
+            this.TLeft.Image = Properties.Resources.TLeft;
+            this.TRight.Image = Properties.Resources.TRight;
+            this.Corner1.Image = Properties.Resources.Corner1;
+            this.Corner2.Image = Properties.Resources.Corner2;
+            this.Corner3.Image = Properties.Resources.Corner3;
+            this.Corner4.Image = Properties.Resources.Corner4;
             this.FormClosed += new FormClosedEventHandler(Form_Simulation_Closed);
 
             //createTimer();
