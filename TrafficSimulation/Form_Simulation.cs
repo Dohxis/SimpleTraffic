@@ -17,17 +17,17 @@ using System.Reflection;
 
 namespace TrafficSimulation
 {
-    public partial class Form2 : Form
+    public partial class Form_Simulation : Form
     {
-        //List<List<PictureBox>> grid = new List<List<PictureBox>>();
         private Grid grid;
         private List<PictureBox> pictureBoxes;
         private int _intersectionCounter = 0;
-        private int simuationUpdateInterval = 1000;
+        private int simuationUpdateInterval = 200;
         private int pictureBoxSize = 20;
         private int pictureBoxGap = 1;
-        private int timesUpdated = 0;
-        System.Timers.Timer timer;
+        private int timesUpdated = 0;        
+        private int carsspawned = 0;
+        System.Windows.Forms.Timer timer;
 
         private int nrred = 5 ;
         private int nrgreen = 3;
@@ -37,7 +37,7 @@ namespace TrafficSimulation
 
         List<PictureBox> exitPoints = new List<PictureBox>();
 
-        public Form2()
+        public Form_Simulation()
         {
             InitializeComponent();
             this.grid = CreateInitialGrid();
@@ -47,56 +47,74 @@ namespace TrafficSimulation
                     Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
                     "Resources"
                 );
-            PlusIntersection.Image = Properties.Resources.rose;
-            
+            this.PlusIntersection.Image = Properties.Resources.plus_intersection;
+            this.TrafficPlusIntersection.Image = Properties.Resources.TrafficPlus;
+            this.TUp.Image = Properties.Resources.TUp;
+            this.TDown.Image = Properties.Resources.TDown;
+            this.TLeft.Image = Properties.Resources.TLeft;
+            this.TRight.Image = Properties.Resources.TRight;
+            this.Corner1.Image = Properties.Resources.Corner3;
+            this.Corner2.Image = Properties.Resources.Corner2;
+            this.Corner3.Image = Properties.Resources.Corner1;
+            this.Corner4.Image = Properties.Resources.Corner4;
 
-            this.TrafficPlusIntersection.ImageLocation = "TrafficPlus.PNG";
-            this.TUp.ImageLocation = "TUp.PNG";
-            this.TDown.ImageLocation = "TDown.PNG";
-            this.TLeft.ImageLocation = "TLeft.PNG";
-            this.TRight.ImageLocation = "TRight.PNG";
-            this.Corner1.ImageLocation = "Corner1.PNG";
-            this.Corner2.ImageLocation = "Corner2.PNG";
-            this.Corner3.ImageLocation = "Corner3.PNG";
-            this.Corner4.ImageLocation = "Corner4.PNG";
+            tbSpawnedCars.Text = "0";
+
+            this.FormClosed += new FormClosedEventHandler(Form_Simulation_Closed);
 
             //createTimer();
             CreateGrid(grid);
             btnStop.Enabled = false;
         }
+        
+
+        void Form_Simulation_Closed(object sender, FormClosedEventArgs e)
+        {
+            this.Visible = false;
+            Form_Stats f = new Form_Stats(carsspawned,Tile.Cars_Removed);
+            f.ShowDialog();
+        }
 
         private void createTimer()
         {
-            timer = new System.Timers.Timer(this.simuationUpdateInterval);
-            timer.Elapsed += this.updateSimulation;
+            timer = new System.Windows.Forms.Timer();
+            timer.Tick += new EventHandler(updateSimulation);
+            timer.Interval = simuationUpdateInterval;
             timer.Enabled = true;
         }
 
         private void StopTimer()
         {
             timer.Stop();
+            btnStop.Enabled = false;
+            btnLaunch.Enabled = true;
         }
 
-
-        private void updateSimulation(object source, ElapsedEventArgs e)
+        void updateSimulation(object sender, EventArgs e)
         {
-            if (this.timesUpdated >= nrgreen + nrred + (nrred - nrgreen))
+            this.grid.Tick(nrred,nrgreen,timesUpdated);
+            CreateGrid(this.grid);
+            this.timesUpdated++;
+            tbCarsQuit.Text = Tile.Cars_Removed.ToString();
+             if (this.timesUpdated >= nrgreen + nrred + (nrred - nrgreen))
             {
                 Console.WriteLine(timesUpdated);
                 timesUpdated = 0;
             }
-            this.grid.Tick(nrred,nrgreen,timesUpdated);
-            CreateGrid(this.grid);
-            this.timesUpdated++;
-           
-            // For demo purposes I will spawn a new car with random
-            // actions every 3 ticks
-            if (this.timesUpdated % 3 == 0)
+            if (this.timesUpdated % 2 == 0)
             {
-                //tbSpawnedCars.Text = carsspawned++.ToString();                    //pops up a cross-threading error, probably need an event to listen to carsspawned changes, and update tbSpawnedCars effectively.
-                this.spawnDemoCar();
+                if (grid.spawnPoints.Count != 0)
+                {
+                    this.spawnDemoCar();
+                    carsspawned++;
+                    tbSpawnedCars.Text = carsspawned.ToString();
+                }
+                else
+                {
+                    StopTimer();
+                    MessageBox.Show("No spawn Points!");
+                }
             }
-           
         }
 
         private void spawnDemoCar()
@@ -209,254 +227,12 @@ namespace TrafficSimulation
                     break;
 
             }
-
-            
-            
-
+                    
             Tile car = new Tile(spawn.Position.X, spawn.Position.Y, TileType.Car, new List<TileAction>());
             car.Actions = car.getRoute(spawn, grid.Tiles, this.grid, exit);
 
-
-
             this.grid.UpdateTile(spawn.Position.X, spawn.Position.Y, TileType.Car, car.Actions);
-            this.CreateGrid(this.grid);
-
-            /*if (grid.LeftSpawnPoints.Contains(point))                    //spawnpoint is on the left edge of the map                                          
-            {
-                //this pseudo-random is very weird, it always does the same shit
-                switch (random.Next(4))
-                {
-                    //car turns right
-                    case 0:
-                        actions = new List<TileAction>() { 
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down)
-                    };
-                        break;
-
-                    //car turns left
-                    case 1:
-                        actions = new List<TileAction>() {
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up)
-                    };
-                        break;
-
-                    //car turns back
-                    case 3:
-                        actions = new List<TileAction>() {
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left)
-                    };
-                        break;
-
-                    //car goes forward
-                    default:
-                    case 2:
-                        actions = new List<TileAction>() {
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right)
-                    };
-                        break;
-                }
-            }
-            else if (grid.UpSpawnPoints.Contains(point))                 //spawnpoint is on the upper edge of the map
-            {
-                switch (random.Next(4))
-                {
-                    //car turns right
-                    case 0:
-                        actions = new List<TileAction>() {
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left)
-                    };
-                        break;
-
-                    //car turns left
-                    case 1:
-                        actions = new List<TileAction>() {
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right)
-                    };
-                        break;
-
-                    //car turns back
-                    case 3:
-                        actions = new List<TileAction>() {
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up)
-                    };
-                        break;
-
-                    //car goes forward
-                    default:
-                    case 2:
-                        actions = new List<TileAction>() {
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down)
-                    };
-                        break;
-                }
-            }
-            else if (grid.RightSpawnPoints.Contains(point))                 //spawnpoint is on the right edge of the map
-            {
-                switch (random.Next(4))
-                {
-                    //car turns right
-                    case 0:
-                        actions = new List<TileAction>() {
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up)
-                    };
-                        break;
-
-                    //car turns left
-                    case 1:
-                        actions = new List<TileAction>() {
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down)
-                    };
-                        break;
-
-                    //car turns back
-                    case 3:
-                        actions = new List<TileAction>() {
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right)
-                    };
-                        break;
-
-                    //car goes forward
-                    default:
-                    case 2:
-                        actions = new List<TileAction>() {
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left)
-                    };
-                        break;
-                }
-            }
-            else                                                           //spawnpoint is on the bottom edge of the map
-            {
-                switch (random.Next(4))
-                {
-                    //car turns right
-                    case 0:
-                        actions = new List<TileAction>() {
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right),
-                        new MoveAction(Direction.Right)
-                    };
-                        break;
-
-                    //car turns left
-                    case 1:
-                        actions = new List<TileAction>() {
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Left),
-
-                    };
-                        break;
-
-                    //car turns back
-                    case 3:
-                        actions = new List<TileAction>() {
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Left),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down),
-                        new MoveAction(Direction.Down)
-                    };
-                        break;
-
-                    //car goes forward
-                    default:
-                    case 2:
-                        actions = new List<TileAction>() {
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up),
-                        new MoveAction(Direction.Up)
-                    };
-                        break;
-                }
-            }    */
-            //this.grid.UpdateTile(grid.spawnPoints[i].Position.X, grid.spawnPoints[i].Position.Y, TileType.Car, actions);
-            //this.CreateGrid(this.grid);
+            this.CreateGrid(this.grid);            
         }
 
         private Grid CreateInitialGrid()
@@ -482,16 +258,17 @@ namespace TrafficSimulation
             {
                 if (isFirstTime)
                 {
-                    PictureBox pictureBox = new PictureBox();
-                    pictureBox.Location = new Point(
-                        tile.Position.X * (this.pictureBoxSize + this.pictureBoxGap),
-                        tile.Position.Y * (this.pictureBoxSize + this.pictureBoxGap)
-                    );
-                    pictureBox.Size = new Size(this.pictureBoxSize, this.pictureBoxSize);
-                    pictureBox.BackColor = this.getTileColor(tile.Type);
-                    pictureBox.Click += new EventHandler(this.pictureBoxClick);
-                    this.pictureBoxes.Add(pictureBox);
-                    this.Controls.Add(pictureBox);
+                     PictureBox pictureBox = new PictureBox();
+                     pictureBox.Location = new Point(
+                         tile.Position.X * (this.pictureBoxSize + this.pictureBoxGap),
+                         tile.Position.Y * (this.pictureBoxSize + this.pictureBoxGap)
+                     );
+                     pictureBox.Size = new Size(this.pictureBoxSize, this.pictureBoxSize); 
+                     pictureBox.BackColor = this.getTileColor(tile.Type);                    
+                     
+                     pictureBox.Click += new EventHandler(this.pictureBoxClick);
+                     this.pictureBoxes.Add(pictureBox);
+                     this.Controls.Add(pictureBox);
                 }
                 else
                 {
@@ -499,7 +276,9 @@ namespace TrafficSimulation
                         box.Location.X == tile.Position.X * (this.pictureBoxSize + this.pictureBoxGap) &&
                         box.Location.Y == tile.Position.Y * (this.pictureBoxSize + this.pictureBoxGap)
                     );
+
                     pictureBox.BackColor = this.getTileColor(tile.Type);
+
                 }
 
             }
@@ -651,14 +430,14 @@ namespace TrafficSimulation
         {
             if (grid.spawnPoints != null)
             {
-                createTimer();
+                btnStop.Enabled = true;
+                btnLaunch.Enabled = false;
+                createTimer();                
             }
             else
             {
                 MessageBox.Show("Cars would drown.");
-            }
-            btnStop.Enabled = true;
-            btnLaunch.Enabled = false;
+            }            
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -682,6 +461,11 @@ namespace TrafficSimulation
             _intersectionCounter = 0;
             grid.Clear();
             grid.comparePoints.Clear();
+            grid.spawnPoints.Clear();
+            carsspawned = 0;
+            Tile.Cars_Removed = 0;
+            tbSpawnedCars.Text = carsspawned.ToString();
+            tbCarsQuit.Text = Tile.Cars_Removed.ToString();
             this.CreateGrid(grid);
         }
     }
