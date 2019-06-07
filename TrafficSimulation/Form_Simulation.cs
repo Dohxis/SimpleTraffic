@@ -22,7 +22,7 @@ namespace TrafficSimulation
         private Grid grid;
         private List<PictureBox> pictureBoxes;
         private int _intersectionCounter = 0;
-        private int simuationUpdateInterval = 200;
+        private int simuationUpdateInterval = 1000;
         private int pictureBoxSize = 20;
         private int pictureBoxGap = 1;
         private int timesUpdated = 0;        
@@ -98,7 +98,6 @@ namespace TrafficSimulation
             tbCarsQuit.Text = Tile.Cars_Removed.ToString();
              if (this.timesUpdated >= nrgreen + nrred + (nrred - nrgreen))
             {
-                Console.WriteLine(timesUpdated);
                 timesUpdated = 0;
             }
             if (this.timesUpdated % 2 == 0)
@@ -258,17 +257,48 @@ namespace TrafficSimulation
             {
                 if (isFirstTime)
                 {
-                     PictureBox pictureBox = new PictureBox();
-                     pictureBox.Location = new Point(
-                         tile.Position.X * (this.pictureBoxSize + this.pictureBoxGap),
-                         tile.Position.Y * (this.pictureBoxSize + this.pictureBoxGap)
-                     );
-                     pictureBox.Size = new Size(this.pictureBoxSize, this.pictureBoxSize); 
-                     pictureBox.BackColor = this.getTileColor(tile.Type);                    
-                     
-                     pictureBox.Click += new EventHandler(this.pictureBoxClick);
-                     this.pictureBoxes.Add(pictureBox);
-                     this.Controls.Add(pictureBox);
+                    PictureBox pictureBox = new PictureBox();
+                    pictureBox.Location = new Point(
+                        tile.Position.X * (this.pictureBoxSize + this.pictureBoxGap),
+                        tile.Position.Y * (this.pictureBoxSize + this.pictureBoxGap)
+                    );
+                    pictureBox.Size = new Size(this.pictureBoxSize, this.pictureBoxSize);
+
+
+                    if (tile.Type == TileType.Car)
+                    {
+                        Direction d;
+
+                        if (tile.Actions.Count > 0)
+                        {
+                            d = ((MoveAction)tile.Actions[0]).direction;
+                            pictureBox.Image = Properties.Resources.thumbnail;                      // default down
+
+                            if (d == Direction.Up)
+                            {
+                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                            }
+                            else if (d == Direction.Left)
+                            {
+                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                            }
+                            else if (d == Direction.Right)
+                            {
+                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                            }
+                        }
+                        pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+                    }
+                    else
+                    {
+                        pictureBox.Image = null;
+                        pictureBox.BackColor = this.getTileColor(tile.Type);
+                    }
+                                       
+                    
+                    pictureBox.Click += new EventHandler(this.pictureBoxClick);
+                    this.pictureBoxes.Add(pictureBox);
+                    this.Controls.Add(pictureBox);
                 }
                 else
                 {
@@ -277,7 +307,35 @@ namespace TrafficSimulation
                         box.Location.Y == tile.Position.Y * (this.pictureBoxSize + this.pictureBoxGap)
                     );
 
-                    pictureBox.BackColor = this.getTileColor(tile.Type);
+                    if (tile.Type == TileType.Car)
+                    {
+                        Direction d;
+
+                        if (tile.Actions.Count > 0)
+                        {
+                            d = ((MoveAction)tile.Actions[0]).direction;
+                            pictureBox.Image = Properties.Resources.thumbnail;                      // default down
+
+                            if (d == Direction.Up)
+                            {
+                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                            }
+                            else if (d == Direction.Left)
+                            {
+                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                            }
+                            else if (d == Direction.Right)
+                            {
+                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                            }
+                        }                                     
+                        pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+                    }
+                    else
+                    {
+                        pictureBox.Image = null;
+                        pictureBox.BackColor = this.getTileColor(tile.Type);
+                    }
 
                 }
 
@@ -290,8 +348,8 @@ namespace TrafficSimulation
             {
                 case TileType.Grass:
                     return Color.LightGreen;
-                case TileType.Car:
-                    return Color.Black;
+                /*case TileType.Car:
+                    return Color.Black;*/
                 case TileType.Road:
                     return Color.LightGray;
                 case TileType.Empty:
