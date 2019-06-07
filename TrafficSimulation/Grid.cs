@@ -21,7 +21,6 @@ namespace TrafficSimulation
     class Grid
     {
         private TrafficRules trafficRules;
-        private int timesUpdated = 1;
 
         public List<Tile> Tiles { get; private set; }
         public List<Tile> CarTiles { get; private set; }
@@ -74,40 +73,38 @@ namespace TrafficSimulation
             trafficRules = new SimpleTrafficRules();
         }
 
-        public void Tick(int nrred, int nrgreen)
+        public void Tick(int nrred, int nrgreen, int timesUpdated)
         {
+            int nryellow = nrred - nrgreen;
+            int numberforred = timesUpdated + 1;
+            if (timesUpdated >= 0)
+            {
+                if (numberforred % nrred == 0)
+                {
+                    ChangeTrafficLightsRed(StartRed);
+                }
+                if (numberforred % (nrred + nrgreen) == 0)
+                {
+                    ChangeTrafficLightsGreen(StartRed);
+                }
+                if (numberforred % (nrred + nryellow + nrgreen) == 0)
+                {
+                    ChangeTrafficLightsYellow(StartRed);
+                    ChangeTrafficLightsRed(StartGreen);
+                }
+
+                if ((timesUpdated + 1) % nrgreen == 0)
+                {
+                    ChangeTrafficLightsGreen(StartGreen);
+                }
+                if ((timesUpdated + 1) % (nrgreen + nryellow) == 0)
+                {
+                    ChangeTrafficLightsYellow(StartGreen);
+                }
+
+            }
             this.Tiles = this.trafficRules.Handle(this.Tiles);
             this.Tiles = this.trafficRules.CleanDirtyTiles(this.Tiles);
-            int nryellow = nrred - nrgreen;
-            int numberforred = timesUpdated + nrgreen + nryellow + nrred;
-            Console.WriteLine(numberforred);
-            Console.WriteLine(timesUpdated);
-            if (numberforred % nrgreen == 0)
-            {
-                ChangeTrafficLightsGreen(StartRed);
-            }
-            else if (numberforred % nrred == 0)
-            {
-                ChangeTrafficLightsRed(StartRed);
-            }
-            else if (numberforred% nryellow == 0)
-            {
-                ChangeTrafficLightsYellow(StartRed);
-            }
-
-            if (timesUpdated % nryellow == 0)
-            {
-                ChangeTrafficLightsYellow(StartGreen);
-            }
-            else if (timesUpdated % nrgreen == 0)
-            {
-                ChangeTrafficLightsGreen(StartGreen);
-            }
-            else if (timesUpdated % nrred == 0)
-            {
-                ChangeTrafficLightsRed(StartGreen);
-            }
-            timesUpdated++;
         }
 
         // We should remove this when Grid class can spawn cars itself
@@ -493,19 +490,19 @@ namespace TrafficSimulation
                     {
                         if (b == y + 3)
                         {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); 
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
                         }
-                        else if (b == y + 2) 
+                        else if (b == y + 2)
                         {
-                            tiles.Add(new Tile(a,b, TileType.TrafficLightGreen, new List<TileAction>()));
+                            tiles.Add(new Tile(a, b, TileType.TrafficLightGreen, new List<TileAction>() { /*new LightAction()*/ }));
                         }
                         else if (b == y + 4)
                         {
                             tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); //leftcontrol point
                         }
-                        else if (b == y + 5) 
+                        else if (b == y + 5)
                         {
-                            tiles.Add(new Tile(a,b, TileType.TrafficLightRed, new List<TileAction>()));
+                            tiles.Add(new Tile(a, b, TileType.TrafficLightRed, new List<TileAction>() {/*new LightAction()*/ }));
                         }
                         else
                         {
@@ -543,7 +540,7 @@ namespace TrafficSimulation
                         }
                         else if (b == y + 2) 
                         {
-                            tiles.Add(new Tile(a,b, TileType.TrafficLightRed, new List<TileAction>()));
+                            tiles.Add(new Tile(a,b, TileType.TrafficLightRed, new List<TileAction>() {/* new LightAction()*/ }));
                         }
                         else if (b == y + 4)
                         {
@@ -551,7 +548,7 @@ namespace TrafficSimulation
                         }
                         else if (b == y + 5) 
                         {
-                            tiles.Add(new Tile(a,b, TileType.TrafficLightGreen, new List<TileAction>()));
+                            tiles.Add(new Tile(a,b, TileType.TrafficLightGreen, new List<TileAction>() { /*new LightAction()*/ }));
                         }
                         else
                         {

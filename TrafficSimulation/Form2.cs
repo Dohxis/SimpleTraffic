@@ -28,7 +28,6 @@ namespace TrafficSimulation
         private int pictureBoxGap = 1;
         private int timesUpdated = 0;
         System.Timers.Timer timer;
-        private int carsspawned = 0;
 
         private int nrred = 5 ;
         private int nrgreen = 3;
@@ -81,14 +80,18 @@ namespace TrafficSimulation
 
         private void updateSimulation(object source, ElapsedEventArgs e)
         {
-            
-            this.grid.Tick(nrred,nrgreen);
+            if (this.timesUpdated >= nrgreen + nrred + (nrred - nrgreen))
+            {
+                Console.WriteLine(timesUpdated);
+                timesUpdated = 0;
+            }
+            this.grid.Tick(nrred,nrgreen,timesUpdated);
             CreateGrid(this.grid);
             this.timesUpdated++;
            
             // For demo purposes I will spawn a new car with random
             // actions every 3 ticks
-            if (this.timesUpdated % 1 == 0)
+            if (this.timesUpdated % 3 == 0)
             {
                 //tbSpawnedCars.Text = carsspawned++.ToString();                    //pops up a cross-threading error, probably need an event to listen to carsspawned changes, and update tbSpawnedCars effectively.
                 this.spawnDemoCar();
@@ -663,6 +666,7 @@ namespace TrafficSimulation
             StopTimer();
             btnStop.Enabled = false;
             btnLaunch.Enabled = true;
+            timesUpdated = 0;
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)                           //Can't seem to be able to close both forms simultaneously, needs looking into.

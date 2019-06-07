@@ -21,7 +21,7 @@ namespace TrafficSimulation
         private List<PictureBox> pictureBoxes;
         private int simulationUpdateInterval = 1000;
         private int timesUpdated = 0;
-        private int nrred = 7;
+        private int nrred = 5;
         private int nrgreen = 3;
 
         public Form1()
@@ -51,7 +51,8 @@ namespace TrafficSimulation
 
         private void updateSimulation(object source, ElapsedEventArgs e)
         {
-            this.grid.Tick(nrred,nrgreen);
+
+            this.grid.Tick(nrred,nrgreen,timesUpdated);
             drawGrid(this.grid);
             this.timesUpdated++;
             // For demo purposes I will spawn a new car with random
