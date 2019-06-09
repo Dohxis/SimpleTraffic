@@ -27,12 +27,6 @@ namespace TrafficSimulation
             this.speed = 10;
         }
 
-        public Tile(TileType type)
-        {
-            this.Type = type;
-            this.Dirty = false;
-        }
-
         public void AdjustRouteBySpeed()
         {
             List<TileAction> nw = new List<TileAction>();
@@ -51,19 +45,6 @@ namespace TrafficSimulation
             }
         }
 
-        public Tile(int x, int y, TileType type)
-        {
-            Position.X = x;
-            Position.Y = y;
-            this.Type = type;
-            this.Dirty = false;
-        }
-
-        public Tile(int x, int y)
-        {
-            Position.X = x;
-            Position.Y = y;
-        }
         public List<TileAction> getRoute(Tile spawn, List<Tile> Tiles, Grid grid, Tile exit)
         {
             List<Tile> routeList = new List<Tile>();
