@@ -36,6 +36,8 @@ namespace TrafficSimulation
         private int timered;
         private int timegreen;
 
+        private int initialTiles = 40;
+
         private List<PictureBox> comparePoints = new List<PictureBox>();
         
 
@@ -245,9 +247,9 @@ namespace TrafficSimulation
         {
             List<Tile> tiles = new List<Tile>();
 
-            for (int x = 0; x < 40; x++)
+            for (int x = 0; x < initialTiles; x++)
             {
-                for (int y = 0; y < 40; y++)
+                for (int y = 0; y < initialTiles; y++)
                 {
                     tiles.Add(new Tile(x, y, TileType.Empty, new List<TileAction>()));
                 }
@@ -600,6 +602,77 @@ namespace TrafficSimulation
             {
                 timer.Interval = simuationUpdateInterval;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            try
+            {
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    String saveableCode = "";
+
+                    foreach (Tile tile in grid.Tiles)
+                    {
+                        saveableCode += tile.getSaveableCode();
+                    }
+
+                    File.WriteAllText(openFileDialog.FileName, saveableCode);
+                }
+            }
+            catch
+            {
+                MessageBox.Show("There was an error while saving the grid.");
+            }
+            finally
+            {
+                MessageBox.Show("Grid was successfully saved!");
+            };
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            try
+            {
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    var reader = new StreamReader(openFileDialog.FileName);
+                    String gridCode = reader.ReadToEnd();
+                    int x = 0;
+                    int y = 0;
+
+                    List<Tile> tiles = new List<Tile>();
+                    foreach(char code in gridCode)
+                    {
+                        tiles.Add(new Tile(y, x, Tile.GetTileTypeByCode(code), new List<TileAction>()));
+                        x++;
+                        if(x == initialTiles)
+                        {
+                            y++;
+                            x = 0;
+                        }
+                    }
+
+                    RestoreGrid();
+                    grid = new Grid(tiles); ;
+                    grid.CheckGrid();
+                    CreateGrid(grid);
+                }
+            }
+            catch
+            {
+                MessageBox.Show("There was an error while loading the grid.");
+            }
+            finally
+            {
+                MessageBox.Show("Grid was successfully loaded!");
+            };
+
         }
     }
 }
