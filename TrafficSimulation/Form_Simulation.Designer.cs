@@ -62,6 +62,16 @@
             this.tb_greenlight = new System.Windows.Forms.TextBox();
             this.lblTimeElapsed = new System.Windows.Forms.Label();
             this.tbTimeElapsed = new System.Windows.Forms.TextBox();
+            this.tbTickFrequency = new System.Windows.Forms.TrackBar();
+            this.gbTickFrequency = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             this.gbIntersections.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Corner4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Corner2)).BeginInit();
@@ -73,6 +83,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.TRight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Corner1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbTickFrequency)).BeginInit();
+            this.gbTickFrequency.SuspendLayout();
             this.SuspendLayout();
             // 
             // rbPlusIntersection
@@ -416,11 +428,113 @@
             this.tbTimeElapsed.Size = new System.Drawing.Size(57, 20);
             this.tbTimeElapsed.TabIndex = 8;
             // 
+            // tbTickFrequency
+            // 
+            this.tbTickFrequency.Location = new System.Drawing.Point(6, 19);
+            this.tbTickFrequency.Maximum = 6;
+            this.tbTickFrequency.Name = "tbTickFrequency";
+            this.tbTickFrequency.Size = new System.Drawing.Size(234, 45);
+            this.tbTickFrequency.TabIndex = 19;
+            this.tbTickFrequency.Value = 2;
+            this.tbTickFrequency.Scroll += new System.EventHandler(this.tbTickFrequency_Scroll);
+            // 
+            // gbTickFrequency
+            // 
+            this.gbTickFrequency.Controls.Add(this.label10);
+            this.gbTickFrequency.Controls.Add(this.label9);
+            this.gbTickFrequency.Controls.Add(this.label8);
+            this.gbTickFrequency.Controls.Add(this.label7);
+            this.gbTickFrequency.Controls.Add(this.label6);
+            this.gbTickFrequency.Controls.Add(this.label5);
+            this.gbTickFrequency.Controls.Add(this.label4);
+            this.gbTickFrequency.Controls.Add(this.label1);
+            this.gbTickFrequency.Controls.Add(this.tbTickFrequency);
+            this.gbTickFrequency.Location = new System.Drawing.Point(1021, 736);
+            this.gbTickFrequency.Name = "gbTickFrequency";
+            this.gbTickFrequency.Size = new System.Drawing.Size(257, 145);
+            this.gbTickFrequency.TabIndex = 20;
+            this.gbTickFrequency.TabStop = false;
+            this.gbTickFrequency.Text = "Ticks/Second";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 61);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(28, 13);
+            this.label1.TabIndex = 20;
+            this.label1.Text = "0.25";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(47, 61);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(22, 13);
+            this.label4.TabIndex = 20;
+            this.label4.Text = "0.5";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(84, 61);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(13, 13);
+            this.label5.TabIndex = 20;
+            this.label5.Text = "1";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(117, 61);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(13, 13);
+            this.label6.TabIndex = 20;
+            this.label6.Text = "2";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(152, 61);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(13, 13);
+            this.label7.TabIndex = 20;
+            this.label7.Text = "5";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(184, 61);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(19, 13);
+            this.label8.TabIndex = 20;
+            this.label8.Text = "10";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(221, 61);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(19, 13);
+            this.label9.TabIndex = 20;
+            this.label9.Text = "20";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 89);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(249, 39);
+            this.label10.TabIndex = 21;
+            this.label10.Text = "Warning: Setting this value to 5 or more ticks per\r\nsecond will cause the cars to" +
+    " be replaced by black \r\nsquares so that the simulation can run smoothly";
+            // 
             // Form_Simulation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1290, 845);
+            this.ClientSize = new System.Drawing.Size(1290, 896);
+            this.Controls.Add(this.gbTickFrequency);
             this.Controls.Add(this.tb_greenlight);
             this.Controls.Add(this.tb_redlight);
             this.Controls.Add(this.label3);
@@ -448,6 +562,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.TRight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Corner1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbTickFrequency)).EndInit();
+            this.gbTickFrequency.ResumeLayout(false);
+            this.gbTickFrequency.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -489,5 +606,15 @@
         private System.Windows.Forms.TextBox tb_greenlight;
         private System.Windows.Forms.Label lblTimeElapsed;
         private System.Windows.Forms.TextBox tbTimeElapsed;
+        private System.Windows.Forms.TrackBar tbTickFrequency;
+        private System.Windows.Forms.GroupBox gbTickFrequency;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label1;
     }
 }

@@ -27,6 +27,8 @@ namespace TrafficSimulation
         private int pictureBoxGap = 1;
         private int timesUpdated = 0;        
         private int carsspawned = 0;
+        private bool simIsLaunched = false;
+        private bool carsTurnBlack = false;
         System.Windows.Forms.Timer timer;
         private DateTime dt;
         private TimeSpan ts = TimeSpan.Zero;
@@ -269,7 +271,7 @@ namespace TrafficSimulation
                     pictureBox.Size = new Size(this.pictureBoxSize, this.pictureBoxSize);
 
 
-                    if (tile.Type == TileType.Car)
+                    if (tile.Type == TileType.Car && !carsTurnBlack)
                     {
                         Direction d;
 
@@ -311,7 +313,7 @@ namespace TrafficSimulation
                         box.Location.Y == tile.Position.Y * (this.pictureBoxSize + this.pictureBoxGap)
                     );
 
-                    if (tile.Type == TileType.Car)
+                    if (tile.Type == TileType.Car && !carsTurnBlack)
                     {
                         Direction d;
 
@@ -352,8 +354,8 @@ namespace TrafficSimulation
             {
                 case TileType.Grass:
                     return Color.LightGreen;
-                /*case TileType.Car:
-                    return Color.Black;*/
+                case TileType.Car:
+                    return Color.Black;
                 case TileType.Road:
                     return Color.LightGray;
                 case TileType.Empty:
@@ -484,26 +486,27 @@ namespace TrafficSimulation
         {
             try
             {
-                    timegreen = Convert.ToInt32(tb_greenlight.Text);
-                    timered = Convert.ToInt32(tb_redlight.Text);
-                    if (timered <= timegreen)
+                simIsLaunched = true;
+                timegreen = Convert.ToInt32(tb_greenlight.Text);
+                timered = Convert.ToInt32(tb_redlight.Text);
+                if (timered <= timegreen)
+                {
+                    MessageBox.Show("red lights should last more than green lights");
+                }
+                else
+                {
+                    if (grid.spawnPoints != null)
                     {
-                        MessageBox.Show("red lights should last more than green lights");
+                        btnStop.Enabled = true;
+                        btnLaunch.Enabled = false;
+                        createTimer();
+                        dt = DateTime.Now;
                     }
                     else
                     {
-                        if (grid.spawnPoints != null)
-                        {
-                            btnStop.Enabled = true;
-                            btnLaunch.Enabled = false;
-                            createTimer();
-                            dt = DateTime.Now;
-                        }
-                        else
-                        {
-                            MessageBox.Show("Cars would drown.");
-                        }
+                        MessageBox.Show("Cars would drown.");
                     }
+                }
             }
             catch (FormatException)
             {
@@ -513,6 +516,7 @@ namespace TrafficSimulation
 
         private void btnStop_Click(object sender, EventArgs e)
         {
+            simIsLaunched = false;
             StopTimer();
             btnStop.Enabled = false;
             btnLaunch.Enabled = true;
@@ -529,6 +533,7 @@ namespace TrafficSimulation
 
         private void btn_Clear_Click(object sender, EventArgs e)
         {
+            simIsLaunched = false;
             _intersectionCounter = 0;
             grid.Clear();
             grid.comparePoints.Clear();
@@ -539,6 +544,55 @@ namespace TrafficSimulation
             tbCarsQuit.Text = Tile.Cars_Removed.ToString();
             this.CreateGrid(grid);
             ts = TimeSpan.Zero;
+        }
+
+        private void tbTickFrequency_Scroll(object sender, EventArgs e)
+        {
+            switch (tbTickFrequency.Value)
+            {
+                case 0:
+                    simuationUpdateInterval = 4000;
+                    carsTurnBlack = false;
+                    break;
+
+                case 1:
+                    simuationUpdateInterval = 2000;
+                    carsTurnBlack = false;
+                    break;
+
+                case 2:
+                    simuationUpdateInterval = 1000;
+                    carsTurnBlack = false;
+                    break;
+
+                case 3:
+                    simuationUpdateInterval = 500;
+                    carsTurnBlack = false;
+                    break;
+
+                case 4:
+                    simuationUpdateInterval = 200;
+                    carsTurnBlack = true;
+                    break;
+
+                case 5:
+                    simuationUpdateInterval = 100;
+                    carsTurnBlack = true;
+                    break;
+
+                case 6:
+                    simuationUpdateInterval = 50;
+                    carsTurnBlack = true;
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (simIsLaunched)
+            {
+                timer.Interval = simuationUpdateInterval;
+            }
         }
     }
 }
