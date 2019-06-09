@@ -229,6 +229,7 @@ namespace TrafficSimulation
                     
             Tile car = new Tile(spawn.Position.X, spawn.Position.Y, TileType.Car, new List<TileAction>());
             car.Actions = car.getRoute(spawn, grid.Tiles, this.grid, exit);
+            car.AdjustRouteBySpeed();
 
             this.grid.UpdateTile(spawn.Position.X, spawn.Position.Y, TileType.Car, car.Actions);
             this.CreateGrid(this.grid);            
@@ -271,20 +272,22 @@ namespace TrafficSimulation
 
                         if (tile.Actions.Count > 0)
                         {
-                            d = ((MoveAction)tile.Actions[0]).direction;
-                            pictureBox.Image = Properties.Resources.thumbnail;                      // default down
+                            if (!(tile.Actions[0] is NoAction)) {
+                                d = ((MoveAction)tile.Actions[0]).direction;
+                                pictureBox.Image = Properties.Resources.thumbnail;                      // default down
 
-                            if (d == Direction.Up)
-                            {
-                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
-                            }
-                            else if (d == Direction.Left)
-                            {
-                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                            }
-                            else if (d == Direction.Right)
-                            {
-                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                                if (d == Direction.Up)
+                                {
+                                    pictureBox.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                                }
+                                else if (d == Direction.Left)
+                                {
+                                    pictureBox.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                                }
+                                else if (d == Direction.Right)
+                                {
+                                    pictureBox.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                                }
                             }
                         }
                         pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -313,20 +316,23 @@ namespace TrafficSimulation
 
                         if (tile.Actions.Count > 0)
                         {
-                            d = ((MoveAction)tile.Actions[0]).direction;
-                            pictureBox.Image = Properties.Resources.thumbnail;                      // default down
+                            if (!(tile.Actions[0] is NoAction))
+                            {
+                                d = ((MoveAction)tile.Actions[0]).direction;
+                                pictureBox.Image = Properties.Resources.thumbnail;                      // default down
 
-                            if (d == Direction.Up)
-                            {
-                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
-                            }
-                            else if (d == Direction.Left)
-                            {
-                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                            }
-                            else if (d == Direction.Right)
-                            {
-                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                                if (d == Direction.Up)
+                                {
+                                    pictureBox.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                                }
+                                else if (d == Direction.Left)
+                                {
+                                    pictureBox.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                                }
+                                else if (d == Direction.Right)
+                                {
+                                    pictureBox.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                                }
                             }
                         }                                     
                         pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
