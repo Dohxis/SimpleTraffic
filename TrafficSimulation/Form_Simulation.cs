@@ -498,11 +498,7 @@ namespace TrafficSimulation
                     timered = Convert.ToInt32(tb_redlight.Text);
                     if (timered <= timegreen)
                     {
-                        simIsLaunched = true;
-                        btnStop.Enabled = true;
-                        btnLaunch.Enabled = false;
-                        createTimer();
-                        dt = DateTime.Now;
+                        MessageBox.Show("red lights should last more than green lights");
                     }
                 }
                 catch (FormatException)
