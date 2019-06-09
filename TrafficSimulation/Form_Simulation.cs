@@ -480,32 +480,32 @@ namespace TrafficSimulation
 
         private void btnLaunch_Click(object sender, EventArgs e)
         {
-            try
+            if (grid.TrafficLightsNeeded)
             {
+                try
+                {
                     timegreen = Convert.ToInt32(tb_greenlight.Text);
                     timered = Convert.ToInt32(tb_redlight.Text);
                     if (timered <= timegreen)
                     {
                         MessageBox.Show("red lights should last more than green lights");
                     }
-                    else
-                    {
-                        if (grid.spawnPoints != null)
-                        {
-                            btnStop.Enabled = true;
-                            btnLaunch.Enabled = false;
-                            createTimer();
-                            dt = DateTime.Now;
-                        }
-                        else
-                        {
-                            MessageBox.Show("Cars would drown.");
-                        }
-                    }
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("please enter valid values for both green and red light time");
+                }
             }
-            catch (FormatException)
+            if (grid.spawnPoints != null)
             {
-                MessageBox.Show("please input valid values for green/red light time");
+                btnStop.Enabled = true;
+                btnLaunch.Enabled = false;
+                createTimer();
+                dt = DateTime.Now;
+            }
+            else
+            {
+                MessageBox.Show("Cars would drown.");
             }
         }
 
@@ -537,6 +537,7 @@ namespace TrafficSimulation
             tbSpawnedCars.Text = carsspawned.ToString();
             tbCarsQuit.Text = Tile.Cars_Removed.ToString();
             this.CreateGrid(grid);
+            grid.TrafficLightsNeeded = false;
         }
     }
 }
