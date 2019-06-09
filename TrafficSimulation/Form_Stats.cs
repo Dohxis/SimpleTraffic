@@ -16,8 +16,7 @@ namespace TrafficSimulation
     public partial class Form_Stats : Form
     {
         public Form_Stats(int carsspawned, int carsquit)
-        {
-            // Form1 will be used for displaying statistics at the end of the Simulation             
+        {          
 
             InitializeComponent();
             tbCarsSpawned.Text = carsspawned.ToString();

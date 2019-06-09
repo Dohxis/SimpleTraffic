@@ -311,13 +311,6 @@ namespace TrafficSimulation
                 case TileType.LeftControlPoint:
                 case TileType RightControlPoint:
                     return Color.Purple;
-
-
-                // Compiler is stupid and cannot realize that
-                // there is no other type, so this will
-                // never happen
-                default:
-                    return Color.White;
             }
         }
 
@@ -335,7 +328,6 @@ namespace TrafficSimulation
         public void pictureBoxClick(object sender, EventArgs e) //Click event
         {
             PictureBox p = sender as PictureBox;
-            //MessageBox.Show(p.Location.X.ToString() + " " + p.Location.Y.ToString() + " clicked");
             if (rbPlusIntersection.Checked == true)
             {
                 RestoreGrid();
@@ -448,7 +440,7 @@ namespace TrafficSimulation
             timesUpdated = 0;
         }
 
-        private void Form2_FormClosing(object sender, FormClosingEventArgs e)                           //Can't seem to be able to close both forms simultaneously, needs looking into.
+        private void Form2_FormClosing(object sender, FormClosingEventArgs e)                           
         {            
             for (int i = Application.OpenForms.Count - 1; i >= 0; i--)
             {
@@ -478,90 +470,4 @@ namespace TrafficSimulation
 
 
 
-
-// Controls used for hover
-/*public void pictureBoxEnter(object sender, EventArgs e)
-{
-    try
-    {
-        PictureBox p = sender as PictureBox;
-        if (rbPlusIntersection.Checked)
-        {
-            PlusHover(p.Location.X / 21, p.Location.Y / 21);
-        }
-    }
-    catch (Exception ArgumentOutOfRangeException)
-    {
-        MessageBox.Show("Out of boundaries! Hover from the upper side to use again!");
-    }
-
-}
-
-public void pictureBoxLeave(object sender, EventArgs e)
-{
-    try
-    {
-        PictureBox p = sender as PictureBox;
-        this.RestoreEmpty(p.Location.X / 21, p.Location.Y / 21);
-    }
-    catch (Exception ArgumentOutOfRangeException)
-    {
-        MessageBox.Show("Out of boundaries! Hover from the upper side to use again!");
-    }
-
-}
-
-public void PlusHover(int x, int y)
-{
-    List<Tile> tiles = new List<Tile>();
-    for (int a = x; a < x + 8; a++)
-    {
-        for (int b = y; b < y + 8; b++)
-        {
-            if (a >= x && a < x + 3 || a >= x + 5 && a <= x + 8)
-            {
-                if (b == y + 3 || b == y + 4)
-                {
-                    tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
-                }
-                else
-                {
-                    tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                }
-            }
-            else
-            {
-                tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-            }
-
-            if (a == x + 3 || a == x + 4)
-            {
-                tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
-            }
-
-        }
-    }
-
-    foreach (Tile t in tiles)
-    {
-        grid[t.Position.X][t.Position.Y].BackColor = this.getTileColor(t.Type);
-    }
-}
-
-public void RestoreEmpty(int x, int y)
-{
-    List<Tile> tiles = new List<Tile>();
-    for (int a = x; a < x + 8; a++)
-    {
-        for (int b = y; b < y + 8; b++)
-        {
-              tiles.Add(new Tile(a, b, TileType.Empty, new List<TileAction>()));
-        }
-    }
-
-    foreach (Tile t in tiles)
-    {
-        grid[t.Position.X][t.Position.Y].BackColor = this.getTileColor(t.Type);
-    }
-}*/
 
