@@ -28,11 +28,11 @@ namespace TrafficSimulation
         private int timesUpdated = 0;        
         private int carsspawned = 0;
         System.Windows.Forms.Timer timer;
-        DateTime dt;
-        TimeSpan ts = TimeSpan.Zero;
+        private DateTime dt;
+        public TimeSpan ts = TimeSpan.Zero;
 
-        private int nrred;
-        private int nrgreen;
+        private int timered;
+        private int timegreen;
 
         private List<PictureBox> comparePoints = new List<PictureBox>();
         
@@ -94,11 +94,11 @@ namespace TrafficSimulation
 
         void updateSimulation(object sender, EventArgs e)
         {
-            this.grid.Tick(nrred,nrgreen,timesUpdated);
+            this.grid.Tick(timered,timegreen,timesUpdated);
             CreateGrid(this.grid);
             this.timesUpdated++;
             tbCarsQuit.Text = Tile.Cars_Removed.ToString();
-             if (this.timesUpdated >= nrgreen + nrred + (nrred - nrgreen))
+             if (this.timesUpdated >= timered + timegreen + (timered - timegreen))
             {
                 timesUpdated = 0;
             }
@@ -482,9 +482,9 @@ namespace TrafficSimulation
         {
             try
             {
-                    nrgreen = Convert.ToInt32(tb_greenlight.Text);
-                    nrred = Convert.ToInt32(tb_redlight.Text);
-                    if (nrred <= nrgreen)
+                    timegreen = Convert.ToInt32(tb_greenlight.Text);
+                    timered = Convert.ToInt32(tb_redlight.Text);
+                    if (timered <= timegreen)
                     {
                         MessageBox.Show("red lights should last more than green lights");
                     }
