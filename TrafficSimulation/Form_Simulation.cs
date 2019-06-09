@@ -28,6 +28,8 @@ namespace TrafficSimulation
         private int timesUpdated = 0;        
         private int carsspawned = 0;
         System.Windows.Forms.Timer timer;
+        DateTime dt;
+        TimeSpan ts = TimeSpan.Zero;
 
         private int nrred;
         private int nrgreen;
@@ -71,7 +73,7 @@ namespace TrafficSimulation
         void Form_Simulation_Closed(object sender, FormClosedEventArgs e)
         {
             this.Visible = false;
-            Form_Stats f = new Form_Stats(carsspawned,Tile.Cars_Removed);
+            Form_Stats f = new Form_Stats(carsspawned,Tile.Cars_Removed,ts);
             f.ShowDialog();
         }
 
@@ -493,6 +495,7 @@ namespace TrafficSimulation
                             btnStop.Enabled = true;
                             btnLaunch.Enabled = false;
                             createTimer();
+                            dt = DateTime.Now;
                         }
                         else
                         {
@@ -512,6 +515,7 @@ namespace TrafficSimulation
             btnStop.Enabled = false;
             btnLaunch.Enabled = true;
             timesUpdated = 0;
+            ts += DateTime.Now - dt;
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)                           

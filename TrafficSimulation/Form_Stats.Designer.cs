@@ -32,6 +32,8 @@
             this.tbCarsSpawned = new System.Windows.Forms.TextBox();
             this.tbCarsQuit = new System.Windows.Forms.TextBox();
             this.lblCarsQuit = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tb_timeran = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // lblCarsSpawned
@@ -70,11 +72,32 @@
             this.lblCarsQuit.TabIndex = 9;
             this.lblCarsQuit.Text = "Cars Arrived at Destination:";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(81, 105);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(91, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "Simulation ran for:";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // tb_timeran
+            // 
+            this.tb_timeran.Location = new System.Drawing.Point(177, 102);
+            this.tb_timeran.Margin = new System.Windows.Forms.Padding(2);
+            this.tb_timeran.Name = "tb_timeran";
+            this.tb_timeran.ReadOnly = true;
+            this.tb_timeran.Size = new System.Drawing.Size(52, 20);
+            this.tb_timeran.TabIndex = 12;
+            // 
             // Form_Stats
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(739, 502);
+            this.Controls.Add(this.tb_timeran);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.tbCarsQuit);
             this.Controls.Add(this.lblCarsQuit);
             this.Controls.Add(this.tbCarsSpawned);
@@ -92,6 +115,8 @@
         private System.Windows.Forms.TextBox tbCarsSpawned;
         private System.Windows.Forms.TextBox tbCarsQuit;
         private System.Windows.Forms.Label lblCarsQuit;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox tb_timeran;
     }
 }
 
