@@ -29,8 +29,8 @@ namespace TrafficSimulation
         private int carsspawned = 0;
         System.Windows.Forms.Timer timer;
 
-        private int nrred = 5 ;
-        private int nrgreen = 3;
+        private int nrred;
+        private int nrgreen;
 
         private List<PictureBox> comparePoints = new List<PictureBox>();
         
@@ -478,16 +478,32 @@ namespace TrafficSimulation
 
         private void btnLaunch_Click(object sender, EventArgs e)
         {
-            if (grid.spawnPoints != null)
+            try
             {
-                btnStop.Enabled = true;
-                btnLaunch.Enabled = false;
-                createTimer();                
+                    nrgreen = Convert.ToInt32(tb_greenlight.Text);
+                    nrred = Convert.ToInt32(tb_redlight.Text);
+                    if (nrred <= nrgreen)
+                    {
+                        MessageBox.Show("red lights should last more than green lights");
+                    }
+                    else
+                    {
+                        if (grid.spawnPoints != null)
+                        {
+                            btnStop.Enabled = true;
+                            btnLaunch.Enabled = false;
+                            createTimer();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Cars would drown.");
+                        }
+                    }
             }
-            else
+            catch (FormatException)
             {
-                MessageBox.Show("Cars would drown.");
-            }            
+                MessageBox.Show("please input valid values for green/red light time");
+            }
         }
 
         private void btnStop_Click(object sender, EventArgs e)
