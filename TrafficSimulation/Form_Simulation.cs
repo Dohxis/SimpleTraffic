@@ -498,6 +498,7 @@ namespace TrafficSimulation
                     timered = Convert.ToInt32(tb_redlight.Text);
                     if (timered <= timegreen)
                     {
+                        simIsLaunched = true;
                         btnStop.Enabled = true;
                         btnLaunch.Enabled = false;
                         createTimer();
