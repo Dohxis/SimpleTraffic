@@ -29,7 +29,7 @@ namespace TrafficSimulation
         private int carsspawned = 0;
         System.Windows.Forms.Timer timer;
         private DateTime dt;
-        public TimeSpan ts = TimeSpan.Zero;
+        private TimeSpan ts = TimeSpan.Zero;
 
         private int timered;
         private int timegreen;
@@ -98,6 +98,8 @@ namespace TrafficSimulation
             CreateGrid(this.grid);
             this.timesUpdated++;
             tbCarsQuit.Text = Tile.Cars_Removed.ToString();
+            ts = DateTime.Now - dt;
+            tbTimeElapsed.Text = ts.ToString(@"hh\:mm\:ss");
              if (this.timesUpdated >= timered + timegreen + (timered - timegreen))
             {
                 timesUpdated = 0;
@@ -515,7 +517,6 @@ namespace TrafficSimulation
             btnStop.Enabled = false;
             btnLaunch.Enabled = true;
             timesUpdated = 0;
-            ts += DateTime.Now - dt;
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)                           
@@ -538,6 +539,7 @@ namespace TrafficSimulation
             tbCarsQuit.Text = Tile.Cars_Removed.ToString();
             this.CreateGrid(grid);
             grid.TrafficLightsNeeded = false;
+            ts = TimeSpan.Zero;
         }
     }
 }
