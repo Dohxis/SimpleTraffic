@@ -35,7 +35,7 @@
             this.rbTRight = new System.Windows.Forms.RadioButton();
             this.btnLaunch = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblCarsSpawned = new System.Windows.Forms.Label();
             this.tbSpawnedCars = new System.Windows.Forms.TextBox();
             this.btn_Clear = new System.Windows.Forms.Button();
             this.rbCorner1 = new System.Windows.Forms.RadioButton();
@@ -56,6 +56,12 @@
             this.Corner1 = new System.Windows.Forms.PictureBox();
             this.lblCarsQuit = new System.Windows.Forms.Label();
             this.tbCarsQuit = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tb_redlight = new System.Windows.Forms.TextBox();
+            this.tb_greenlight = new System.Windows.Forms.TextBox();
+            this.lblTimeElapsed = new System.Windows.Forms.Label();
+            this.tbTimeElapsed = new System.Windows.Forms.TextBox();
             this.gbIntersections.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Corner4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Corner2)).BeginInit();
@@ -121,7 +127,7 @@
             // 
             // btnLaunch
             // 
-            this.btnLaunch.Location = new System.Drawing.Point(1113, 497);
+            this.btnLaunch.Location = new System.Drawing.Point(1101, 580);
             this.btnLaunch.Margin = new System.Windows.Forms.Padding(2);
             this.btnLaunch.Name = "btnLaunch";
             this.btnLaunch.Size = new System.Drawing.Size(56, 19);
@@ -132,7 +138,7 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(1186, 497);
+            this.btnStop.Location = new System.Drawing.Point(1181, 580);
             this.btnStop.Margin = new System.Windows.Forms.Padding(2);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(56, 19);
@@ -141,23 +147,23 @@
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
-            // label1
+            // lblCarsSpawned
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1098, 553);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Cars Spawned:";
+            this.lblCarsSpawned.AutoSize = true;
+            this.lblCarsSpawned.Location = new System.Drawing.Point(1121, 619);
+            this.lblCarsSpawned.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblCarsSpawned.Name = "lblCarsSpawned";
+            this.lblCarsSpawned.Size = new System.Drawing.Size(79, 13);
+            this.lblCarsSpawned.TabIndex = 7;
+            this.lblCarsSpawned.Text = "Cars Spawned:";
             // 
             // tbSpawnedCars
             // 
-            this.tbSpawnedCars.Location = new System.Drawing.Point(1181, 550);
+            this.tbSpawnedCars.Location = new System.Drawing.Point(1204, 616);
             this.tbSpawnedCars.Margin = new System.Windows.Forms.Padding(2);
             this.tbSpawnedCars.Name = "tbSpawnedCars";
             this.tbSpawnedCars.ReadOnly = true;
-            this.tbSpawnedCars.Size = new System.Drawing.Size(34, 20);
+            this.tbSpawnedCars.Size = new System.Drawing.Size(57, 20);
             this.tbSpawnedCars.TabIndex = 8;
             // 
             // btn_Clear
@@ -343,7 +349,7 @@
             // lblCarsQuit
             // 
             this.lblCarsQuit.AutoSize = true;
-            this.lblCarsQuit.Location = new System.Drawing.Point(1042, 587);
+            this.lblCarsQuit.Location = new System.Drawing.Point(1065, 653);
             this.lblCarsQuit.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCarsQuit.Name = "lblCarsQuit";
             this.lblCarsQuit.Size = new System.Drawing.Size(135, 13);
@@ -352,23 +358,80 @@
             // 
             // tbCarsQuit
             // 
-            this.tbCarsQuit.Location = new System.Drawing.Point(1181, 584);
+            this.tbCarsQuit.Location = new System.Drawing.Point(1204, 650);
             this.tbCarsQuit.Margin = new System.Windows.Forms.Padding(2);
             this.tbCarsQuit.Name = "tbCarsQuit";
             this.tbCarsQuit.ReadOnly = true;
-            this.tbCarsQuit.Size = new System.Drawing.Size(34, 20);
+            this.tbCarsQuit.Size = new System.Drawing.Size(57, 20);
             this.tbCarsQuit.TabIndex = 8;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(1064, 517);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(71, 13);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "Red light time";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(1064, 544);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(80, 13);
+            this.label3.TabIndex = 16;
+            this.label3.Text = "Green light time";
+            // 
+            // tb_redlight
+            // 
+            this.tb_redlight.Location = new System.Drawing.Point(1150, 515);
+            this.tb_redlight.Name = "tb_redlight";
+            this.tb_redlight.Size = new System.Drawing.Size(50, 20);
+            this.tb_redlight.TabIndex = 17;
+            // 
+            // tb_greenlight
+            // 
+            this.tb_greenlight.Location = new System.Drawing.Point(1150, 541);
+            this.tb_greenlight.Name = "tb_greenlight";
+            this.tb_greenlight.Size = new System.Drawing.Size(50, 20);
+            this.tb_greenlight.TabIndex = 18;
+            // 
+            // lblTimeElapsed
+            // 
+            this.lblTimeElapsed.AutoSize = true;
+            this.lblTimeElapsed.Location = new System.Drawing.Point(1042, 686);
+            this.lblTimeElapsed.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTimeElapsed.Name = "lblTimeElapsed";
+            this.lblTimeElapsed.Size = new System.Drawing.Size(158, 13);
+            this.lblTimeElapsed.TabIndex = 7;
+            this.lblTimeElapsed.Text = "Simulation has been running for:";
+            // 
+            // tbTimeElapsed
+            // 
+            this.tbTimeElapsed.Location = new System.Drawing.Point(1204, 683);
+            this.tbTimeElapsed.Margin = new System.Windows.Forms.Padding(2);
+            this.tbTimeElapsed.Name = "tbTimeElapsed";
+            this.tbTimeElapsed.ReadOnly = true;
+            this.tbTimeElapsed.Size = new System.Drawing.Size(57, 20);
+            this.tbTimeElapsed.TabIndex = 8;
             // 
             // Form_Simulation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1290, 845);
+            this.Controls.Add(this.tb_greenlight);
+            this.Controls.Add(this.tb_redlight);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.gbIntersections);
             this.Controls.Add(this.tbCarsQuit);
+            this.Controls.Add(this.tbTimeElapsed);
             this.Controls.Add(this.tbSpawnedCars);
             this.Controls.Add(this.lblCarsQuit);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblTimeElapsed);
+            this.Controls.Add(this.lblCarsSpawned);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnLaunch);
             this.Name = "Form_Simulation";
@@ -399,7 +462,7 @@
         private System.Windows.Forms.RadioButton rbTRight;
         private System.Windows.Forms.Button btnLaunch;
         private System.Windows.Forms.Button btnStop;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblCarsSpawned;
         private System.Windows.Forms.TextBox tbSpawnedCars;
         private System.Windows.Forms.Button btn_Clear;
         private System.Windows.Forms.RadioButton rbCorner1;
@@ -420,5 +483,11 @@
         private System.Windows.Forms.PictureBox Corner3;
         private System.Windows.Forms.Label lblCarsQuit;
         private System.Windows.Forms.TextBox tbCarsQuit;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tb_redlight;
+        private System.Windows.Forms.TextBox tb_greenlight;
+        private System.Windows.Forms.Label lblTimeElapsed;
+        private System.Windows.Forms.TextBox tbTimeElapsed;
     }
 }

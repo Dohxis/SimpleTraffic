@@ -8,15 +8,6 @@ using TrafficSimulation.Actions;
 
 namespace TrafficSimulation
 {
-    // There are multiple problems with this approach:
-    // 1. Instead of using List<Tile> we should really use List<List<Tile>> 
-    //    for easier access to the actual grid.
-    //
-    // 2. Merging roads/grass and cars into one variable. Thats very convienent for
-    //    the form because we can just loop over tiles and render them, but it 
-    //    creates a need of "Dirty" tiles. I think we should still have a function 
-    //    "GetTiles()" for the form to render the map, but internally separate these
-    //    to two entities.
 
     class Grid
     {
@@ -494,7 +485,7 @@ namespace TrafficSimulation
                         }
                         else if (b == y + 2)
                         {
-                            tiles.Add(new Tile(a, b, TileType.TrafficLightGreen, new List<TileAction>() { /*new LightAction()*/ }));
+                            tiles.Add(new Tile(a, b, TileType.TrafficLightGreen, new List<TileAction>()));
                         }
                         else if (b == y + 4)
                         {
@@ -502,7 +493,7 @@ namespace TrafficSimulation
                         }
                         else if (b == y + 5)
                         {
-                            tiles.Add(new Tile(a, b, TileType.TrafficLightRed, new List<TileAction>() {/*new LightAction()*/ }));
+                            tiles.Add(new Tile(a, b, TileType.TrafficLightRed, new List<TileAction>()));
                         }
                         else
                         {
@@ -540,7 +531,7 @@ namespace TrafficSimulation
                         }
                         else if (b == y + 2) 
                         {
-                            tiles.Add(new Tile(a,b, TileType.TrafficLightRed, new List<TileAction>() {/* new LightAction()*/ }));
+                            tiles.Add(new Tile(a,b, TileType.TrafficLightRed, new List<TileAction>()));
                         }
                         else if (b == y + 4)
                         {
@@ -548,7 +539,7 @@ namespace TrafficSimulation
                         }
                         else if (b == y + 5) 
                         {
-                            tiles.Add(new Tile(a,b, TileType.TrafficLightGreen, new List<TileAction>() { /*new LightAction()*/ }));
+                            tiles.Add(new Tile(a,b, TileType.TrafficLightGreen, new List<TileAction>()));
                         }
                         else
                         {

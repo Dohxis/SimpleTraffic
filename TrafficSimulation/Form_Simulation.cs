@@ -28,9 +28,11 @@ namespace TrafficSimulation
         private int timesUpdated = 0;        
         private int carsspawned = 0;
         System.Windows.Forms.Timer timer;
+        private DateTime dt;
+        private TimeSpan ts = TimeSpan.Zero;
 
-        private int nrred = 5 ;
-        private int nrgreen = 3;
+        private int timered;
+        private int timegreen;
 
         private List<PictureBox> comparePoints = new List<PictureBox>();
         
@@ -71,7 +73,7 @@ namespace TrafficSimulation
         void Form_Simulation_Closed(object sender, FormClosedEventArgs e)
         {
             this.Visible = false;
-            Form_Stats f = new Form_Stats(carsspawned,Tile.Cars_Removed);
+            Form_Stats f = new Form_Stats(carsspawned,Tile.Cars_Removed,ts);
             f.ShowDialog();
         }
 
@@ -92,11 +94,13 @@ namespace TrafficSimulation
 
         void updateSimulation(object sender, EventArgs e)
         {
-            this.grid.Tick(nrred,nrgreen,timesUpdated);
+            this.grid.Tick(timered,timegreen,timesUpdated);
             CreateGrid(this.grid);
             this.timesUpdated++;
             tbCarsQuit.Text = Tile.Cars_Removed.ToString();
-             if (this.timesUpdated >= nrgreen + nrred + (nrred - nrgreen))
+            ts = DateTime.Now - dt;
+            tbTimeElapsed.Text = ts.ToString(@"hh\:mm\:ss");
+             if (this.timesUpdated >= timered + timegreen + (timered - timegreen))
             {
                 timesUpdated = 0;
             }
@@ -375,13 +379,6 @@ namespace TrafficSimulation
                 case TileType.LeftControlPoint:
                 case TileType RightControlPoint:
                     return Color.Purple;
-
-
-                // Compiler is stupid and cannot realize that
-                // there is no other type, so this will
-                // never happen
-                default:
-                    return Color.White;
             }
         }
 
@@ -399,7 +396,6 @@ namespace TrafficSimulation
         public void pictureBoxClick(object sender, EventArgs e) //Click event
         {
             PictureBox p = sender as PictureBox;
-            //MessageBox.Show(p.Location.X.ToString() + " " + p.Location.Y.ToString() + " clicked");
             if (rbPlusIntersection.Checked == true)
             {
                 RestoreGrid();
@@ -492,16 +488,33 @@ namespace TrafficSimulation
 
         private void btnLaunch_Click(object sender, EventArgs e)
         {
-            if (grid.spawnPoints != null)
+            try
             {
-                btnStop.Enabled = true;
-                btnLaunch.Enabled = false;
-                createTimer();                
+                    timegreen = Convert.ToInt32(tb_greenlight.Text);
+                    timered = Convert.ToInt32(tb_redlight.Text);
+                    if (timered <= timegreen)
+                    {
+                        MessageBox.Show("red lights should last more than green lights");
+                    }
+                    else
+                    {
+                        if (grid.spawnPoints != null)
+                        {
+                            btnStop.Enabled = true;
+                            btnLaunch.Enabled = false;
+                            createTimer();
+                            dt = DateTime.Now;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Cars would drown.");
+                        }
+                    }
             }
-            else
+            catch (FormatException)
             {
-                MessageBox.Show("Cars would drown.");
-            }            
+                MessageBox.Show("please input valid values for green/red light time");
+            }
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -512,7 +525,7 @@ namespace TrafficSimulation
             timesUpdated = 0;
         }
 
-        private void Form2_FormClosing(object sender, FormClosingEventArgs e)                           //Can't seem to be able to close both forms simultaneously, needs looking into.
+        private void Form2_FormClosing(object sender, FormClosingEventArgs e)                           
         {            
             for (int i = Application.OpenForms.Count - 1; i >= 0; i--)
             {
@@ -531,6 +544,7 @@ namespace TrafficSimulation
             tbSpawnedCars.Text = carsspawned.ToString();
             tbCarsQuit.Text = Tile.Cars_Removed.ToString();
             this.CreateGrid(grid);
+            ts = TimeSpan.Zero;
         }
     }
 }
@@ -542,90 +556,4 @@ namespace TrafficSimulation
 
 
 
-
-// Controls used for hover
-/*public void pictureBoxEnter(object sender, EventArgs e)
-{
-    try
-    {
-        PictureBox p = sender as PictureBox;
-        if (rbPlusIntersection.Checked)
-        {
-            PlusHover(p.Location.X / 21, p.Location.Y / 21);
-        }
-    }
-    catch (Exception ArgumentOutOfRangeException)
-    {
-        MessageBox.Show("Out of boundaries! Hover from the upper side to use again!");
-    }
-
-}
-
-public void pictureBoxLeave(object sender, EventArgs e)
-{
-    try
-    {
-        PictureBox p = sender as PictureBox;
-        this.RestoreEmpty(p.Location.X / 21, p.Location.Y / 21);
-    }
-    catch (Exception ArgumentOutOfRangeException)
-    {
-        MessageBox.Show("Out of boundaries! Hover from the upper side to use again!");
-    }
-
-}
-
-public void PlusHover(int x, int y)
-{
-    List<Tile> tiles = new List<Tile>();
-    for (int a = x; a < x + 8; a++)
-    {
-        for (int b = y; b < y + 8; b++)
-        {
-            if (a >= x && a < x + 3 || a >= x + 5 && a <= x + 8)
-            {
-                if (b == y + 3 || b == y + 4)
-                {
-                    tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
-                }
-                else
-                {
-                    tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                }
-            }
-            else
-            {
-                tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-            }
-
-            if (a == x + 3 || a == x + 4)
-            {
-                tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
-            }
-
-        }
-    }
-
-    foreach (Tile t in tiles)
-    {
-        grid[t.Position.X][t.Position.Y].BackColor = this.getTileColor(t.Type);
-    }
-}
-
-public void RestoreEmpty(int x, int y)
-{
-    List<Tile> tiles = new List<Tile>();
-    for (int a = x; a < x + 8; a++)
-    {
-        for (int b = y; b < y + 8; b++)
-        {
-              tiles.Add(new Tile(a, b, TileType.Empty, new List<TileAction>()));
-        }
-    }
-
-    foreach (Tile t in tiles)
-    {
-        grid[t.Position.X][t.Position.Y].BackColor = this.getTileColor(t.Type);
-    }
-}*/
 
