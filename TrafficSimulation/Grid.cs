@@ -38,6 +38,7 @@ namespace TrafficSimulation
 
         public List<Tile> StartRed { get; set; }
         public List<Tile> StartGreen { get; set; }
+        public bool TrafficLightsNeeded = false;
 
         public Grid(List<Tile> tiles, TrafficRules trafficRules)
         {
@@ -66,33 +67,36 @@ namespace TrafficSimulation
 
         public void Tick(int nrred, int nrgreen, int timesUpdated)
         {
-            int nryellow = nrred - nrgreen;
-            int numberforred = timesUpdated + 1;
-            if (timesUpdated >= 0)
+            if (TrafficLightsNeeded)
             {
-                if (numberforred % nrred == 0)
+                int nryellow = nrred - nrgreen;
+                int numberforred = timesUpdated + 1;
+                if (timesUpdated >= 0)
                 {
-                    ChangeTrafficLightsRed(StartRed);
-                }
-                if (numberforred % (nrred + nrgreen) == 0)
-                {
-                    ChangeTrafficLightsGreen(StartRed);
-                }
-                if (numberforred % (nrred + nryellow + nrgreen) == 0)
-                {
-                    ChangeTrafficLightsYellow(StartRed);
-                    ChangeTrafficLightsRed(StartGreen);
-                }
+                    if (numberforred % nrred == 0)
+                    {
+                        ChangeTrafficLightsRed(StartRed);
+                    }
+                    if (numberforred % (nrred + nrgreen) == 0)
+                    {
+                        ChangeTrafficLightsGreen(StartRed);
+                    }
+                    if (numberforred % (nrred + nryellow + nrgreen) == 0)
+                    {
+                        ChangeTrafficLightsYellow(StartRed);
+                        ChangeTrafficLightsRed(StartGreen);
+                    }
 
-                if ((timesUpdated + 1) % nrgreen == 0)
-                {
-                    ChangeTrafficLightsGreen(StartGreen);
-                }
-                if ((timesUpdated + 1) % (nrgreen + nryellow) == 0)
-                {
-                    ChangeTrafficLightsYellow(StartGreen);
-                }
+                    if ((timesUpdated + 1) % nrgreen == 0)
+                    {
+                        ChangeTrafficLightsGreen(StartGreen);
+                    }
+                    if ((timesUpdated + 1) % (nrgreen + nryellow) == 0)
+                    {
+                        ChangeTrafficLightsYellow(StartGreen);
+                    }
 
+                }
             }
             this.Tiles = this.trafficRules.Handle(this.Tiles);
             this.Tiles = this.trafficRules.CleanDirtyTiles(this.Tiles);
@@ -461,6 +465,7 @@ namespace TrafficSimulation
         public void AddTrafficPlusToGrid(int x, int y) // Add method
         {
             List<Tile> tiles = new List<Tile>();
+            this.TrafficLightsNeeded = true;
 
             for (int a = x; a < x + 8; a++)
             {

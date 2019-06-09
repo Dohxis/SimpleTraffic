@@ -235,6 +235,7 @@ namespace TrafficSimulation
                     
             Tile car = new Tile(spawn.Position.X, spawn.Position.Y, TileType.Car, new List<TileAction>());
             car.Actions = car.getRoute(spawn, grid.Tiles, this.grid, exit);
+            car.AdjustRouteBySpeed();
 
             this.grid.UpdateTile(spawn.Position.X, spawn.Position.Y, TileType.Car, car.Actions);
             this.CreateGrid(this.grid);            
@@ -277,20 +278,22 @@ namespace TrafficSimulation
 
                         if (tile.Actions.Count > 0)
                         {
-                            d = ((MoveAction)tile.Actions[0]).direction;
-                            pictureBox.Image = Properties.Resources.thumbnail;                      // default down
+                            if (!(tile.Actions[0] is NoAction)) {
+                                d = ((MoveAction)tile.Actions[0]).direction;
+                                pictureBox.Image = Properties.Resources.thumbnail;                      // default down
 
-                            if (d == Direction.Up)
-                            {
-                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
-                            }
-                            else if (d == Direction.Left)
-                            {
-                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                            }
-                            else if (d == Direction.Right)
-                            {
-                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                                if (d == Direction.Up)
+                                {
+                                    pictureBox.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                                }
+                                else if (d == Direction.Left)
+                                {
+                                    pictureBox.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                                }
+                                else if (d == Direction.Right)
+                                {
+                                    pictureBox.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                                }
                             }
                         }
                         pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -319,20 +322,23 @@ namespace TrafficSimulation
 
                         if (tile.Actions.Count > 0)
                         {
-                            d = ((MoveAction)tile.Actions[0]).direction;
-                            pictureBox.Image = Properties.Resources.thumbnail;                      // default down
+                            if (!(tile.Actions[0] is NoAction))
+                            {
+                                d = ((MoveAction)tile.Actions[0]).direction;
+                                pictureBox.Image = Properties.Resources.thumbnail;                      // default down
 
-                            if (d == Direction.Up)
-                            {
-                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
-                            }
-                            else if (d == Direction.Left)
-                            {
-                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                            }
-                            else if (d == Direction.Right)
-                            {
-                                pictureBox.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                                if (d == Direction.Up)
+                                {
+                                    pictureBox.Image.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                                }
+                                else if (d == Direction.Left)
+                                {
+                                    pictureBox.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                                }
+                                else if (d == Direction.Right)
+                                {
+                                    pictureBox.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                                }
                             }
                         }                                     
                         pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -484,33 +490,36 @@ namespace TrafficSimulation
 
         private void btnLaunch_Click(object sender, EventArgs e)
         {
-            try
+            if (grid.TrafficLightsNeeded)
             {
-                simIsLaunched = true;
-                timegreen = Convert.ToInt32(tb_greenlight.Text);
-                timered = Convert.ToInt32(tb_redlight.Text);
-                if (timered <= timegreen)
+                try
                 {
-                    MessageBox.Show("red lights should last more than green lights");
-                }
-                else
-                {
-                    if (grid.spawnPoints != null)
+                    timegreen = Convert.ToInt32(tb_greenlight.Text);
+                    timered = Convert.ToInt32(tb_redlight.Text);
+                    if (timered <= timegreen)
                     {
                         btnStop.Enabled = true;
                         btnLaunch.Enabled = false;
                         createTimer();
                         dt = DateTime.Now;
                     }
-                    else
-                    {
-                        MessageBox.Show("Cars would drown.");
-                    }
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("please enter valid values for both green and red light time");
                 }
             }
-            catch (FormatException)
+            if (grid.spawnPoints != null)
             {
-                MessageBox.Show("please input valid values for green/red light time");
+                simIsLaunched = true;
+                btnStop.Enabled = true;
+                btnLaunch.Enabled = false;
+                createTimer();
+                dt = DateTime.Now;
+            }
+            else
+            {
+                MessageBox.Show("Cars would drown.");
             }
         }
 
@@ -543,6 +552,7 @@ namespace TrafficSimulation
             tbSpawnedCars.Text = carsspawned.ToString();
             tbCarsQuit.Text = Tile.Cars_Removed.ToString();
             this.CreateGrid(grid);
+            grid.TrafficLightsNeeded = false;
             ts = TimeSpan.Zero;
         }
 

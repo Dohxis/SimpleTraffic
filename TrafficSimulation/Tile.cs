@@ -9,7 +9,7 @@ namespace TrafficSimulation
 {
     class Tile
     {
-
+        private int speed;
         public Position Position { get; }
         public List<TileAction> Actions { get; set; }
         public bool Dirty { get; set; }
@@ -24,7 +24,29 @@ namespace TrafficSimulation
             this.Actions = actions;
             this.Type = type;
             this.Dirty = false;
+            this.speed = 10;
         }
+
+
+        public void AdjustRouteBySpeed()
+        {
+            List<TileAction> nw = new List<TileAction>();
+            nw = Actions;
+            for(int d = 0; d < Actions.Count - 1; d++)
+            {
+                if(!(Actions[d] is NoAction))
+                {
+                    for(int i = 0; i < this.speed; i++)
+                    {
+                        d++;
+                        NoAction n = new NoAction();
+                        Actions.Insert(d, n);
+                    }
+                }
+            }
+        }
+
+
         public List<TileAction> getRoute(Tile spawn, List<Tile> Tiles, Grid grid, Tile exit)
         {
             List<Tile> routeList = new List<Tile>();
