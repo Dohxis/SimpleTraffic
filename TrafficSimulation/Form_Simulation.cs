@@ -46,6 +46,7 @@ namespace TrafficSimulation
         public Form_Simulation()
         {
             InitializeComponent();
+            rbPlusIntersection.Checked = true;
             this.grid = CreateInitialGrid();
             this.pictureBoxes = new List<PictureBox>();
             string ImagesDirectory =
@@ -68,61 +69,349 @@ namespace TrafficSimulation
 
             this.FormClosed += new FormClosedEventHandler(Form_Simulation_Closed);
 
-            //createTimer();
             CreateGrid(grid);
             btnStop.Enabled = false;
+            btnMap.Enabled = false;
         }
-        
+
+
+        #region User_Form_Interactions
+
+        private void btnLaunch_Click(object sender, EventArgs e)
+        {
+            if (grid.TrafficLightsNeeded)
+            {
+                try
+                {
+                    timegreen = Convert.ToInt32(tb_greenlight.Text);
+                    timered = Convert.ToInt32(tb_redlight.Text);
+                    if (timered <= timegreen)
+                    {
+                        MessageBox.Show("red lights should last more than green lights");
+                    }
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("please enter valid values for both green and red light time");
+                }
+            }
+            if (grid.spawnPoints != null)
+            {
+                simIsLaunched = true;
+                btnStop.Enabled = true;
+                btnLaunch.Enabled = false;
+                btnSave.Enabled = false;
+                btnLoad.Enabled = false;
+                btnMap.Enabled = false;
+                createTimer();
+                dt = DateTime.Now;
+            }
+            else
+            {
+                MessageBox.Show("Cars would drown.");
+            }
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            simIsLaunched = false;
+            StopTimer();
+            btnStop.Enabled = false;
+            btnLaunch.Enabled = true;
+            btnMap.Enabled = true;
+            timesUpdated = 0;
+        }
+
+        private void btn_Clear_Click(object sender, EventArgs e)
+        {
+            simIsLaunched = false;
+            _intersectionCounter = 0;
+            grid.Clear();
+            grid.comparePoints.Clear();
+            grid.spawnPoints.Clear();
+            carsspawned = 0;
+            Tile.Cars_Removed = 0;
+            tbSpawnedCars.Text = carsspawned.ToString();
+            tbCarsQuit.Text = Tile.Cars_Removed.ToString();
+            this.CreateGrid(grid);
+            grid.TrafficLightsNeeded = false;
+            ts = TimeSpan.Zero;
+
+            btnSave.Enabled = true;
+            btnLoad.Enabled = true;
+            btnLaunch.Enabled = true;
+            btnMap.Enabled = false;
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            try
+            {
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    String saveableCode = "";
+
+                    foreach (Tile tile in grid.Tiles)
+                    {
+                        saveableCode += tile.getSaveableCode();
+                    }
+
+                    File.WriteAllText(saveFileDialog.FileName, saveableCode);
+                    MessageBox.Show("Grid was successfully saved!");
+                }
+            }
+            catch
+            {
+                MessageBox.Show("There was an error while saving the grid.");
+            }
+        }
+
+        private void btnLoad_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            try
+            {
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    var reader = new StreamReader(openFileDialog.FileName);
+                    String gridCode = reader.ReadToEnd();
+                    int x = 0;
+                    int y = 0;
+
+                    List<Tile> tiles = new List<Tile>();
+                    foreach (char code in gridCode)
+                    {
+                        tiles.Add(new Tile(y, x, Tile.GetTileTypeByCode(code), new List<TileAction>()));
+                        x++;
+                        if (x == initialTiles)
+                        {
+                            y++;
+                            x = 0;
+                        }
+                    }
+
+                    RestoreGrid();
+                    grid = new Grid(tiles); ;
+                    grid.CheckGrid();
+                    CreateGrid(grid);
+
+                    MessageBox.Show("Grid was successfully loaded!");
+                }
+            }
+            catch
+            {
+                MessageBox.Show("There was an error while loading the grid.");
+            }
+        }
+
+        private void tbTickFrequency_Scroll(object sender, EventArgs e)
+        {
+            switch (tbTickFrequency.Value)
+            {
+                case 0:
+                    simuationUpdateInterval = 4000;
+                    carsTurnBlack = false;
+                    break;
+
+                case 1:
+                    simuationUpdateInterval = 2000;
+                    carsTurnBlack = false;
+                    break;
+
+                case 2:
+                    simuationUpdateInterval = 1000;
+                    carsTurnBlack = false;
+                    break;
+
+                case 3:
+                    simuationUpdateInterval = 500;
+                    carsTurnBlack = false;
+                    break;
+
+                case 4:
+                    simuationUpdateInterval = 200;
+                    carsTurnBlack = true;
+                    break;
+
+                case 5:
+                    simuationUpdateInterval = 100;
+                    carsTurnBlack = true;
+                    break;
+
+                case 6:
+                    simuationUpdateInterval = 50;
+                    carsTurnBlack = true;
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (simIsLaunched)
+            {
+                timer.Interval = simuationUpdateInterval;
+            }
+        }
+
+        private void btnMap_Click(object sender, EventArgs e)
+        {
+            foreach (Tile tile in grid.Tiles)
+            {
+                if (tile.Type != TileType.Grass && tile.Type != TileType.Empty && tile.Type != TileType.TrafficLightRed && tile.Type != TileType.TrafficLightGreen && tile.Type != TileType.TrafficLightYellow)
+                {
+                    switch (tile.counter)
+                    {
+                        case 0:
+                        case 1:
+                        case 2:
+                            tile.Type = TileType.White;
+                            break;
+                        case 3:
+                        case 4:
+                        case 5:
+                            tile.Type = TileType.Bej;
+                            break;
+                        case 6:
+                        case 7:
+                        case 8:
+                            tile.Type = TileType.Orange;
+                            break;
+                        case 9:
+                        case 10:
+                        case 11:
+                            tile.Type = TileType.LightRed;
+                            break;
+                        case 12:
+                        case 13:
+                        case 14:
+                            tile.Type = TileType.Red;
+                            break;
+                        case 15:
+                        case 16:
+                        case 17:
+                            tile.Type = TileType.LightBlue;
+                            break;
+                        case 18:
+                            tile.Type = TileType.Blue;
+                            break;
+                        default:
+                            tile.Type = TileType.Blue;
+                            break;
+                    }
+                }
+            }
+            this.CreateGrid(grid);
+            btnLaunch.Enabled = false;
+            btn_Clear.Enabled = true;
+        }
+
+        public void pictureBoxClick(object sender, EventArgs e) //Click event
+        {
+            PictureBox p = sender as PictureBox;
+            if (rbPlusIntersection.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Plus);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+
+            }
+            else if (rbTrafficPlus.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TrafficPlus);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+            }
+            else if (rbTUp.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TUp);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+
+            }
+            else if (rbTDown.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TDown);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+
+            }
+            else if (rbTLeft.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TLeft);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+            }
+            else if (rbTRight.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TRight);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+            }
+            else if (rbCorner1.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Corner1);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+            }
+            else if (rbCorner2.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Corner2);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+            }
+            else if (rbCorner3.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Corner3);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+            }
+            else if (rbCorner4.Checked == true)
+            {
+                RestoreGrid();
+                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Corner4);
+                grid.CheckGrid();
+                this.CreateGrid(grid);
+                _intersectionCounter++;
+            }
+            else
+            {
+                MessageBox.Show("Please choose a type of intersection");
+            }
+
+        }
 
         void Form_Simulation_Closed(object sender, FormClosedEventArgs e)
         {
             this.Visible = false;
-            Form_Stats f = new Form_Stats(carsspawned,Tile.Cars_Removed,ts);
+            Form_Stats f = new Form_Stats(carsspawned, Tile.Cars_Removed, ts);
             f.ShowDialog();
         }
 
-        private void createTimer()
-        {
-            timer = new System.Windows.Forms.Timer();
-            timer.Tick += new EventHandler(updateSimulation);
-            timer.Interval = simuationUpdateInterval;
-            timer.Enabled = true;
-        }
+        #endregion
 
-        private void StopTimer()
-        {
-            timer.Stop();
-            btnStop.Enabled = false;
-            btnLaunch.Enabled = true;
-        }
 
-        void updateSimulation(object sender, EventArgs e)
-        {
-            this.grid.Tick(timered,timegreen,timesUpdated);
-            CreateGrid(this.grid);
-            this.timesUpdated++;
-            tbCarsQuit.Text = Tile.Cars_Removed.ToString();
-            ts = DateTime.Now - dt;
-            tbTimeElapsed.Text = ts.ToString(@"hh\:mm\:ss");
-             if (this.timesUpdated >= timered + timegreen + (timered - timegreen))
-            {
-                timesUpdated = 0;
-            }
-            if (this.timesUpdated % 2 == 0)
-            {
-                if (grid.spawnPoints.Count != 0)
-                {
-                    this.spawnDemoCar();
-                    carsspawned++;
-                    tbSpawnedCars.Text = carsspawned.ToString();
-                }
-                else
-                {
-                    StopTimer();
-                    MessageBox.Show("No spawn Points!");
-                }
-            }
-        }
+        #region Grid_Related_Actions
 
         private void spawnDemoCar()
         {
@@ -149,7 +438,7 @@ namespace TrafficSimulation
                     spawn = grid.DownSpawnPoints[a];
 
                     r = ran.Next(3);
-                    switch(r)
+                    switch (r)
                     {
                         case 0:
                             b = ran.Next(grid.UpExitPoints.Count);
@@ -234,13 +523,13 @@ namespace TrafficSimulation
                     break;
 
             }
-                    
+
             Tile car = new Tile(spawn.Position.X, spawn.Position.Y, TileType.Car, new List<TileAction>());
             car.Actions = car.getRoute(spawn, grid.Tiles, this.grid, exit);
             //car.AdjustRouteBySpeed();
 
             this.grid.UpdateTile(spawn.Position.X, spawn.Position.Y, TileType.Car, car.Actions);
-            this.CreateGrid(this.grid);            
+            this.CreateGrid(this.grid);
         }
 
         private Grid CreateInitialGrid()
@@ -280,7 +569,8 @@ namespace TrafficSimulation
 
                         if (tile.Actions.Count > 0)
                         {
-                            if (!(tile.Actions[0] is NoAction)) {
+                            if (!(tile.Actions[0] is NoAction))
+                            {
                                 d = ((MoveAction)tile.Actions[0]).direction;
                                 pictureBox.Image = Properties.Resources.thumbnail;                      // default down
 
@@ -305,8 +595,8 @@ namespace TrafficSimulation
                         pictureBox.Image = null;
                         pictureBox.BackColor = this.getTileColor(tile.Type);
                     }
-                                       
-                    
+
+
                     pictureBox.Click += new EventHandler(this.pictureBoxClick);
                     this.pictureBoxes.Add(pictureBox);
                     this.Controls.Add(pictureBox);
@@ -342,7 +632,7 @@ namespace TrafficSimulation
                                     pictureBox.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
                                 }
                             }
-                        }                                     
+                        }
                         pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
                     }
                     else
@@ -412,304 +702,51 @@ namespace TrafficSimulation
             }
         }
 
-        public void pictureBoxClick(object sender, EventArgs e) //Click event
-        {
-            PictureBox p = sender as PictureBox;
-            if (rbPlusIntersection.Checked == true)
-            {
-                RestoreGrid();
-                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Plus);
-                grid.CheckGrid();
-                this.CreateGrid(grid);
-                _intersectionCounter++;
-                
-            }
-            else if (rbTrafficPlus.Checked == true)
-            {
-                RestoreGrid();
-                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TrafficPlus);
-                grid.CheckGrid();
-                this.CreateGrid(grid);
-                _intersectionCounter++;
-            }
-            else if (rbTUp.Checked == true)
-            {
-                RestoreGrid();
-                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TUp);
-                grid.CheckGrid();
-                this.CreateGrid(grid);
-                _intersectionCounter++;
-                
-            }
-            else if (rbTDown.Checked == true)
-            {
-                RestoreGrid();
-                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TDown);
-                grid.CheckGrid();
-                this.CreateGrid(grid);
-                _intersectionCounter++;
-                
-            }
-            else if (rbTLeft.Checked == true)
-            {
-                RestoreGrid();
-                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TLeft);
-                grid.CheckGrid();
-                this.CreateGrid(grid);
-                _intersectionCounter++;
-            }
-            else if (rbTRight.Checked == true)
-            {
-                RestoreGrid();
-                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.TRight);
-                grid.CheckGrid();
-                this.CreateGrid(grid);
-                _intersectionCounter++;
-            }
-            else if (rbCorner1.Checked == true)
-            {
-                RestoreGrid();
-                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Corner1);
-                grid.CheckGrid();
-                this.CreateGrid(grid);
-                _intersectionCounter++;
-            }
-            else if (rbCorner2.Checked == true)
-            {
-                RestoreGrid();
-                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Corner2);
-                grid.CheckGrid();
-                this.CreateGrid(grid);
-                _intersectionCounter++;
-            }
-            else if (rbCorner3.Checked == true)
-            {
-                RestoreGrid();
-                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Corner3);
-                grid.CheckGrid();
-                this.CreateGrid(grid);
-                _intersectionCounter++;
-            }
-            else if (rbCorner4.Checked == true)
-            {
-                RestoreGrid();
-                grid.Draw_Intersection(p.Location.X / 21, p.Location.Y / 21, _intersectionCounter, IntersectionType.Corner4);
-                grid.CheckGrid();
-                this.CreateGrid(grid);
-                _intersectionCounter++;
-            }
-            else
-            {
-                MessageBox.Show("Please choose a type of intersection");
-            }
+        #endregion
 
+
+        private void createTimer()
+        {
+            timer = new System.Windows.Forms.Timer();
+            timer.Tick += new EventHandler(updateSimulation);
+            timer.Interval = simuationUpdateInterval;
+            timer.Enabled = true;
         }
 
-        private void btnLaunch_Click(object sender, EventArgs e)
+        private void StopTimer()
         {
-            if (grid.TrafficLightsNeeded)
-            {
-                try
-                {
-                    timegreen = Convert.ToInt32(tb_greenlight.Text);
-                    timered = Convert.ToInt32(tb_redlight.Text);
-                    if (timered <= timegreen)
-                    {
-                        MessageBox.Show("red lights should last more than green lights");
-                    }
-                }
-                catch (FormatException)
-                {
-                    MessageBox.Show("please enter valid values for both green and red light time");
-                }
-            }
-            if (grid.spawnPoints != null)
-            {
-                simIsLaunched = true;
-                btnStop.Enabled = true;
-                btnLaunch.Enabled = false;
-                createTimer();
-                dt = DateTime.Now;
-            }
-            else
-            {
-                MessageBox.Show("Cars would drown.");
-            }
-        }
-
-        private void btnStop_Click(object sender, EventArgs e)
-        {
-            simIsLaunched = false;
-            StopTimer();
+            timer.Stop();
             btnStop.Enabled = false;
             btnLaunch.Enabled = true;
-            timesUpdated = 0;
         }
 
-        private void Form2_FormClosing(object sender, FormClosingEventArgs e)                           
-        {            
-            for (int i = Application.OpenForms.Count - 1; i >= 0; i--)
-            {
-                    Application.OpenForms[i].Close();
-            }
-        }
-
-        private void btn_Clear_Click(object sender, EventArgs e)
+        void updateSimulation(object sender, EventArgs e)
         {
-            simIsLaunched = false;
-            _intersectionCounter = 0;
-            grid.Clear();
-            grid.comparePoints.Clear();
-            grid.spawnPoints.Clear();
-            carsspawned = 0;
-            Tile.Cars_Removed = 0;
-            tbSpawnedCars.Text = carsspawned.ToString();
+            this.grid.Tick(timered,timegreen,timesUpdated);
+            CreateGrid(this.grid);
+            this.timesUpdated++;
             tbCarsQuit.Text = Tile.Cars_Removed.ToString();
-            this.CreateGrid(grid);
-            grid.TrafficLightsNeeded = false;
-            ts = TimeSpan.Zero;
-        }
-
-        private void tbTickFrequency_Scroll(object sender, EventArgs e)
-        {
-            switch (tbTickFrequency.Value)
+            ts = DateTime.Now - dt;
+            tbTimeElapsed.Text = ts.ToString(@"hh\:mm\:ss");
+             if (this.timesUpdated >= timered + timegreen + (timered - timegreen))
             {
-                case 0:
-                    simuationUpdateInterval = 4000;
-                    carsTurnBlack = false;
-                    break;
-
-                case 1:
-                    simuationUpdateInterval = 2000;
-                    carsTurnBlack = false;
-                    break;
-
-                case 2:
-                    simuationUpdateInterval = 1000;
-                    carsTurnBlack = false;
-                    break;
-
-                case 3:
-                    simuationUpdateInterval = 500;
-                    carsTurnBlack = false;
-                    break;
-
-                case 4:
-                    simuationUpdateInterval = 200;
-                    carsTurnBlack = true;
-                    break;
-
-                case 5:
-                    simuationUpdateInterval = 100;
-                    carsTurnBlack = true;
-                    break;
-
-                case 6:
-                    simuationUpdateInterval = 50;
-                    carsTurnBlack = true;
-                    break;
-
-                default:
-                    break;
+                timesUpdated = 0;
             }
-
-            if (simIsLaunched)
+            if (this.timesUpdated % 5 == 0)
             {
-                timer.Interval = simuationUpdateInterval;
-            }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            try
-            {
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                if (grid.spawnPoints.Count != 0)
                 {
-                    String saveableCode = "";
-
-                    foreach (Tile tile in grid.Tiles)
-                    {
-                        saveableCode += tile.getSaveableCode();
-                    }
-
-                    File.WriteAllText(openFileDialog.FileName, saveableCode);
+                    this.spawnDemoCar();
+                    carsspawned++;
+                    tbSpawnedCars.Text = carsspawned.ToString();
+                }
+                else
+                {
+                    StopTimer();
+                    MessageBox.Show("No spawn Points!");
                 }
             }
-            catch
-            {
-                MessageBox.Show("There was an error while saving the grid.");
-            }
-            finally
-            {
-                MessageBox.Show("Grid was successfully saved!");
-            };
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            try
-            {
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    var reader = new StreamReader(openFileDialog.FileName);
-                    String gridCode = reader.ReadToEnd();
-                    int x = 0;
-                    int y = 0;
-
-                    List<Tile> tiles = new List<Tile>();
-                    foreach(char code in gridCode)
-                    {
-                        tiles.Add(new Tile(y, x, Tile.GetTileTypeByCode(code), new List<TileAction>()));
-                        x++;
-                        if(x == initialTiles)
-                        {
-                            y++;
-                            x = 0;
-                        }
-                    }
-
-                    RestoreGrid();
-                    grid = new Grid(tiles); ;
-                    grid.CheckGrid();
-                    CreateGrid(grid);
-                }
-            }
-            catch
-            {
-                MessageBox.Show("There was an error while loading the grid.");
-            }
-            finally
-            {
-                MessageBox.Show("Grid was successfully loaded!");
-            };
-
-        }
-
-        private void btnMap_Click(object sender, EventArgs e)
-        {
-            foreach (Tile tile in grid.Tiles)
-            {
-                if (tile.Type != TileType.Grass && tile.Type != TileType.Empty)
-                {
-                    switch(tile.counter)
-                    {
-                        case 0: tile.Type = TileType.White; break;
-                        case 1: tile.Type = TileType.Bej; break;
-                        case 2: tile.Type = TileType.Orange; break;
-                        case 3: tile.Type = TileType.LightRed; break;
-                        case 4: tile.Type = TileType.Red; break;
-                        case 5: tile.Type = TileType.LightBlue; break;
-                        case 6: tile.Type = TileType.Blue; break;
-                    }
-                }
-            }
-            this.CreateGrid(grid);
-        }
+        }      
     }
 }
 

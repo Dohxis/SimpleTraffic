@@ -24,7 +24,7 @@ namespace TrafficSimulation.Rules
                 bool lightstrue = true;
                 TileAction nextAction = new NoAction();
 
-                if (tile != null &&tile.Actions.Count > 0)
+                if (tile != null && tile.Actions.Count > 0)
                 {
                     nextAction = tile.Actions[0];
                 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TrafficSimulation.Rules
 {
-    abstract class TrafficRules
+    public abstract class TrafficRules
     {
         abstract public List<Tile> Handle(List<Tile> tiles);
 

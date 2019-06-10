@@ -7,7 +7,7 @@ using TrafficSimulation.Actions;
 
 namespace TrafficSimulation
 {
-    class Tile
+    public class Tile
     {
         private int speed;
         public int counter { get; set; }
@@ -274,7 +274,7 @@ namespace TrafficSimulation
                     }
 
                 }
-                else if (exit.Position.X < currentTile.Position.X)
+                else if (exit.Position.X > currentTile.Position.X)
                 {
                     LeadAction = new MoveAction(Direction.Right);
                     while (currentTile.Position.X != exit.Position.X)
@@ -300,7 +300,6 @@ namespace TrafficSimulation
             {
                 if (this.Type == TileType.Car)
                 {
-
                     return new RemoveCar();
                 }
                 return new NoAction();

@@ -43,8 +43,8 @@
             this.rbCorner3 = new System.Windows.Forms.RadioButton();
             this.rbCorner4 = new System.Windows.Forms.RadioButton();
             this.gbIntersections = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnLoad = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
             this.rbTrafficPlus = new System.Windows.Forms.RadioButton();
             this.Corner4 = new System.Windows.Forms.PictureBox();
             this.Corner2 = new System.Windows.Forms.PictureBox();
@@ -142,7 +142,7 @@
             // 
             // btnLaunch
             // 
-            this.btnLaunch.Location = new System.Drawing.Point(1101, 580);
+            this.btnLaunch.Location = new System.Drawing.Point(1071, 580);
             this.btnLaunch.Margin = new System.Windows.Forms.Padding(2);
             this.btnLaunch.Name = "btnLaunch";
             this.btnLaunch.Size = new System.Drawing.Size(56, 19);
@@ -153,7 +153,7 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(1181, 580);
+            this.btnStop.Location = new System.Drawing.Point(1141, 580);
             this.btnStop.Margin = new System.Windows.Forms.Padding(2);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(56, 19);
@@ -233,8 +233,8 @@
             // 
             // gbIntersections
             // 
-            this.gbIntersections.Controls.Add(this.button2);
-            this.gbIntersections.Controls.Add(this.button1);
+            this.gbIntersections.Controls.Add(this.btnLoad);
+            this.gbIntersections.Controls.Add(this.btnSave);
             this.gbIntersections.Controls.Add(this.rbTrafficPlus);
             this.gbIntersections.Controls.Add(this.btn_Clear);
             this.gbIntersections.Controls.Add(this.Corner4);
@@ -263,25 +263,25 @@
             this.gbIntersections.TabStop = false;
             this.gbIntersections.Text = "Interections";
             // 
-            // button2
+            // btnLoad
             // 
-            this.button2.Location = new System.Drawing.Point(142, 466);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 16;
-            this.button2.Text = "Load";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.btnLoad.Location = new System.Drawing.Point(142, 466);
+            this.btnLoad.Name = "btnLoad";
+            this.btnLoad.Size = new System.Drawing.Size(75, 23);
+            this.btnLoad.TabIndex = 16;
+            this.btnLoad.Text = "Load";
+            this.btnLoad.UseVisualStyleBackColor = true;
+            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
             // 
-            // button1
+            // btnSave
             // 
-            this.button1.Location = new System.Drawing.Point(61, 466);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 15;
-            this.button1.Text = "Save";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnSave.Location = new System.Drawing.Point(61, 466);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 15;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // rbTrafficPlus
             // 
@@ -455,6 +455,7 @@
             // 
             // tbTickFrequency
             // 
+            this.tbTickFrequency.LargeChange = 1;
             this.tbTickFrequency.Location = new System.Drawing.Point(6, 19);
             this.tbTickFrequency.Maximum = 6;
             this.tbTickFrequency.Name = "tbTickFrequency";
@@ -556,7 +557,7 @@
             // 
             // btnMap
             // 
-            this.btnMap.Location = new System.Drawing.Point(980, 515);
+            this.btnMap.Location = new System.Drawing.Point(1203, 578);
             this.btnMap.Name = "btnMap";
             this.btnMap.Size = new System.Drawing.Size(75, 23);
             this.btnMap.TabIndex = 21;
@@ -652,8 +653,8 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnLoad;
+        private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnMap;
     }
 }

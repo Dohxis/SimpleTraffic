@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TrafficSimulation
 {
-    enum IntersectionType
+    public enum IntersectionType
     {
         Plus,TrafficPlus, TUp, TDown, TLeft, TRight, Corner1, Corner2, Corner3, Corner4
     }

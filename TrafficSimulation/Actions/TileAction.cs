@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TrafficSimulation.Actions
 {
-    abstract class TileAction
+    public abstract class TileAction
     {
         abstract public List<Tile> Handle(Tile tile, List<Tile> tiles);
     }

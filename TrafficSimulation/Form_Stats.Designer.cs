@@ -39,7 +39,7 @@
             // lblCarsSpawned
             // 
             this.lblCarsSpawned.AutoSize = true;
-            this.lblCarsSpawned.Location = new System.Drawing.Point(94, 39);
+            this.lblCarsSpawned.Location = new System.Drawing.Point(81, 37);
             this.lblCarsSpawned.Name = "lblCarsSpawned";
             this.lblCarsSpawned.Size = new System.Drawing.Size(79, 13);
             this.lblCarsSpawned.TabIndex = 0;
@@ -47,7 +47,7 @@
             // 
             // tbCarsSpawned
             // 
-            this.tbCarsSpawned.Location = new System.Drawing.Point(177, 36);
+            this.tbCarsSpawned.Location = new System.Drawing.Point(164, 34);
             this.tbCarsSpawned.Name = "tbCarsSpawned";
             this.tbCarsSpawned.ReadOnly = true;
             this.tbCarsSpawned.Size = new System.Drawing.Size(52, 20);
@@ -55,7 +55,7 @@
             // 
             // tbCarsQuit
             // 
-            this.tbCarsQuit.Location = new System.Drawing.Point(177, 70);
+            this.tbCarsQuit.Location = new System.Drawing.Point(164, 68);
             this.tbCarsQuit.Margin = new System.Windows.Forms.Padding(2);
             this.tbCarsQuit.Name = "tbCarsQuit";
             this.tbCarsQuit.ReadOnly = true;
@@ -65,7 +65,7 @@
             // lblCarsQuit
             // 
             this.lblCarsQuit.AutoSize = true;
-            this.lblCarsQuit.Location = new System.Drawing.Point(38, 73);
+            this.lblCarsQuit.Location = new System.Drawing.Point(25, 71);
             this.lblCarsQuit.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCarsQuit.Name = "lblCarsQuit";
             this.lblCarsQuit.Size = new System.Drawing.Size(135, 13);
@@ -75,7 +75,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(81, 105);
+            this.label1.Location = new System.Drawing.Point(68, 103);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(91, 13);
             this.label1.TabIndex = 11;
@@ -84,7 +84,7 @@
             // 
             // tb_timeran
             // 
-            this.tb_timeran.Location = new System.Drawing.Point(177, 102);
+            this.tb_timeran.Location = new System.Drawing.Point(164, 100);
             this.tb_timeran.Margin = new System.Windows.Forms.Padding(2);
             this.tb_timeran.Name = "tb_timeran";
             this.tb_timeran.ReadOnly = true;
@@ -95,7 +95,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(739, 502);
+            this.ClientSize = new System.Drawing.Size(286, 311);
             this.Controls.Add(this.tb_timeran);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbCarsQuit);

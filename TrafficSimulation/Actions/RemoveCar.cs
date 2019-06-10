@@ -11,7 +11,6 @@ namespace TrafficSimulation.Actions
         public override List<Tile> Handle(Tile tile, List<Tile> tiles)
         {
             int removeIndex = tiles.IndexOf(tile);
-            int n = 1;
             List<TileAction> actions = new List<TileAction>();
             tiles[removeIndex] = new Tile(tile.Position.X, tile.Position.Y, TileType.Road, actions);
             return tiles;

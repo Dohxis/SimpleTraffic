@@ -9,7 +9,7 @@ using TrafficSimulation.Actions;
 namespace TrafficSimulation
 {
     //heat map line 107
-    class Grid
+    public class Grid
     {
         private TrafficRules trafficRules;
 
