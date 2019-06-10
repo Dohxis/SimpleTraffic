@@ -33,6 +33,7 @@ namespace TrafficSimulation
         private DateTime dt;
         private TimeSpan ts = TimeSpan.Zero;
         private int trafficflow;
+        private int cars_tick;
 
         private int timered;
         private int timegreen;
@@ -84,6 +85,7 @@ namespace TrafficSimulation
             {
                 try
                 {
+                    cars_tick = Convert.ToInt32(tb_cars_tick.Text);
                     trafficflow = Convert.ToInt32(tb_trafficflow.Text);
                     timegreen = Convert.ToInt32(tb_greenlight.Text);
                     timered = Convert.ToInt32(tb_redlight.Text);
@@ -109,7 +111,7 @@ namespace TrafficSimulation
                 }
                 catch (FormatException)
                 {
-                    MessageBox.Show("please enter valid values for green,red light time and traffic flow");
+                    MessageBox.Show("please enter valid values for green,red light time, traffic flow, cars/tick");
                 }
 
             }
@@ -118,6 +120,7 @@ namespace TrafficSimulation
                 try
                 {
                 trafficflow = Convert.ToInt32(tb_trafficflow.Text);
+                    cars_tick = Convert.ToInt32(tb_cars_tick.Text);
                 simIsLaunched = true;
                 btnStop.Enabled = true;
                 btnLaunch.Enabled = false;
@@ -129,7 +132,7 @@ namespace TrafficSimulation
                 }
                 catch (FormatException)
                 {
-                    MessageBox.Show("please enter value for traffic flow");
+                    MessageBox.Show("please enter value for traffic flow, cars/tick");
                 }
             }
             else
@@ -754,11 +757,11 @@ namespace TrafficSimulation
             tbCarsQuit.Text = Tile.Cars_Removed.ToString();
             ts = DateTime.Now - dt;
             tbTimeElapsed.Text = ts.ToString(@"hh\:mm\:ss");
-             if (this.timesUpdated >= timered + timegreen + (timered - timegreen))
+            if (this.timesUpdated >= timered + timegreen + (timered - timegreen))
             {
                 timesUpdated = 0;
             }
-            if (this.timesUpdated % 5 == 0)
+            if (this.timesUpdated % cars_tick == 0)
             {
                 if (grid.spawnPoints.Count != 0)
                 {
