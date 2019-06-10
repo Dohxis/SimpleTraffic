@@ -66,28 +66,28 @@ namespace TrafficSimulation
             if (TrafficLightsNeeded)
             {
                 int nryellow = nrred - nrgreen;
-                int numberforred = timesUpdated + 1;
+                int nrstart = timesUpdated + 1;
                 if (timesUpdated >= 0)
                 {
-                    if (numberforred % nrred == 0)
+                    if (nrstart % nrred == 0)
                     {
                         ChangeTrafficLightsRed(StartRed);
                     }
-                    if (numberforred % (nrred + nrgreen) == 0)
+                    if (nrstart % (nrred + nrgreen) == 0)
                     {
                         ChangeTrafficLightsGreen(StartRed);
                     }
-                    if (numberforred % (nrred + nryellow + nrgreen) == 0)
+                    if (nrstart % (nrred + nryellow + nrgreen) == 0)
                     {
                         ChangeTrafficLightsYellow(StartRed);
                         ChangeTrafficLightsRed(StartGreen);
                     }
 
-                    if ((timesUpdated + 1) % nrgreen == 0)
+                    if (nrstart % nrgreen == 0)
                     {
                         ChangeTrafficLightsGreen(StartGreen);
                     }
-                    if ((timesUpdated + 1) % (nrgreen + nryellow) == 0)
+                    if (nrstart % (nrgreen + nryellow) == 0)
                     {
                         ChangeTrafficLightsYellow(StartGreen);
                     }
@@ -457,6 +457,7 @@ namespace TrafficSimulation
         public void AddTrafficPlusToGrid(int x, int y) // Add method
         {
             List<Tile> tiles = new List<Tile>();
+            TrafficLightsNeeded = true;
 
             for (int a = x; a < x + 8; a++)
             {

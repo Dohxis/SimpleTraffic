@@ -89,13 +89,29 @@ namespace TrafficSimulation
                     {
                         MessageBox.Show("red lights should last more than green lights");
                     }
+                    else if (grid.spawnPoints != null)
+                    {
+                        simIsLaunched = true;
+                        btnStop.Enabled = true;
+                        btnLaunch.Enabled = false;
+                        btnSave.Enabled = false;
+                        btnLoad.Enabled = false;
+                        btnMap.Enabled = false;
+                        createTimer();
+                        dt = DateTime.Now;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Cars would drown.");
+                    }
                 }
                 catch (FormatException)
                 {
                     MessageBox.Show("please enter valid values for both green and red light time");
                 }
+
             }
-            if (grid.spawnPoints != null)
+           else  if (grid.spawnPoints != null)
             {
                 simIsLaunched = true;
                 btnStop.Enabled = true;
