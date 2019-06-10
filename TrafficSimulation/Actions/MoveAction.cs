@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TrafficSimulation.Actions
-{
+{   //heatmap line 111
     public enum Direction
     {
         Up, Down, Right, Left 
@@ -96,7 +96,7 @@ namespace TrafficSimulation.Actions
                 tile.Position.X == car.Position.X
             );
 
-            if (tiles[newCarIndex].Type == TileType.Road)
+            if (tiles[newCarIndex].Type == TileType.Road || tiles[newCarIndex].Type == TileType.ControlPoint)
             {
                 if (newCarIndex != -1)
                 {
@@ -108,7 +108,7 @@ namespace TrafficSimulation.Actions
                 updatedTiles[newRoadIndex].Actions = new List<TileAction>();
                 updatedTiles[newRoadIndex].Type = TileType.Road;
                 updatedTiles[newRoadIndex].Dirty = true;
-
+                updatedTiles[newRoadIndex].counter++;
                 return updatedTiles;
             }
             else

@@ -10,6 +10,7 @@ namespace TrafficSimulation
     class Tile
     {
         private int speed;
+        public int counter { get; set; }
         public Position Position { get; }
         public List<TileAction> Actions { get; set; }
         public bool Dirty { get; set; }
@@ -35,10 +36,7 @@ namespace TrafficSimulation
                     return "A";
                 case TileType.SpawnPoint:
                 case TileType.ExitPoint:
-                case TileType.DownControlPoint:
-                case TileType.UpControlPoint:
-                case TileType.LeftControlPoint:
-                case TileType.RightControlPoint:
+                case TileType.ControlPoint:
                 case TileType.LeftExitPoint:
                 case TileType.RightExitPoint:
                 case TileType.UpExitPoint:

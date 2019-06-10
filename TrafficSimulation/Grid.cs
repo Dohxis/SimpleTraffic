@@ -8,7 +8,7 @@ using TrafficSimulation.Actions;
 
 namespace TrafficSimulation
 {
-
+    //heat map line 107
     class Grid
     {
         private TrafficRules trafficRules;
@@ -30,11 +30,7 @@ namespace TrafficSimulation
         public List<Tile> LeftExitPoints { get; private set; }
         public List<Tile> RightExitPoints { get; private set; }
 
-        public List<Tile> controlPoints { get; private set; }
-        public List<Tile> DowncontrolPoints { get; private set; }
-        public List<Tile> UpcontrolPoints { get; private set; }
-        public List<Tile> LeftcontrolPoints { get; private set; }
-        public List<Tile> RightcontrolPoints { get; private set; }
+        
 
         public List<Tile> StartRed { get; set; }
         public List<Tile> StartGreen { get; set; }
@@ -108,9 +104,8 @@ namespace TrafficSimulation
             Tile newTile = new Tile(x, y, type, actions);
             int tileIndex = this.Tiles.FindIndex(tile => tile.Position.X == x && tile.Position.Y == y);
             this.Tiles[tileIndex] = newTile;
+            this.Tiles[tileIndex].counter++;
         }
-
-        
 
         public void Draw_Intersection(int x, int y, int intersectionCounter, IntersectionType section_type)
         {
@@ -210,7 +205,7 @@ namespace TrafficSimulation
 
 
 
-                    if (e.Position.Y >= _closest.Position.Y && e.Position.Y < _closest.Position.Y + 8 && e.Position.X < e.Position.X) // Add Left
+                    if (e.Position.Y >= _closest.Position.Y && e.Position.Y < _closest.Position.Y + 8 && e.Position.X < _closest.Position.X) // Add Left
                     {
                         switch (section_type)
                         {
@@ -362,8 +357,6 @@ namespace TrafficSimulation
             }
         }
 
-        
-
         public void AddPlusToGrid(int x, int y) // Add method
         {
             List<Tile> tiles = new List<Tile>();
@@ -383,11 +376,11 @@ namespace TrafficSimulation
                             tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
                         }
                     }
-                    else if (a == x+2)
+                    else if (a == x + 2)
                     {
                         if (b == y + 4)
                         {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); //leftcontrol point
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //leftcontrol point
                         }
                         else if (b == y + 3)
                         {
@@ -402,7 +395,7 @@ namespace TrafficSimulation
                     {
                         if (b == y + 3)
                         {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); //right control point
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //right control point
                         }
                         else if (b == y + 4)
                         {
@@ -417,7 +410,7 @@ namespace TrafficSimulation
                     {
                         if (b == y + 2)
                         {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); //upcontrol point
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //up control point
                         }
                         else
                         {
@@ -428,8 +421,7 @@ namespace TrafficSimulation
                     {
                         if (b == y + 5)
                         {
-                            //tiles.Add(new Tile(a, b, TileType.DownControlPoint, new List<TileAction>()));
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); // down
                         }
                         else
                         {
@@ -437,7 +429,7 @@ namespace TrafficSimulation
                         }
                     }
 
-                    
+
 
                 }
             }
@@ -465,7 +457,6 @@ namespace TrafficSimulation
         public void AddTrafficPlusToGrid(int x, int y) // Add method
         {
             List<Tile> tiles = new List<Tile>();
-            this.TrafficLightsNeeded = true;
 
             for (int a = x; a < x + 8; a++)
             {
@@ -494,7 +485,7 @@ namespace TrafficSimulation
                         }
                         else if (b == y + 4)
                         {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); //leftcontrol point
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //leftcontrol point
                         }
                         else if (b == y + 5)
                         {
@@ -509,7 +500,7 @@ namespace TrafficSimulation
                     {
                         if (b == y + 2)
                         {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); //upcontrol point
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //upcontrol point
                         }
                         else
                         {
@@ -520,8 +511,7 @@ namespace TrafficSimulation
                     {
                         if (b == y + 5)
                         {
-                            //tiles.Add(new Tile(a, b, TileType.DownControlPoint, new List<TileAction>()));
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //down
                         }
                         else
                         {
@@ -532,19 +522,19 @@ namespace TrafficSimulation
                     {
                         if (b == y + 3)
                         {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); //right control point
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //right control point
                         }
-                        else if (b == y + 2) 
+                        else if (b == y + 2)
                         {
-                            tiles.Add(new Tile(a,b, TileType.TrafficLightRed, new List<TileAction>()));
+                            tiles.Add(new Tile(a, b, TileType.TrafficLightRed, new List<TileAction>()));
                         }
                         else if (b == y + 4)
                         {
                             tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
                         }
-                        else if (b == y + 5) 
+                        else if (b == y + 5)
                         {
-                            tiles.Add(new Tile(a,b, TileType.TrafficLightGreen, new List<TileAction>()));
+                            tiles.Add(new Tile(a, b, TileType.TrafficLightGreen, new List<TileAction>()));
                         }
                         else
                         {
@@ -581,7 +571,7 @@ namespace TrafficSimulation
             {
                 for (int b = y; b < y + 8; b++)
                 {
-                    if (a >= x && a < x + 3 || a >= x + 5 && a <= x + 8)
+                    if (a >= x && a < x + 2 || a >= x + 6 && a <= x + 7)
                     {
                         if (b == y + 3 || b == y + 4)
                         {
@@ -592,8 +582,38 @@ namespace TrafficSimulation
                             tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
                         }
                     }
+                    else if (a == x + 2)
+                    {
+                        if (b == y + 3)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else if (b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); // left
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 3)
+                    {
+                        if (b == y + 2)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //up
 
-                    if (a == x + 3 || a == x + 4)
+                        }
+                        else if (b == y + 5 || b == y + 6 || b == y + 7)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 4)
                     {
                         if (b == y + 5 || b == y + 6 || b == y + 7)
                         {
@@ -604,7 +624,21 @@ namespace TrafficSimulation
                             tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
                         }
                     }
-
+                    else if (a == x + 5)
+                    {
+                        if (b == y + 3)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //right
+                        }
+                        else if (b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
                 }
             }
 
@@ -635,7 +669,7 @@ namespace TrafficSimulation
             {
                 for (int b = y; b < y + 8; b++)
                 {
-                    if (a >= x && a < x + 3 || a >= x + 5 && a <= x + 8)
+                    if (a >= x && a < x + 2 || a >= x + 6 && a <= x + 7)
                     {
                         if (b == y + 3 || b == y + 4)
                         {
@@ -646,16 +680,60 @@ namespace TrafficSimulation
                             tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
                         }
                     }
-
-                    if (a == x + 3 || a == x + 4)
+                    else if (a == x + 2)
                     {
-                        if (b == y || b == y + 1 || b == y + 2)
+                        if (b == y + 3)
                         {
-                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else if (b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); // left
                         }
                         else
                         {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 3)
+                    {
+                        if (b == y + 3 || b == y + 4 || b == y + 5 || b == y + 6 || b == y + 7)
+                        {
                             tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 4)
+                    {
+                        if (b == y + 3 || b == y + 4 || b == y + 6 || b == y + 7)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else if (b == y + 5)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //down
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 5)
+                    {
+                        if (b == y + 3)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //right
+                        }
+                        else if (b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
                         }
                     }
 
@@ -689,7 +767,7 @@ namespace TrafficSimulation
             {
                 for (int b = y; b < y + 8; b++)
                 {
-                    if (a >= x && a < x + 3)
+                    if (a >= x && a < x + 2)
                     {
                         if (b == y + 3 || b == y + 4)
                         {
@@ -700,13 +778,44 @@ namespace TrafficSimulation
                             tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
                         }
                     }
-
-                    if (a == x + 3 || a == x + 4)
+                    else if (a == x + 2)
                     {
-                        tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        if (b == y + 3)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else if (b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); // left
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
                     }
-
-                    if (a >= x + 5 && a <= x + 8)
+                    else if (a == x + 3)
+                    {
+                        if (b == y + 2)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //up
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 4)
+                    {
+                        if (b == y + 5)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //down
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                    }
+                    else if (a >= x + 5 && a <= x + 8)
                     {
                         tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
                     }
@@ -742,13 +851,46 @@ namespace TrafficSimulation
                 {
                     if (a >= x && a < x + 3)
                     {
-                        tiles.Add(new Tile(a,b, TileType.Grass, new List<TileAction>()));
+                        tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
                     }
-                    else if (a >= x + 3 && a < x + 5)
+                    else if (a == x + 3)
                     {
-                        tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        if (b == y + 2)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //up
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
                     }
-                    else if (a >= x+5 && a < x + 8)
+                    else if (a == x + 4)
+                    {
+                        if (b == y + 5)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //up
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                    }
+                    else if (a == x + 5)
+                    {
+                        if (b == y + 3)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //right
+                        }
+                        else if (b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                    }
+                    else if (a >= x + 6 && a <= x + 7)
                     {
                         if (b == y + 3 || b == y + 4)
                         {
@@ -806,13 +948,11 @@ namespace TrafficSimulation
                     {
                         if (b == y + 3)
                         {
-
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));// rightcontrol
-
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
                         }
                         else if (b == y + 4)
                         {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); //lefcontrol
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //left
                         }
                         else
                         {
@@ -828,7 +968,7 @@ namespace TrafficSimulation
                         else if (b == y + 2)
                         {
 
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); // upcontrol
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); // upcontrol
 
                         }
                         else
@@ -842,7 +982,6 @@ namespace TrafficSimulation
                         {
                             tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
                         }
-
                         else
                         {
                             tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
@@ -885,14 +1024,7 @@ namespace TrafficSimulation
                 {
                     if (a >= x && a <= x + 2)
                     {
-                        if (b == y + 3 || b == y + 4)
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                        }
-                        else
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                        }
+                        tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
                     }
                     else if (a == x + 3)
                     {
@@ -902,7 +1034,7 @@ namespace TrafficSimulation
                         }
                         else if (b == y + 2)
                         {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //up
                         }
                         else
                         {
@@ -921,7 +1053,23 @@ namespace TrafficSimulation
                             tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
                         }
                     }
-                    else if (a >= x + 5 && a < x + 8)
+                    else if (a == x + 5)
+                    {
+                        if (b == y + 3)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //right
+                        }
+                        else if (b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+
+                    }
+                    else if (a >= x + 6 && a <= x + 7)
                     {
                         if (b == y + 3 || b == y + 4)
                         {
@@ -932,10 +1080,7 @@ namespace TrafficSimulation
                             tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
                         }
                     }
-                    else
-                    {
-                        tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                    }
+
 
                 }
             }
@@ -986,7 +1131,7 @@ namespace TrafficSimulation
                         }
                         else if (b == y + 4)
                         {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>())); //lefcontrol
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //leftcontrol
                         }
                         else
                         {
@@ -1006,14 +1151,19 @@ namespace TrafficSimulation
                     }
                     else if (a == x + 4)
                     {
-                        if (b >= y + 3 && b <= y + 7)
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
-                        }
-                        else
+                        if (b >= y && b < y + 3)
                         {
                             tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
                         }
+                        else if (b == y + 5)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //down
+                        }
+                        else
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
+
                     }
                     else
                     {
@@ -1052,14 +1202,7 @@ namespace TrafficSimulation
                 {
                     if (a >= x && a <= x + 2)
                     {
-                        if (b == y + 3 || b == y + 4)
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                        }
-                        else
-                        {
-                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                        }
+                        tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
                     }
                     else if (a == x + 3)
                     {
@@ -1075,17 +1218,35 @@ namespace TrafficSimulation
                     }
                     else if (a == x + 4)
                     {
-                        if (b >= y + 3 && b <= y + 7)
+                        if (b >= y && b <= y + 2)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
+                        }
+                        else if (b == y + 5)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //down
+                        }
+                        else
                         {
                             tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
                         }
-
+                    }
+                    else if (a == x + 5)
+                    {
+                        if (b == y + 3)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.ControlPoint, new List<TileAction>())); //right
+                        }
+                        else if (b == y + 4)
+                        {
+                            tiles.Add(new Tile(a, b, TileType.Road, new List<TileAction>()));
+                        }
                         else
                         {
                             tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
                         }
                     }
-                    else if (a >= x + 5 && a < x + 8)
+                    else if (a >= x + 6 && a <= x + 7)
                     {
                         if (b == y + 3 || b == y + 4)
                         {
@@ -1096,10 +1257,7 @@ namespace TrafficSimulation
                             tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
                         }
                     }
-                    else
-                    {
-                        tiles.Add(new Tile(a, b, TileType.Grass, new List<TileAction>()));
-                    }
+
 
                 }
             }
@@ -1124,7 +1282,7 @@ namespace TrafficSimulation
             }
         }
 
-        
+
 
 
         public void CheckGrid()
@@ -1145,91 +1303,99 @@ namespace TrafficSimulation
             StartGreen = new List<Tile>();
 
 
+            try
+            {
+                foreach (Tile t in Tiles)
+                {   //Finding all the spawnpoints
+                    Tile t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y + 1);
+                    Tile t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X - 1 && tile.Position.Y == t.Position.Y);
+                    if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty)
+                    {
+                        t.Type = TileType.SpawnPoint;
+                        spawnPoints.Add(t);
+                        LeftSpawnPoints.Add(t);
+                    }
 
-            foreach (Tile t in Tiles)
-            {   //Finding all the spawnpoints
-                Tile t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y + 1);
-                Tile t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X - 1 && tile.Position.Y == t.Position.Y);
-                if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty)
-                {
-                    t.Type = TileType.SpawnPoint;
-                    spawnPoints.Add(t);
-                    LeftSpawnPoints.Add(t);
-                }
+                    t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X - 1 && tile.Position.Y == t.Position.Y);
+                    t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y - 1);
+                    if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty)
+                    {
+                        t.Type = TileType.SpawnPoint;
+                        spawnPoints.Add(t);
+                        UpSpawnPoints.Add(t);
+                    }
 
-                t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X - 1 && tile.Position.Y == t.Position.Y);
-                t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y - 1);
-                if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty)
-                {
-                    t.Type = TileType.SpawnPoint;
-                    spawnPoints.Add(t);
-                    UpSpawnPoints.Add(t);
-                }
+                    t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y - 1);
+                    t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X + 1 && tile.Position.Y == t.Position.Y);
+                    if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty)
+                    {
+                        t.Type = TileType.SpawnPoint;
+                        spawnPoints.Add(t);
+                        RightSpawnPoints.Add(t);
+                    }
 
-                t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y - 1);
-                t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X + 1 && tile.Position.Y == t.Position.Y);
-                if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty)
-                {
-                    t.Type = TileType.SpawnPoint;
-                    spawnPoints.Add(t);
-                    RightSpawnPoints.Add(t);
-                }
+                    t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X + 1 && tile.Position.Y == t.Position.Y);
+                    t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y + 1);
+                    if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty)
+                    {
+                        t.Type = TileType.SpawnPoint;
+                        spawnPoints.Add(t);
+                        DownSpawnPoints.Add(t);
+                    }
 
-                t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X + 1 && tile.Position.Y == t.Position.Y);
-                t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y + 1);
-                 if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty)
-                {
-                    t.Type = TileType.SpawnPoint;
-                    spawnPoints.Add(t);
-                    DownSpawnPoints.Add(t);
-                }
+                    //Finding all the exitpoints
+                    t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X + 1 && tile.Position.Y == t.Position.Y);
+                    t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y - 1);
+                    if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty) // upper exitpoint
+                    {
+                        t.Type = TileType.ExitPoint;
+                        exitPoints.Add(t);
+                        UpExitPoints.Add(t);
+                    }
 
-                //Finding all the exitpoints
-                t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X + 1 && tile.Position.Y == t.Position.Y);
-                t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y - 1);
-                if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty) // upper exitpoint
-                {
-                    t.Type = TileType.ExitPoint;
-                    exitPoints.Add(t);
-                    UpExitPoints.Add(t);
-                }
+                    t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y - 1);
+                    t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X - 1 && tile.Position.Y == t.Position.Y);
+                    if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty) // left exitpoint
+                    {
+                        t.Type = TileType.ExitPoint;
+                        exitPoints.Add(t);
+                        LeftExitPoints.Add(t);
+                    }
 
-                t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y - 1);
-                t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X - 1 && tile.Position.Y == t.Position.Y);
-                if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty) // left exitpoint
-                {
-                    t.Type = TileType.ExitPoint;
-                    exitPoints.Add(t);
-                    LeftExitPoints.Add(t);
-                }
+                    t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X - 1 && tile.Position.Y == t.Position.Y);
+                    t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y + 1);
+                    if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty) // down exipoint
+                    {
+                        t.Type = TileType.ExitPoint;
+                        exitPoints.Add(t);
+                        DownExitPoints.Add(t);
+                    }
 
-                t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X - 1 && tile.Position.Y == t.Position.Y);
-                t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y + 1);
-                if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty) // down exipoint
-                {
-                    t.Type = TileType.ExitPoint;
-                    exitPoints.Add(t);
-                    DownExitPoints.Add(t);
-                }
+                    t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y + 1);
+                    t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X + 1 && tile.Position.Y == t.Position.Y);
+                    if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty) // right exitpoint
+                    {
+                        t.Type = TileType.ExitPoint;
+                        exitPoints.Add(t);
+                        RightExitPoints.Add(t);
+                    }
+                    if (t.Type == TileType.TrafficLightGreen)
+                    {
+                        StartGreen.Add(t);
+                    }
+                    if (t.Type == TileType.TrafficLightRed)
+                    {
+                        StartRed.Add(t);
+                    }
 
-                t1 = this.Tiles.Find(tile => tile.Position.X == t.Position.X && tile.Position.Y == t.Position.Y + 1);
-                t2 = this.Tiles.Find(tile => tile.Position.X == t.Position.X + 1 && tile.Position.Y == t.Position.Y);
-                if (t.Type == TileType.Road && t1.Type == TileType.Grass && t2.Type == TileType.Empty) // right exitpoint
-                {
-                    t.Type = TileType.ExitPoint;
-                    exitPoints.Add(t);
-                    RightExitPoints.Add(t);
                 }
-                if(t.Type == TileType.TrafficLightGreen)
-                {
-                    StartGreen.Add(t);
-                }
-                if(t.Type == TileType.TrafficLightRed)
-                {
-                    StartRed.Add(t);
-                }
-
+                
             }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("Please don't use the margin to build the map!");
+            }
+
         }
         public void Clear()
         {

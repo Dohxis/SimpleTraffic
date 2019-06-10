@@ -237,7 +237,7 @@ namespace TrafficSimulation
                     
             Tile car = new Tile(spawn.Position.X, spawn.Position.Y, TileType.Car, new List<TileAction>());
             car.Actions = car.getRoute(spawn, grid.Tiles, this.grid, exit);
-            car.AdjustRouteBySpeed();
+            //car.AdjustRouteBySpeed();
 
             this.grid.UpdateTile(spawn.Position.X, spawn.Position.Y, TileType.Car, car.Actions);
             this.CreateGrid(this.grid);            
@@ -365,6 +365,7 @@ namespace TrafficSimulation
                 case TileType.Car:
                     return Color.Black;
                 case TileType.Road:
+                case TileType.ControlPoint:
                     return Color.LightGray;
                 case TileType.Empty:
                     return Color.Blue;
@@ -378,11 +379,25 @@ namespace TrafficSimulation
                     return Color.DarkGreen;
                 case TileType.TrafficLightYellow:
                     return Color.Yellow;
-                case TileType.UpControlPoint:
-                case TileType.DownControlPoint:
-                case TileType.LeftControlPoint:
-                case TileType RightControlPoint:
-                    return Color.Purple;
+
+                //Cases used for Heatmap
+                //Heatmap should be pressed after stop, without clearing the grid
+                //MoveAction, Grid classes used for heatmap
+                case TileType.White:
+                    return Color.White;
+                case TileType.Bej:
+                    return Color.Beige;
+                case TileType.Orange:
+                    return Color.Orange;
+                case TileType.LightRed:
+                    return Color.Red;
+                case TileType.Red:
+                    return Color.DarkRed;
+                case TileType.LightBlue:
+                    return Color.LightBlue;
+                case TileType.Blue:
+                    return Color.DarkBlue;
+                default: return Color.White;
             }
         }
 
@@ -673,6 +688,27 @@ namespace TrafficSimulation
                 MessageBox.Show("Grid was successfully loaded!");
             };
 
+        }
+
+        private void btnMap_Click(object sender, EventArgs e)
+        {
+            foreach (Tile tile in grid.Tiles)
+            {
+                if (tile.Type != TileType.Grass && tile.Type != TileType.Empty)
+                {
+                    switch(tile.counter)
+                    {
+                        case 0: tile.Type = TileType.White; break;
+                        case 1: tile.Type = TileType.Bej; break;
+                        case 2: tile.Type = TileType.Orange; break;
+                        case 3: tile.Type = TileType.LightRed; break;
+                        case 4: tile.Type = TileType.Red; break;
+                        case 5: tile.Type = TileType.LightBlue; break;
+                        case 6: tile.Type = TileType.Blue; break;
+                    }
+                }
+            }
+            this.CreateGrid(grid);
         }
     }
 }
