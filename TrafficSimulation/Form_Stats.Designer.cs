@@ -34,6 +34,7 @@
             this.lblCarsQuit = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.tb_timeran = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblCarsSpawned
@@ -71,6 +72,7 @@
             this.lblCarsQuit.Size = new System.Drawing.Size(135, 13);
             this.lblCarsQuit.TabIndex = 9;
             this.lblCarsQuit.Text = "Cars Arrived at Destination:";
+            this.lblCarsQuit.Click += new System.EventHandler(this.lblCarsQuit_Click);
             // 
             // label1
             // 
@@ -91,11 +93,22 @@
             this.tb_timeran.Size = new System.Drawing.Size(52, 20);
             this.tb_timeran.TabIndex = 12;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(12, 147);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(261, 23);
+            this.button1.TabIndex = 13;
+            this.button1.Text = "Save";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Form_Stats
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(286, 311);
+            this.ClientSize = new System.Drawing.Size(286, 182);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.tb_timeran);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbCarsQuit);
@@ -117,6 +130,7 @@
         private System.Windows.Forms.Label lblCarsQuit;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tb_timeran;
+        private System.Windows.Forms.Button button1;
     }
 }
 
