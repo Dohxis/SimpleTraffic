@@ -72,26 +72,22 @@ namespace TrafficSimulation
                     if (nrstart % nrred == 0)
                     {
                         ChangeTrafficLightsRed(StartRed);
+                        ChangeTrafficLightsYellow(StartGreen);
                     }
+                    
                     if (nrstart % (nrred + nrgreen) == 0)
                     {
                         ChangeTrafficLightsGreen(StartRed);
+                    }
+                    if (nrstart % nrgreen == 0)
+                    {
+                        ChangeTrafficLightsGreen(StartGreen);
                     }
                     if (nrstart % (nrred + nryellow + nrgreen) == 0)
                     {
                         ChangeTrafficLightsYellow(StartRed);
                         ChangeTrafficLightsRed(StartGreen);
                     }
-
-                    if (nrstart % nrgreen == 0)
-                    {
-                        ChangeTrafficLightsGreen(StartGreen);
-                    }
-                    if (nrstart % (nrgreen + nryellow) == 0)
-                    {
-                        ChangeTrafficLightsYellow(StartGreen);
-                    }
-
                 }
             }
             this.Tiles = this.trafficRules.Handle(this.Tiles);
