@@ -29,35 +29,37 @@ namespace TestSimulation
             grid.Draw_Intersection(5, 5, 0, IntersectionType.Plus);
             grid.CheckGrid();
             List<TileAction> actions = new List<TileAction>();
-            Tile spawn = grid.DownSpawnPoints[0];
-            Tile exit = grid.LeftExitPoints[0];
+            Tile spawn = grid.DownSpawnPoints[0]; 
+            Tile exit = grid.LeftExitPoints[0];            
             Tile car = new Tile(spawn.Position.X, spawn.Position.Y, TileType.Car, actions);
             car.Actions = car.getRoute(spawn, tiles, grid, exit);
-            grid.UpdateTile(spawn.Position.X, spawn.Position.Y, TileType.Car, car.Actions);
-
-            grid.Tick(5, 3, 0);
-            grid.Tick(5, 3, 1);
-            grid.Tick(5, 3, 2);
-            grid.Tick(5, 3, 3);
-            grid.Tick(5, 3, 4);
-            grid.Tick(5, 3, 5);
-            
-
-            int[] cararr = new int[2];
-            cararr[0] = car.Position.X;
-            cararr[1] = car.Position.Y;
             int[] exitarr = new int[2];
             exitarr[0] = exit.Position.X + 1;
             exitarr[1] = exit.Position.Y;
-            foreach (Tile t in grid.Tiles)
-            {
-                if(t.Position.X == exit.Position.X + 1 && t.Position.Y == exit.Position.Y)
+            grid.UpdateTile(spawn.Position.X, spawn.Position.Y, TileType.Car, car.Actions);
+            
+            List<Tile> tl = new List<Tile>();
+            for (int i = 0; i < 10; i++) {
+                foreach (Tile t in grid.Tiles)
                 {
-                    Tile hr = t;
+                    if (t.Position.X == exit.Position.X + 1 && t.Position.Y == exit.Position.Y && t.Type == TileType.Car)
+                    {
+                        tl.Add(t);
+                        break;
+                    }
                 }
+                if (tl.Count == 1)
+                {
+                    break;
+                }
+                grid.Tick(5, 3, i);
             }
+            int[] cararr = new int[2];
+            cararr[0] = tl[0].Position.X;
+            cararr[1] = tl[0].Position.Y;
             //Assert
-            Assert.AreEqual(car.Type, hr.Type);
+            Assert.AreEqual(exitarr[0], cararr[0]);
+            Assert.AreEqual(exitarr[1], cararr[1]);
 
         }
         [TestMethod]
