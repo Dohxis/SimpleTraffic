@@ -32,6 +32,7 @@ namespace TrafficSimulation
         System.Windows.Forms.Timer timer;
         private DateTime dt;
         private TimeSpan ts = TimeSpan.Zero;
+        private int trafficflow;
 
         private int timered;
         private int timegreen;
@@ -83,6 +84,7 @@ namespace TrafficSimulation
             {
                 try
                 {
+                    trafficflow = Convert.ToInt32(tb_trafficflow.Text);
                     timegreen = Convert.ToInt32(tb_greenlight.Text);
                     timered = Convert.ToInt32(tb_redlight.Text);
                     if (timered <= timegreen)
@@ -107,12 +109,15 @@ namespace TrafficSimulation
                 }
                 catch (FormatException)
                 {
-                    MessageBox.Show("please enter valid values for both green and red light time");
+                    MessageBox.Show("please enter valid values for green,red light time and traffic flow");
                 }
 
             }
            else  if (grid.spawnPoints != null)
-            {
+           {
+                try
+                {
+                trafficflow = Convert.ToInt32(tb_trafficflow.Text);
                 simIsLaunched = true;
                 btnStop.Enabled = true;
                 btnLaunch.Enabled = false;
@@ -121,6 +126,11 @@ namespace TrafficSimulation
                 btnMap.Enabled = false;
                 createTimer();
                 dt = DateTime.Now;
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("please enter value for traffic flow");
+                }
             }
             else
             {
@@ -752,9 +762,12 @@ namespace TrafficSimulation
             {
                 if (grid.spawnPoints.Count != 0)
                 {
-                    this.spawnDemoCar();
-                    carsspawned++;
-                    tbSpawnedCars.Text = carsspawned.ToString();
+                    if ((carsspawned - Tile.Cars_Removed) < trafficflow)
+                    {
+                        this.spawnDemoCar();
+                        carsspawned++;
+                        tbSpawnedCars.Text = carsspawned.ToString();
+                    }
                 }
                 else
                 {

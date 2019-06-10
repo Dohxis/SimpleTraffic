@@ -15,7 +15,6 @@ namespace TrafficSimulation
         public List<TileAction> Actions { get; set; }
         public bool Dirty { get; set; }
         public TileType Type { get; set; }
-        public int Id { get; set; }
 
         public static int Cars_Removed { get; set; }
 
