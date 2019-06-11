@@ -526,7 +526,7 @@ namespace TrafficSimulation
 
             Tile car = new Tile(spawn.Position.X, spawn.Position.Y, TileType.Car, new List<TileAction>());
             car.Actions = car.getRoute(spawn, grid.Tiles, this.grid, exit);
-            //car.AdjustRouteBySpeed();
+            car.AdjustRouteBySpeed();
 
             this.grid.UpdateTile(spawn.Position.X, spawn.Position.Y, TileType.Car, car.Actions);
             this.CreateGrid(this.grid);

@@ -52,6 +52,11 @@ namespace TrafficSimulation.Rules
                             break;
                     }
                 }
+                if(nextAction.GetType() == typeof(NoAction) && tile.Type == TileType.Car)
+                {
+                    updatedTiles = action.Handle(tile, initialTiles);
+                    return updatedTiles;
+                }
 
                 if (!tile.Dirty && lightstrue && canMove)
                 {

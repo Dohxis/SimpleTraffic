@@ -10,6 +10,7 @@ namespace TrafficSimulation.Actions
     {
         public override List<Tile> Handle(Tile tile, List<Tile> tiles)
         {
+            tiles[tiles.IndexOf(tile)].Dirty = true;
             return tiles;
         }
 
