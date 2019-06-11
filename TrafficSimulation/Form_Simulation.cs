@@ -444,17 +444,13 @@ namespace TrafficSimulation
 
         private void spawnDemoCar()
         {
-            List<TileAction> actions = new List<TileAction>();
-            Random random = new Random();
             Random ran = new Random();
 
-            int i = ran.Next(grid.spawnPoints.Count);
-            Tile point = grid.spawnPoints[i];
 
             int r = ran.Next(3);
 
-            int a = 0;
-            int b = 0;
+            int a;
+            int b;
 
             Tile spawn = grid.spawnPoints[0];
             Tile exit = grid.exitPoints[0];
@@ -554,8 +550,8 @@ namespace TrafficSimulation
             }
 
             Tile car = new Tile(spawn.Position.X, spawn.Position.Y, TileType.Car, new List<TileAction>());
-            car.Actions = car.getRoute(spawn, grid.Tiles, this.grid, exit);
-            car.AdjustRouteBySpeed();
+            car.Actions = car.getRoute2(spawn, grid.Tiles, this.grid, exit);
+            //car.AdjustRouteBySpeed();
 
             this.grid.UpdateTile(spawn.Position.X, spawn.Position.Y, TileType.Car, car.Actions);
             this.CreateGrid(this.grid);
