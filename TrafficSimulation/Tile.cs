@@ -296,8 +296,6 @@ namespace TrafficSimulation
 
         public List<TileAction> getRoute2(Tile spawn, List<Tile> Tiles, Grid grid, Tile exit)
         {
-            List<Tile> routeList = new List<Tile>();
-
             MoveAction LeadAction = new MoveAction(Direction.Up); 
             Tile currentTile = spawn;
             
@@ -483,7 +481,94 @@ namespace TrafficSimulation
                         }
                         else if (LeadAction.direction == Direction.Down)
                         {
-                            
+
+                            if (FindSpecificTile(0, 3, Tiles, currentTile).Type == TileType.Road)
+                            {
+                                checkFront = true;
+                            }
+
+                            if (FindSpecificTile(2, 2, Tiles, currentTile).Type == TileType.Road)
+                            {
+                                checkLeft = true;
+                            }
+
+                            if (FindSpecificTile(-1, 1, Tiles, currentTile).Type == TileType.Road)
+                            {
+                                checkRight = true;
+                            }
+
+                            if (checkFront && checkLeft && checkRight) // Car is in a plus intersection
+                            {
+                                number = random.Next(3);
+
+                                switch (number)
+                                {
+                                    case 0: //going Left
+                                        TurnLeft();
+                                        break;
+
+                                    case 1: //going forward
+                                        Actions.Add(LeadAction);
+                                        break;
+
+                                    case 2: //going right
+                                        TurnRight();
+                                        break;
+                                }
+                            } 
+                            else if (checkFront && !checkLeft && checkRight) // T-left intersection
+                            {
+                                number = random.Next(2);
+
+                                switch (number)
+                                {
+                                    case 0: //going Left
+                                        TurnRight();
+                                        break;
+
+                                    case 1: //going forward
+                                        Actions.Add(LeadAction);
+                                        break;
+                                }
+                            }
+                            else if (checkFront && checkLeft && !checkRight) // T-right intersection
+                            {
+                                number = random.Next(2);
+
+                                switch (number)
+                                {
+                                    case 0: //going right
+                                        TurnLeft();
+                                        break;
+
+                                    case 1: //going forward
+                                        Actions.Add(LeadAction);
+                                        break;
+                                }
+                            }
+                            else if (!checkFront && checkLeft && checkRight) // T-up intersection
+                            {
+                                number = random.Next(2);
+
+                                switch (number)
+                                {
+                                    case 0: //going right
+                                        TurnRight();
+                                        break;
+
+                                    case 1: //going left
+                                        TurnLeft();
+                                        break;
+                                }
+                            }
+                            else if (!checkFront && checkLeft && !checkRight) // Corner Right
+                            {
+                                TurnLeft();
+                            }
+                            else if (!checkFront && !checkLeft && checkRight) // Corner Left
+                            {
+                                TurnRight();
+                            }
                         }
                         else if (LeadAction.direction == Direction.Left)
                         {
@@ -568,18 +653,104 @@ namespace TrafficSimulation
                             } // T-down
                             else if (!checkFront && checkLeft && !checkRight) // Corner Left
                             {
-                                TurnRight();
-                            } //Corner Left-Down
-                            else if (!checkFront && checkLeft && !checkRight)
-                            {
                                 TurnLeft();
+                            } 
+                            else if (!checkFront && !checkLeft && checkRight)
+                            {
+                                TurnRight();
                             } //Corner Left-Up
 
 
                         }
                         else if (LeadAction.direction == Direction.Right)
                         {
+                            if (FindSpecificTile(3, 0, Tiles, currentTile).Type == TileType.Road)
+                            {
+                                checkFront = true;
+                            }
 
+                            if (FindSpecificTile(2, -2, Tiles, currentTile).Type == TileType.Road)
+                            {
+                                checkLeft = true;
+                            }
+
+                            if (FindSpecificTile(1, 1, Tiles, currentTile).Type == TileType.Road)
+                            {
+                                checkRight = true;
+                            }
+
+                            if (checkFront && checkLeft && checkRight) // Car is in a plus intersection
+                            {
+                                number = random.Next(3);
+
+                                switch (number)
+                                {
+                                    case 0: //going Left
+                                        TurnLeft();
+                                        break;
+
+                                    case 1: //going forward
+                                        Actions.Add(LeadAction);
+                                        break;
+
+                                    case 2: //going right
+                                        TurnRight();
+                                        break;
+                                }
+                            }
+                            else if (!checkFront && checkLeft && checkRight) // T-left intersection
+                            {
+                                number = random.Next(2);
+
+                                switch (number)
+                                {
+                                    case 0: //going Left
+                                        TurnRight();
+                                        break;
+
+                                    case 1: //going forward
+                                        TurnLeft();
+                                        break;
+                                }
+                            }
+                            else if (checkFront && checkLeft && !checkRight) // T-up intersection
+                            {
+                                number = random.Next(2);
+
+                                switch (number)
+                                {
+                                    case 0: //going right
+                                        TurnLeft();
+                                        break;
+
+                                    case 1: //going forward
+                                        Actions.Add(LeadAction);
+                                        break;
+                                }
+                            }
+                            else if (checkFront && !checkLeft && checkRight) // T-Down intersection
+                            {
+                                number = random.Next(2);
+
+                                switch (number)
+                                {
+                                    case 0: //going right
+                                        TurnRight();
+                                        break;
+
+                                    case 1: //going left
+                                        TurnLeft();
+                                        break;
+                                }
+                            }
+                            else if (!checkFront && checkLeft && !checkRight) // Corner Right
+                            {
+                                TurnLeft();
+                            }
+                            else if (!checkFront && !checkLeft && checkRight) // Corner Left
+                            {
+                                TurnRight();
+                            }
                         }
                     }
                     else

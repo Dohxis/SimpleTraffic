@@ -110,12 +110,12 @@ namespace TrafficSimulation.Actions
         private List<Tile> MoveDown(Tile car, List<Tile> tiles)
         {
             int newCarIndex = tiles.FindIndex(tile =>
-                tile.Position.Y == car.Position.Y - 1 &&
+                tile.Position.Y == car.Position.Y + 1 &&
                 tile.Position.X == car.Position.X
             );
 
             Tile t = tiles.Find(tile =>
-                tile.Position.Y == car.Position.Y - 1 &&
+                tile.Position.Y == car.Position.Y + 1 &&
                 tile.Position.X == car.Position.X
             );
 

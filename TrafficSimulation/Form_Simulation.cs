@@ -444,17 +444,13 @@ namespace TrafficSimulation
 
         private void spawnDemoCar()
         {
-            List<TileAction> actions = new List<TileAction>();
-            Random random = new Random();
             Random ran = new Random();
 
-            int i = ran.Next(grid.spawnPoints.Count);
-            Tile point = grid.spawnPoints[i];
 
-            int r = 2; //ran.Next(2);
+            int r = ran.Next(3);
 
-            int a = 0;
-            int b = 0;
+            int a;
+            int b;
 
             Tile spawn = grid.spawnPoints[0];
             Tile exit = grid.exitPoints[0];
