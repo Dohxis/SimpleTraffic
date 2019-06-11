@@ -932,5 +932,82 @@ namespace TestSimulation
             Assert.AreEqual(carnext[0], cararr[0]);
             Assert.AreEqual(carnext[1], cararr[1]);
         }
+
+        [TestMethod]
+        public void DeadLockTest()
+        {
+            //Arrange
+            List<Tile> tiles = new List<Tile>();
+
+            for (int x = 0; x < 12; x++)
+            {
+                for (int y = 0; y < 12; y++)
+                {
+                    tiles.Add(new Tile(x, y, TileType.Empty, new List<TileAction>()));
+                }
+            }
+
+            //Act
+            Grid grid = new Grid(tiles);
+            grid.Draw_Intersection(1, 1, 0, IntersectionType.TrafficPlus);
+            grid.CheckGrid();
+            List<TileAction> actions = new List<TileAction>();
+            Tile spawn = grid.LeftSpawnPoints[0];
+            Tile exit = grid.DownExitPoints[0];
+            Tile car = new Tile(spawn.Position.X, spawn.Position.Y, TileType.Car, actions);
+            car.Actions = car.getRoute(spawn, tiles, grid, exit);
+            grid.UpdateTile(spawn.Position.X, spawn.Position.Y, TileType.Car, car.Actions);
+            List<TileAction> actions1 = new List<TileAction>();
+            Tile spawn1 = grid.LeftSpawnPoints[0];
+            Tile exit1 = grid.DownExitPoints[0];
+            Tile car1 = new Tile(spawn.Position.X, spawn.Position.Y, TileType.Car, actions1);
+            car1.Actions = car1.getRoute(spawn1, tiles, grid, exit1);
+            grid.UpdateTile(spawn1.Position.X, spawn1.Position.Y, TileType.Car, car1.Actions);
+            List<TileAction> actions2 = new List<TileAction>();
+            Tile spawn2 = grid.LeftSpawnPoints[0];
+            Tile exit2 = grid.DownExitPoints[0];
+            Tile car2 = new Tile(spawn2.Position.X, spawn2.Position.Y, TileType.Car, actions2);
+            car2.Actions = car2.getRoute(spawn2, tiles, grid, exit2);
+            grid.UpdateTile(spawn2.Position.X, spawn2.Position.Y, TileType.Car, car2.Actions);
+            List<TileAction> actions3 = new List<TileAction>();
+            Tile spawn3 = grid.LeftSpawnPoints[0];
+            Tile exit3 = grid.DownExitPoints[0];
+            Tile car3 = new Tile(spawn3.Position.X, spawn3.Position.Y, TileType.Car, actions3);
+            car3.Actions = car3.getRoute(spawn3, tiles, grid, exit3);
+            grid.UpdateTile(spawn3.Position.X, spawn3.Position.Y, TileType.Car, car3.Actions);
+
+            List<Tile> carls = new List<Tile>();
+            int check = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                if (carls.Count != 0 && carls.Count != 1)
+                {
+                    if (carls[carls.Count - 1] == carls[carls.Count - 2])
+                    {
+                        break;
+                    }
+                }
+                foreach (Tile t in grid.Tiles)
+                {
+                    if (t.Type == TileType.Car)
+                    {
+                        carls.Add(t);
+                        break;
+                    }
+                }
+                grid.Tick(7, 3, i);
+                check = i;
+            }
+            grid.Tick(7, 3, check);
+            int[] cararr = new int[2];
+            cararr[0] = carls[carls.Count - 1].Position.X;
+            cararr[1] = carls[carls.Count - 1].Position.Y;
+            int[] carnext = new int[2];
+            carnext[0] = carls[carls.Count - 2].Position.X;
+            carnext[1] = carls[carls.Count - 2].Position.Y;
+            //Assert
+            Assert.AreEqual(carnext[0], cararr[0]);
+            Assert.AreEqual(carnext[1], cararr[1]);
+        }
     }
 }

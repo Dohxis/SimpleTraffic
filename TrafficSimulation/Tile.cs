@@ -24,7 +24,7 @@ namespace TrafficSimulation
             this.Actions = actions;
             this.Type = type;
             this.Dirty = false;
-            this.speed = 1;
+            this.speed = 3;
         }
 
         public String getSaveableCode()
