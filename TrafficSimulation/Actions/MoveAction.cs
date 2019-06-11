@@ -14,7 +14,7 @@ namespace TrafficSimulation.Actions
     class MoveAction : TileAction
     {
         public Direction direction;
-
+        private int ControlPoint = 100;
         public MoveAction(Direction direction)
         {
             this.direction = direction;
@@ -53,6 +53,17 @@ namespace TrafficSimulation.Actions
                 tile.Position.X == car.Position.X
             );
 
+            Tile t = tiles.Find(tile =>
+                tile.Position.Y == car.Position.Y - 1 &&
+                tile.Position.X == car.Position.X
+            );
+
+            if (t.Type == TileType.ControlPoint)
+            {
+                ControlPoint = 0;
+            }
+            
+
             return this.Move(newCarIndex, car, tiles);
         }
 
@@ -62,6 +73,16 @@ namespace TrafficSimulation.Actions
                 tile.Position.Y == car.Position.Y &&
                 tile.Position.X == car.Position.X + 1
             );
+
+            Tile t = tiles.Find(tile =>
+                tile.Position.Y == car.Position.Y &&
+                tile.Position.X == car.Position.X + 1
+            );
+
+            if (t.Type == TileType.ControlPoint)
+            {
+                ControlPoint = 0;
+            }
 
             return this.Move(newCarIndex, car, tiles);
         }
@@ -73,15 +94,35 @@ namespace TrafficSimulation.Actions
                 tile.Position.X == car.Position.X - 1
             );
 
+            Tile t = tiles.Find(tile =>
+                tile.Position.Y == car.Position.Y &&
+                tile.Position.X == car.Position.X - 1
+            );
+
+            if (t.Type == TileType.ControlPoint)
+            {
+                ControlPoint = 0;
+            }
+
             return this.Move(newCarIndex, car, tiles);
         }
 
         private List<Tile> MoveDown(Tile car, List<Tile> tiles)
         {
             int newCarIndex = tiles.FindIndex(tile =>
-                tile.Position.Y == car.Position.Y + 1 &&
+                tile.Position.Y == car.Position.Y - 1 &&
                 tile.Position.X == car.Position.X
             );
+
+            Tile t = tiles.Find(tile =>
+                tile.Position.Y == car.Position.Y - 1 &&
+                tile.Position.X == car.Position.X
+            );
+
+            if (t.Type == TileType.ControlPoint)
+            {
+                ControlPoint = 0;
+            }
 
             return this.Move(newCarIndex, car, tiles);
         }
@@ -106,7 +147,24 @@ namespace TrafficSimulation.Actions
                 }
 
                 updatedTiles[newRoadIndex].Actions = new List<TileAction>();
-                updatedTiles[newRoadIndex].Type = TileType.Road;
+
+                if (ControlPoint == 0)
+                {
+                    updatedTiles[newRoadIndex].Type = TileType.Road;
+                    ControlPoint++;
+                }
+                else if (ControlPoint == 1)
+                {
+                    updatedTiles[newRoadIndex].Type = TileType.ControlPoint;
+                    ControlPoint++;
+                }
+                else
+                {
+                    updatedTiles[newRoadIndex].Type = TileType.Road;
+                    ControlPoint = 100;
+                }
+
+
                 updatedTiles[newRoadIndex].Dirty = true;
                 updatedTiles[newRoadIndex].counter++;
                 return updatedTiles;

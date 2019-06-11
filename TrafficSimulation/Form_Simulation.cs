@@ -451,7 +451,7 @@ namespace TrafficSimulation
             int i = ran.Next(grid.spawnPoints.Count);
             Tile point = grid.spawnPoints[i];
 
-            int r = ran.Next(3);
+            int r = 2; //ran.Next(2);
 
             int a = 0;
             int b = 0;
@@ -554,7 +554,7 @@ namespace TrafficSimulation
             }
 
             Tile car = new Tile(spawn.Position.X, spawn.Position.Y, TileType.Car, new List<TileAction>());
-            car.Actions = car.getRoute(spawn, grid.Tiles, this.grid, exit);
+            car.Actions = car.getRoute2(spawn, grid.Tiles, this.grid, exit);
             //car.AdjustRouteBySpeed();
 
             this.grid.UpdateTile(spawn.Position.X, spawn.Position.Y, TileType.Car, car.Actions);
