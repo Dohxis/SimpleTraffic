@@ -94,207 +94,10 @@ namespace TrafficSimulation
         }
 
 
-        public List<TileAction> getRoute(Tile spawn, List<Tile> Tiles, Grid grid, Tile exit)
-        {
-            List<Tile> routeList = new List<Tile>();
-
-            MoveAction LeadAction;
-            Tile currentTile = spawn;
-            Tile nextTile = currentTile;
-
-            if (grid.DownSpawnPoints.Contains(spawn))
-            {
-                LeadAction = new MoveAction(Direction.Up);
-
-                while (currentTile.Position.Y != exit.Position.Y)
-                {
-                    nextTile = Tiles.Find(box =>
-                                box.Position.X == currentTile.Position.X &&
-                                box.Position.Y == currentTile.Position.Y - 1
-                            );
-                    currentTile = nextTile;
-                    Actions.Add(LeadAction);
-                }
-
-                if (exit.Position.X < currentTile.Position.X)
-                {
-                    LeadAction = new MoveAction(Direction.Left);
-
-                    while (currentTile.Position.X != exit.Position.X)
-                    {
-                        nextTile = Tiles.Find(box =>
-                                    box.Position.X == currentTile.Position.X - 1 &&
-                                    box.Position.Y == currentTile.Position.Y
-                                );
-                        currentTile = nextTile;
-                        Actions.Add(LeadAction);
-                    }
-
-                }
-                else if (exit.Position.X > currentTile.Position.X)
-                {
-                    LeadAction = new MoveAction(Direction.Right);
-
-                    while (currentTile.Position.X != exit.Position.X)
-                    {
-                        nextTile = Tiles.Find(box =>
-                                    box.Position.X == currentTile.Position.X + 1 &&
-                                    box.Position.Y == currentTile.Position.Y
-                                );
-                        currentTile = nextTile;
-                        Actions.Add(LeadAction);
-                    }
-                }
+       
 
 
-
-
-            }
-            else if (grid.RightSpawnPoints.Contains(spawn))
-            {
-                LeadAction = new MoveAction(Direction.Left);
-
-
-                while (currentTile.Position.X != exit.Position.X)
-                {
-                    nextTile = Tiles.Find(box =>
-                        box.Position.X == currentTile.Position.X - 1 &&
-                        box.Position.Y == currentTile.Position.Y
-                    );
-                    currentTile = nextTile;
-                    Actions.Add(LeadAction);
-                }
-
-                if (exit.Position.Y < currentTile.Position.Y)
-                {
-                    LeadAction = new MoveAction(Direction.Up);
-
-                    while (currentTile.Position.Y != exit.Position.Y)
-                    {
-                        nextTile = Tiles.Find(box =>
-                                    box.Position.X == currentTile.Position.X &&
-                                    box.Position.Y == currentTile.Position.Y - 1
-                                );
-                        currentTile = nextTile;
-                        Actions.Add(LeadAction);
-                    }
-
-                }
-                else if (exit.Position.Y > currentTile.Position.Y)
-                {
-                    LeadAction = new MoveAction(Direction.Down);
-                    while (currentTile.Position.Y != exit.Position.Y)
-                    {
-                        nextTile = Tiles.Find(box =>
-                                    box.Position.X == currentTile.Position.X &&
-                                    box.Position.Y == currentTile.Position.Y + 1
-                                );
-                        currentTile = nextTile;
-                        Actions.Add(LeadAction);
-                    }
-                }
-
-
-
-
-            }
-            else if (grid.LeftSpawnPoints.Contains(spawn))
-            {
-                LeadAction = new MoveAction(Direction.Right);
-
-                while (currentTile.Position.X != exit.Position.X)
-                {
-                    nextTile = Tiles.Find(box =>
-                        box.Position.X == currentTile.Position.X + 1 &&
-                        box.Position.Y == currentTile.Position.Y
-                    );
-                    currentTile = nextTile;
-                    Actions.Add(LeadAction);
-                }
-
-                if (exit.Position.Y < currentTile.Position.Y)
-                {
-                    LeadAction = new MoveAction(Direction.Up);
-
-                    while (currentTile.Position.Y != exit.Position.Y)
-                    {
-                        nextTile = Tiles.Find(box =>
-                                    box.Position.X == currentTile.Position.X &&
-                                    box.Position.Y == currentTile.Position.Y - 1
-                                );
-                        currentTile = nextTile;
-                        Actions.Add(LeadAction);
-                    }
-
-                }
-                else if (exit.Position.Y > currentTile.Position.Y)
-                {
-                    LeadAction = new MoveAction(Direction.Down);
-                    while (currentTile.Position.Y != exit.Position.Y)
-                    {
-                        nextTile = Tiles.Find(box =>
-                                    box.Position.X == currentTile.Position.X &&
-                                    box.Position.Y == currentTile.Position.Y + 1
-                                );
-                        currentTile = nextTile;
-                        Actions.Add(LeadAction);
-                    }
-                }
-
-
-
-
-            }
-            else if (grid.UpSpawnPoints.Contains(spawn))
-            {
-                LeadAction = new MoveAction(Direction.Down);
-                while (currentTile.Position.Y != exit.Position.Y)
-                {
-                    nextTile = Tiles.Find(box =>
-                                box.Position.X == currentTile.Position.X &&
-                                box.Position.Y == currentTile.Position.Y + 1
-                            );
-                    currentTile = nextTile;
-                    Actions.Add(LeadAction);
-                }
-
-                if (exit.Position.X < currentTile.Position.X)
-                {
-                    LeadAction = new MoveAction(Direction.Left);
-
-                    while (currentTile.Position.X != exit.Position.X)
-                    {
-                        nextTile = Tiles.Find(box =>
-                                    box.Position.X == currentTile.Position.X - 1 &&
-                                    box.Position.Y == currentTile.Position.Y
-                                );
-                        currentTile = nextTile;
-                        Actions.Add(LeadAction);
-                    }
-
-                }
-                else if (exit.Position.X > currentTile.Position.X)
-                {
-                    LeadAction = new MoveAction(Direction.Right);
-                    while (currentTile.Position.X != exit.Position.X)
-                    {
-                        nextTile = Tiles.Find(box =>
-                                    box.Position.X == currentTile.Position.X + 1 &&
-                                    box.Position.Y == currentTile.Position.Y
-                                );
-                        currentTile = nextTile;
-                        Actions.Add(LeadAction);
-                    }
-                }
-            }
-
-
-            return Actions;
-
-        }
-
-
-        public List<TileAction> getRoute2(Tile spawn, List<Tile> Tiles, Grid grid, Tile exit)
+        public List<TileAction> getRoute(Tile spawn, List<Tile> Tiles, Grid grid)
         {
             MoveAction LeadAction = new MoveAction(Direction.Up); 
             Tile currentTile = spawn;
@@ -847,3 +650,203 @@ namespace TrafficSimulation
     }
 }
 
+/*
+ *  public List<TileAction> getRoute(Tile spawn, List<Tile> Tiles, Grid grid, Tile exit)
+        {
+            List<Tile> routeList = new List<Tile>();
+
+            MoveAction LeadAction;
+            Tile currentTile = spawn;
+            Tile nextTile = currentTile;
+
+            if (grid.DownSpawnPoints.Contains(spawn))
+            {
+                LeadAction = new MoveAction(Direction.Up);
+
+                while (currentTile.Position.Y != exit.Position.Y)
+                {
+                    nextTile = Tiles.Find(box =>
+                                box.Position.X == currentTile.Position.X &&
+                                box.Position.Y == currentTile.Position.Y - 1
+                            );
+                    currentTile = nextTile;
+                    Actions.Add(LeadAction);
+                }
+
+                if (exit.Position.X < currentTile.Position.X)
+                {
+                    LeadAction = new MoveAction(Direction.Left);
+
+                    while (currentTile.Position.X != exit.Position.X)
+                    {
+                        nextTile = Tiles.Find(box =>
+                                    box.Position.X == currentTile.Position.X - 1 &&
+                                    box.Position.Y == currentTile.Position.Y
+                                );
+                        currentTile = nextTile;
+                        Actions.Add(LeadAction);
+                    }
+
+                }
+                else if (exit.Position.X > currentTile.Position.X)
+                {
+                    LeadAction = new MoveAction(Direction.Right);
+
+                    while (currentTile.Position.X != exit.Position.X)
+                    {
+                        nextTile = Tiles.Find(box =>
+                                    box.Position.X == currentTile.Position.X + 1 &&
+                                    box.Position.Y == currentTile.Position.Y
+                                );
+                        currentTile = nextTile;
+                        Actions.Add(LeadAction);
+                    }
+                }
+
+
+
+
+            }
+            else if (grid.RightSpawnPoints.Contains(spawn))
+            {
+                LeadAction = new MoveAction(Direction.Left);
+
+
+                while (currentTile.Position.X != exit.Position.X)
+                {
+                    nextTile = Tiles.Find(box =>
+                        box.Position.X == currentTile.Position.X - 1 &&
+                        box.Position.Y == currentTile.Position.Y
+                    );
+                    currentTile = nextTile;
+                    Actions.Add(LeadAction);
+                }
+
+                if (exit.Position.Y < currentTile.Position.Y)
+                {
+                    LeadAction = new MoveAction(Direction.Up);
+
+                    while (currentTile.Position.Y != exit.Position.Y)
+                    {
+                        nextTile = Tiles.Find(box =>
+                                    box.Position.X == currentTile.Position.X &&
+                                    box.Position.Y == currentTile.Position.Y - 1
+                                );
+                        currentTile = nextTile;
+                        Actions.Add(LeadAction);
+                    }
+
+                }
+                else if (exit.Position.Y > currentTile.Position.Y)
+                {
+                    LeadAction = new MoveAction(Direction.Down);
+                    while (currentTile.Position.Y != exit.Position.Y)
+                    {
+                        nextTile = Tiles.Find(box =>
+                                    box.Position.X == currentTile.Position.X &&
+                                    box.Position.Y == currentTile.Position.Y + 1
+                                );
+                        currentTile = nextTile;
+                        Actions.Add(LeadAction);
+                    }
+                }
+
+
+
+
+            }
+            else if (grid.LeftSpawnPoints.Contains(spawn))
+            {
+                LeadAction = new MoveAction(Direction.Right);
+
+                while (currentTile.Position.X != exit.Position.X)
+                {
+                    nextTile = Tiles.Find(box =>
+                        box.Position.X == currentTile.Position.X + 1 &&
+                        box.Position.Y == currentTile.Position.Y
+                    );
+                    currentTile = nextTile;
+                    Actions.Add(LeadAction);
+                }
+
+                if (exit.Position.Y < currentTile.Position.Y)
+                {
+                    LeadAction = new MoveAction(Direction.Up);
+
+                    while (currentTile.Position.Y != exit.Position.Y)
+                    {
+                        nextTile = Tiles.Find(box =>
+                                    box.Position.X == currentTile.Position.X &&
+                                    box.Position.Y == currentTile.Position.Y - 1
+                                );
+                        currentTile = nextTile;
+                        Actions.Add(LeadAction);
+                    }
+
+                }
+                else if (exit.Position.Y > currentTile.Position.Y)
+                {
+                    LeadAction = new MoveAction(Direction.Down);
+                    while (currentTile.Position.Y != exit.Position.Y)
+                    {
+                        nextTile = Tiles.Find(box =>
+                                    box.Position.X == currentTile.Position.X &&
+                                    box.Position.Y == currentTile.Position.Y + 1
+                                );
+                        currentTile = nextTile;
+                        Actions.Add(LeadAction);
+                    }
+                }
+
+
+
+
+            }
+            else if (grid.UpSpawnPoints.Contains(spawn))
+            {
+                LeadAction = new MoveAction(Direction.Down);
+                while (currentTile.Position.Y != exit.Position.Y)
+                {
+                    nextTile = Tiles.Find(box =>
+                                box.Position.X == currentTile.Position.X &&
+                                box.Position.Y == currentTile.Position.Y + 1
+                            );
+                    currentTile = nextTile;
+                    Actions.Add(LeadAction);
+                }
+
+                if (exit.Position.X < currentTile.Position.X)
+                {
+                    LeadAction = new MoveAction(Direction.Left);
+
+                    while (currentTile.Position.X != exit.Position.X)
+                    {
+                        nextTile = Tiles.Find(box =>
+                                    box.Position.X == currentTile.Position.X - 1 &&
+                                    box.Position.Y == currentTile.Position.Y
+                                );
+                        currentTile = nextTile;
+                        Actions.Add(LeadAction);
+                    }
+
+                }
+                else if (exit.Position.X > currentTile.Position.X)
+                {
+                    LeadAction = new MoveAction(Direction.Right);
+                    while (currentTile.Position.X != exit.Position.X)
+                    {
+                        nextTile = Tiles.Find(box =>
+                                    box.Position.X == currentTile.Position.X + 1 &&
+                                    box.Position.Y == currentTile.Position.Y
+                                );
+                        currentTile = nextTile;
+                        Actions.Add(LeadAction);
+                    }
+                }
+            }
+
+
+            return Actions;
+
+        }
+*/

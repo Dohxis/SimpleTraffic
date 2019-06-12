@@ -444,10 +444,9 @@ namespace TrafficSimulation
 
         private void spawnDemoCar()
         {
+            List <List< Tile >> SpawnPoint = new List<List<Tile>>();
             Random ran = new Random();
-
-
-            int r = ran.Next(3);
+            
 
             int a;
             int b;
@@ -455,102 +454,53 @@ namespace TrafficSimulation
             Tile spawn = grid.spawnPoints[0];
             Tile exit = grid.exitPoints[0];
 
+            if (grid.DownSpawnPoints.Count > 0)
+            {
+                SpawnPoint.Add(grid.DownSpawnPoints);
+            }
+
+            if (grid.UpSpawnPoints.Count > 0)
+            {
+                SpawnPoint.Add(grid.UpSpawnPoints);
+            }
+
+            if (grid.RightSpawnPoints.Count > 0)
+            {
+                SpawnPoint.Add(grid.RightSpawnPoints);
+            }
+
+            if (grid.LeftSpawnPoints.Count > 0)
+            {
+                SpawnPoint.Add(grid.LeftSpawnPoints);
+            }
+
+            int r = ran.Next(SpawnPoint.Count);
 
             switch (r)
             {
                 case 0:
-                    a = ran.Next(grid.DownSpawnPoints.Count);
-                    spawn = grid.DownSpawnPoints[a];
-
-                    r = ran.Next(3);
-                    switch (r)
-                    {
-                        case 0:
-                            b = ran.Next(grid.UpExitPoints.Count);
-                            exit = grid.UpExitPoints[b];
-                            break;
-                        case 1:
-                            b = ran.Next(grid.RightExitPoints.Count);
-                            exit = grid.RightExitPoints[b];
-                            break;
-                        case 2:
-                            b = ran.Next(grid.LeftExitPoints.Count);
-                            exit = grid.LeftExitPoints[b];
-                            break;
-
-                    }
+                    a = ran.Next(SpawnPoint[0].Count);
+                    spawn = SpawnPoint[0][a];
                     break;
                 case 1:
-                    a = ran.Next(grid.LeftSpawnPoints.Count);
-                    spawn = grid.LeftSpawnPoints[a];
-
-                    r = ran.Next(3);
-                    switch (r)
-                    {
-                        case 0:
-                            b = ran.Next(grid.RightExitPoints.Count);
-                            exit = grid.RightExitPoints[b];
-                            break;
-                        case 1:
-                            b = ran.Next(grid.UpExitPoints.Count);
-                            exit = grid.UpExitPoints[b];
-                            break;
-                        case 2:
-                            b = ran.Next(grid.DownExitPoints.Count);
-                            exit = grid.DownExitPoints[b];
-                            break;
-                    }
-
+                    a = ran.Next(SpawnPoint[1].Count);
+                    spawn = SpawnPoint[1][a];
                     break;
                 case 2:
-                    a = ran.Next(grid.RightSpawnPoints.Count);
-                    spawn = grid.RightSpawnPoints[a];
-
-                    r = ran.Next(3);
-                    switch (r)
-                    {
-                        case 0:
-                            b = ran.Next(grid.LeftExitPoints.Count);
-                            exit = grid.LeftExitPoints[b];
-                            break;
-                        case 1:
-                            b = ran.Next(grid.UpExitPoints.Count);
-                            exit = grid.UpExitPoints[b];
-                            break;
-                        case 2:
-                            b = ran.Next(grid.DownExitPoints.Count);
-                            exit = grid.DownExitPoints[b];
-                            break;
-                    }
-
-
+                    a = ran.Next(SpawnPoint[2].Count);
+                    spawn = SpawnPoint[2][a];
                     break;
                 case 3:
-                    a = ran.Next(grid.UpSpawnPoints.Count);
-                    spawn = grid.UpSpawnPoints[a];
-
-                    r = ran.Next(3);
-                    switch (r)
-                    {
-                        case 0:
-                            b = ran.Next(grid.RightExitPoints.Count);
-                            exit = grid.RightExitPoints[b];
-                            break;
-                        case 1:
-                            b = ran.Next(grid.LeftExitPoints.Count);
-                            exit = grid.LeftExitPoints[b];
-                            break;
-                        case 2:
-                            b = ran.Next(grid.DownExitPoints.Count);
-                            exit = grid.DownExitPoints[b];
-                            break;
-                    }
+                    a = ran.Next(SpawnPoint[3].Count);
+                    spawn = SpawnPoint[3][a];
                     break;
-
+                default:
+                    MessageBox.Show("There are no exit and entry points");
+                    break;
             }
 
             Tile car = new Tile(spawn.Position.X, spawn.Position.Y, TileType.Car, new List<TileAction>());
-            car.Actions = car.getRoute2(spawn, grid.Tiles, this.grid, exit);
+            car.Actions = car.getRoute(spawn, grid.Tiles, this.grid);
             //car.AdjustRouteBySpeed();
 
             this.grid.UpdateTile(spawn.Position.X, spawn.Position.Y, TileType.Car, car.Actions);
