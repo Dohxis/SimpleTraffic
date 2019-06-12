@@ -124,12 +124,12 @@ namespace TrafficSimulation
             }
 
             CheckDirection();
-
-            while (currentTile.Type != TileType.ExitPoint)
+            try
             {
-                currentTile = GetNextTile(currentTile, LeadAction.direction, Tiles);
-                try
+                while (currentTile.Type != TileType.ExitPoint)
                 {
+                    currentTile = GetNextTile(currentTile, LeadAction.direction, Tiles);
+
                     if (currentTile.Type == TileType.ControlPoint)
                     {
                         Actions.Add(LeadAction);
@@ -318,7 +318,7 @@ namespace TrafficSimulation
                                         TurnRight();
                                         break;
                                 }
-                            } 
+                            }
                             else if (checkFront && !checkLeft && checkRight) // T-left intersection
                             {
                                 number = random.Next(2);
@@ -409,7 +409,7 @@ namespace TrafficSimulation
                                         break;
                                 }
                             } // Plus intersection
-                            else if (!checkFront && checkLeft && checkRight) // T-left intersection
+                            else if (!checkFront && checkLeft && checkRight) // T-right intersection
                             {
                                 number = random.Next(2);
 
@@ -424,7 +424,7 @@ namespace TrafficSimulation
                                         break;
                                 }
                             } // T-Left
-                            else if (checkFront && checkLeft && !checkRight) // T-up intersection
+                            else if (checkFront && checkLeft && !checkRight) // T-down intersection
                             {
                                 number = random.Next(2);
 
@@ -438,8 +438,8 @@ namespace TrafficSimulation
                                         Actions.Add(LeadAction);
                                         break;
                                 }
-                            } // T-up
-                            else if (checkFront && !checkLeft && checkRight) // T-down intersection
+                            } 
+                            else if (checkFront && !checkLeft && checkRight) // T-up intersection
                             {
                                 number = random.Next(2);
 
@@ -453,15 +453,15 @@ namespace TrafficSimulation
                                         Actions.Add(LeadAction);
                                         break;
                                 }
-                            } // T-down
+                            } 
                             else if (!checkFront && checkLeft && !checkRight) // Corner Left
                             {
                                 TurnLeft();
-                            } 
+                            }
                             else if (!checkFront && !checkLeft && checkRight)
                             {
                                 TurnRight();
-                            } //Corner Left-Up
+                            } 
 
 
                         }
@@ -537,12 +537,12 @@ namespace TrafficSimulation
 
                                 switch (number)
                                 {
-                                    case 0: //going right
-                                        TurnRight();
+                                    case 0: //going forward
+                                        Actions.Add(LeadAction);
                                         break;
 
                                     case 1: //going left
-                                        TurnLeft();
+                                        TurnRight();
                                         break;
                                 }
                             }
@@ -560,14 +560,16 @@ namespace TrafficSimulation
                     {
                         Actions.Add(LeadAction);
                     }
+
+
+
                 }
-                catch (NullReferenceException ex)
-                {
-                    Console.WriteLine("Something happened");   
-                }
-                    
             }
             
+            catch (NullReferenceException ex)
+            {
+                Console.WriteLine("Something happened");
+            }
 
 
             return Actions;
