@@ -75,7 +75,7 @@ namespace TrafficSimulation
             this.Tiles = this.trafficRules.CleanDirtyTiles(this.Tiles);
         }
 
-        // We should remove this when Grid class can spawn cars itself
+
         public void UpdateTile(int x, int y, TileType type, List<TileAction> actions)
         {
             Tile newTile = new Tile(x, y, type, actions);

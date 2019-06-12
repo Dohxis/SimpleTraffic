@@ -94,36 +94,34 @@ namespace TrafficSimulation
         }
 
 
-       
+        private MoveAction CheckDirection(Tile spawn, Grid grid)
+        {
+            if (grid.UpSpawnPoints.Contains(spawn))
+            {
+                return new MoveAction(Direction.Down);
+            }
+            else if (grid.LeftSpawnPoints.Contains(spawn))
+            {
+                return new MoveAction(Direction.Right);
+            }
+            else if (grid.RightSpawnPoints.Contains(spawn))
+            {
+                return new MoveAction(Direction.Left);
+            }
+            else
+            {
+                return new MoveAction(Direction.Up);
+            }
+        }
 
 
         public List<TileAction> getRoute(Tile spawn, List<Tile> Tiles, Grid grid)
         {
-            MoveAction LeadAction = new MoveAction(Direction.Up); 
+            MoveAction LeadAction = CheckDirection(spawn, grid);
             Tile currentTile = spawn;
             
-
             Random random = new Random();
             int number;
-
-            
-            void CheckDirection()
-            {
-                if (grid.UpSpawnPoints.Contains(spawn))
-                {
-                    LeadAction = new MoveAction(Direction.Down);
-                }
-                else if (grid.LeftSpawnPoints.Contains(spawn))
-                {
-                    LeadAction = new MoveAction(Direction.Right);
-                }
-                else if (grid.RightSpawnPoints.Contains(spawn))
-                {
-                    LeadAction = new MoveAction(Direction.Left);
-                }
-            }
-
-            CheckDirection();
 
             while (currentTile.Type != TileType.ExitPoint)
             {
@@ -563,12 +561,10 @@ namespace TrafficSimulation
                 }
                 catch (NullReferenceException ex)
                 {
-                    Console.WriteLine("Something happened");   
+                    Console.WriteLine("Something went wrong.");   
                 }
                     
-            }
-            
-
+            }            
 
             return Actions;
 
