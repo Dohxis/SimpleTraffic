@@ -430,6 +430,7 @@
             this.tb_redlight.Name = "tb_redlight";
             this.tb_redlight.Size = new System.Drawing.Size(50, 20);
             this.tb_redlight.TabIndex = 17;
+            this.tb_redlight.TextChanged += new System.EventHandler(this.tb_redlight_TextChanged);
             // 
             // tb_greenlight
             // 
@@ -437,6 +438,7 @@
             this.tb_greenlight.Name = "tb_greenlight";
             this.tb_greenlight.Size = new System.Drawing.Size(50, 20);
             this.tb_greenlight.TabIndex = 18;
+            this.tb_greenlight.TextChanged += new System.EventHandler(this.tb_greenlight_TextChanged);
             // 
             // lblTimeElapsed
             // 
@@ -584,6 +586,7 @@
             this.tb_trafficflow.Name = "tb_trafficflow";
             this.tb_trafficflow.Size = new System.Drawing.Size(50, 20);
             this.tb_trafficflow.TabIndex = 23;
+            this.tb_trafficflow.TextChanged += new System.EventHandler(this.tb_trafficflow_TextChanged);
             // 
             // label12
             // 
@@ -600,6 +603,7 @@
             this.tb_cars_tick.Name = "tb_cars_tick";
             this.tb_cars_tick.Size = new System.Drawing.Size(50, 20);
             this.tb_cars_tick.TabIndex = 25;
+            this.tb_cars_tick.TextChanged += new System.EventHandler(this.tb_cars_tick_TextChanged);
             // 
             // Form_Simulation
             // 

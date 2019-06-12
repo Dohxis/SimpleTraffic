@@ -120,7 +120,7 @@ namespace TrafficSimulation
                 try
                 {
                 trafficflow = Convert.ToInt32(tb_trafficflow.Text);
-                    cars_tick = Convert.ToInt32(tb_cars_tick.Text);
+                cars_tick = Convert.ToInt32(tb_cars_tick.Text);
                 simIsLaunched = true;
                 btnStop.Enabled = true;
                 btnLaunch.Enabled = false;
@@ -724,7 +724,41 @@ namespace TrafficSimulation
                     MessageBox.Show("No spawn Points!");
                 }
             }
-        }      
+        }
+
+        private void tb_cars_tick_TextChanged(object sender, EventArgs e)
+        {
+            cars_tick = Convert.ToInt32(tb_cars_tick.Text);
+        }
+
+        private void tb_trafficflow_TextChanged(object sender, EventArgs e)
+        {
+            trafficflow = Convert.ToInt32(tb_trafficflow.Text);
+        }
+
+        private void tb_greenlight_TextChanged(object sender, EventArgs e)
+        {
+            if (grid.TrafficLightsNeeded)
+            {
+                if (timered <= Convert.ToInt32(tb_greenlight.Text))
+                {
+                    timegreen = Convert.ToInt32(tb_greenlight.Text);
+                    MessageBox.Show("red lights should last more than green lights");
+                }
+            }           
+        }
+
+        private void tb_redlight_TextChanged(object sender, EventArgs e)
+        {
+            if (grid.TrafficLightsNeeded)
+            {
+                if (Convert.ToInt32(tb_redlight.Text) <= timegreen)
+                {
+                    timered = Convert.ToInt32(tb_redlight.Text);
+                    MessageBox.Show("red lights should last more than green lights");
+                }
+            }
+        }
     }
 }
 
